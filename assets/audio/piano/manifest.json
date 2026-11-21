@@ -1,0 +1,296 @@
+[
+  {
+    "midi": 36,
+    "note": "C2",
+    "file": "piano_C2.wav",
+    "frequency": 65.406
+  },
+  {
+    "midi": 37,
+    "note": "C♯2",
+    "file": "piano_Cs2.wav",
+    "frequency": 69.296
+  },
+  {
+    "midi": 38,
+    "note": "D2",
+    "file": "piano_D2.wav",
+    "frequency": 73.416
+  },
+  {
+    "midi": 39,
+    "note": "D♯2",
+    "file": "piano_Ds2.wav",
+    "frequency": 77.782
+  },
+  {
+    "midi": 40,
+    "note": "E2",
+    "file": "piano_E2.wav",
+    "frequency": 82.407
+  },
+  {
+    "midi": 41,
+    "note": "F2",
+    "file": "piano_F2.wav",
+    "frequency": 87.307
+  },
+  {
+    "midi": 42,
+    "note": "F♯2",
+    "file": "piano_Fs2.wav",
+    "frequency": 92.499
+  },
+  {
+    "midi": 43,
+    "note": "G2",
+    "file": "piano_G2.wav",
+    "frequency": 97.999
+  },
+  {
+    "midi": 44,
+    "note": "G♯2",
+    "file": "piano_Gs2.wav",
+    "frequency": 103.826
+  },
+  {
+    "midi": 45,
+    "note": "A2",
+    "file": "piano_A2.wav",
+    "frequency": 110
+  },
+  {
+    "midi": 46,
+    "note": "A♯2",
+    "file": "piano_As2.wav",
+    "frequency": 116.541
+  },
+  {
+    "midi": 47,
+    "note": "B2",
+    "file": "piano_B2.wav",
+    "frequency": 123.471
+  },
+  {
+    "midi": 48,
+    "note": "C3",
+    "file": "piano_C3.wav",
+    "frequency": 130.813
+  },
+  {
+    "midi": 49,
+    "note": "C♯3",
+    "file": "piano_Cs3.wav",
+    "frequency": 138.591
+  },
+  {
+    "midi": 50,
+    "note": "D3",
+    "file": "piano_D3.wav",
+    "frequency": 146.832
+  },
+  {
+    "midi": 51,
+    "note": "D♯3",
+    "file": "piano_Ds3.wav",
+    "frequency": 155.563
+  },
+  {
+    "midi": 52,
+    "note": "E3",
+    "file": "piano_E3.wav",
+    "frequency": 164.814
+  },
+  {
+    "midi": 53,
+    "note": "F3",
+    "file": "piano_F3.wav",
+    "frequency": 174.614
+  },
+  {
+    "midi": 54,
+    "note": "F♯3",
+    "file": "piano_Fs3.wav",
+    "frequency": 184.997
+  },
+  {
+    "midi": 55,
+    "note": "G3",
+    "file": "piano_G3.wav",
+    "frequency": 195.998
+  },
+  {
+    "midi": 56,
+    "note": "G♯3",
+    "file": "piano_Gs3.wav",
+    "frequency": 207.652
+  },
+  {
+    "midi": 57,
+    "note": "A3",
+    "file": "piano_A3.wav",
+    "frequency": 220
+  },
+  {
+    "midi": 58,
+    "note": "A♯3",
+    "file": "piano_As3.wav",
+    "frequency": 233.082
+  },
+  {
+    "midi": 59,
+    "note": "B3",
+    "file": "piano_B3.wav",
+    "frequency": 246.942
+  },
+  {
+    "midi": 60,
+    "note": "C4",
+    "file": "piano_C4.wav",
+    "frequency": 261.626
+  },
+  {
+    "midi": 61,
+    "note": "C♯4",
+    "file": "piano_Cs4.wav",
+    "frequency": 277.183
+  },
+  {
+    "midi": 62,
+    "note": "D4",
+    "file": "piano_D4.wav",
+    "frequency": 293.665
+  },
+  {
+    "midi": 63,
+    "note": "D♯4",
+    "file": "piano_Ds4.wav",
+    "frequency": 311.127
+  },
+  {
+    "midi": 64,
+    "note": "E4",
+    "file": "piano_E4.wav",
+    "frequency": 329.628
+  },
+  {
+    "midi": 65,
+    "note": "F4",
+    "file": "piano_F4.wav",
+    "frequency": 349.228
+  },
+  {
+    "midi": 66,
+    "note": "F♯4",
+    "file": "piano_Fs4.wav",
+    "frequency": 369.994
+  },
+  {
+    "midi": 67,
+    "note": "G4",
+    "file": "piano_G4.wav",
+    "frequency": 391.995
+  },
+  {
+    "midi": 68,
+    "note": "G♯4",
+    "file": "piano_Gs4.wav",
+    "frequency": 415.305
+  },
+  {
+    "midi": 69,
+    "note": "A4",
+    "file": "piano_A4.wav",
+    "frequency": 440
+  },
+  {
+    "midi": 70,
+    "note": "A♯4",
+    "file": "piano_As4.wav",
+    "frequency": 466.164
+  },
+  {
+    "midi": 71,
+    "note": "B4",
+    "file": "piano_B4.wav",
+    "frequency": 493.883
+  },
+  {
+    "midi": 72,
+    "note": "C5",
+    "file": "piano_C5.wav",
+    "frequency": 523.251
+  },
+  {
+    "midi": 73,
+    "note": "C♯5",
+    "file": "piano_Cs5.wav",
+    "frequency": 554.365
+  },
+  {
+    "midi": 74,
+    "note": "D5",
+    "file": "piano_D5.wav",
+    "frequency": 587.33
+  },
+  {
+    "midi": 75,
+    "note": "D♯5",
+    "file": "piano_Ds5.wav",
+    "frequency": 622.254
+  },
+  {
+    "midi": 76,
+    "note": "E5",
+    "file": "piano_E5.wav",
+    "frequency": 659.255
+  },
+  {
+    "midi": 77,
+    "note": "F5",
+    "file": "piano_F5.wav",
+    "frequency": 698.456
+  },
+  {
+    "midi": 78,
+    "note": "F♯5",
+    "file": "piano_Fs5.wav",
+    "frequency": 739.989
+  },
+  {
+    "midi": 79,
+    "note": "G5",
+    "file": "piano_G5.wav",
+    "frequency": 783.991
+  },
+  {
+    "midi": 80,
+    "note": "G♯5",
+    "file": "piano_Gs5.wav",
+    "frequency": 830.609
+  },
+  {
+    "midi": 81,
+    "note": "A5",
+    "file": "piano_A5.wav",
+    "frequency": 880
+  },
+  {
+    "midi": 82,
+    "note": "A♯5",
+    "file": "piano_As5.wav",
+    "frequency": 932.328
+  },
+  {
+    "midi": 83,
+    "note": "B5",
+    "file": "piano_B5.wav",
+    "frequency": 987.767
+  },
+  {
+    "midi": 84,
+    "note": "C6",
+    "file": "piano_C6.wav",
+    "frequency": 1046.502
+  }
+]

@@ -1,0 +1,5 @@
+2026-11-20 12:15:50,186 ERROR cdb.wikidata: Wikidata fallo en libro offset 0: ReadTimeout: HTTPSConnectionPool(host='query.wikidata.org', port=443): Read timed out. (read timeout=60) (reducí tamano_pagina o reintentá)
+2026-11-20 12:16:19,486 WARNING cdb.http: HTTP 503 en musicbrainz.org; reintento en 1s
+2026-11-20 12:16:20,743 WARNING cdb.http: HTTP 503 en musicbrainz.org; reintento en 1s
+2026-11-20 12:16:24,581 WARNING cdb.http: HTTP 503 en musicbrainz.org; reintento en 1s
+2026-11-20 13:10:38,783 ERROR cdb.gutendex: Gutendex fallo: ReadTimeout: HTTPSConnectionPool(host='gutendex.com', port=443): Read timed out. (read timeout=60)

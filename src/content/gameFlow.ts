@@ -1,0 +1,22 @@
+export const GAME_FLOW_TEXT = {
+  games: 'Juegos',
+  notFoundTitle: 'No encontramos ese juego',
+  seeAll: 'Ver todos',
+  fase0Number: 'F0',
+  number: (value: number) => String(value).padStart(2, '0'),
+  begin: 'Comenzar',
+  privacyNote: 'Ningún juego cambia tu letra sin una acción explícita. Nada se guarda al salir.',
+  tag: (value: string) => `#${value}`,
+  objective: 'Objetivo',
+  stepsTitle: 'Paso a paso',
+  examplesTitle: 'Ejemplos',
+  steps: [
+    'Leé la consigna y mirá los estímulos que aparecen.',
+    'Jugá las veces que quieras: el azar cambia en cada tirada.',
+    'Cuando encuentres algo que te sirva, lleválo al cuaderno.',
+  ],
+  examples: (summary: string, tags: readonly string[]) => [
+    summary,
+    ...tags.map((tag) => `Si aparece «${tag}», probá usarlo como punto de partida.`),
+  ],
+} as const;

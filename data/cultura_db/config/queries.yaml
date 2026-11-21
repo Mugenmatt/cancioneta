@@ -1,0 +1,46 @@
+# Semillas de consulta editables. Son criterios de busqueda, NO datos.
+# Probá cada consulta con --max 50 antes de lanzar una corrida grande.
+
+openlibrary:
+  # q usa la sintaxis de busqueda de Open Library. paginas = cuantas paginas de 100 pedir.
+  - {q: "subject:poesia language:spa", paginas: 20}
+  - {q: "subject:novela language:spa", paginas: 30}
+  - {q: "subject:cuentos language:spa", paginas: 20}
+  - {q: "subject:ensayo language:spa", paginas: 15}
+  - {q: "subject:teatro language:spa", paginas: 10}
+  - {q: "subject:filosofia language:spa", paginas: 15}
+  - {q: "subject:ciencia ficcion language:spa", paginas: 15}
+  - {q: "subject:fantasia language:spa", paginas: 15}
+  - {q: "subject:terror language:spa", paginas: 10}
+  - {q: "subject:argentina language:spa", paginas: 30}
+
+gutendex:
+  - {idiomas: "es", paginas: 100}
+  - {idiomas: "fr,en,de,it,pt", paginas: 60}
+
+musicbrainz:
+  # Consultas SIN etiquetas (los tags de MusicBrainz son CC BY-NC-SA). Ajustá la sintaxis si hace falta.
+  - {etiqueta: "Argentina 1960-1979", query: "country:AR AND date:[1960 TO 1979]", paginas: 20}
+  - {etiqueta: "Argentina 1980-1999", query: "country:AR AND date:[1980 TO 1999]", paginas: 30}
+  - {etiqueta: "Argentina 2000-2024", query: "country:AR AND date:[2000 TO 2024]", paginas: 30}
+  - {etiqueta: "Uruguay", query: "country:UY", paginas: 15}
+  - {etiqueta: "Espana", query: "country:ES", paginas: 20}
+  - {etiqueta: "Mexico", query: "country:MX", paginas: 20}
+  - {etiqueta: "Chile", query: "country:CL", paginas: 15}
+
+commons:
+  min_ancho_px: 800
+  consultas:
+    - {q: "ventana lluvia", tematica: "lluvia; ventana; melancolia", paginas: 4}
+    - {q: "calle vacia noche", tematica: "noche; soledad; ciudad", paginas: 4}
+    - {q: "tren estacion", tematica: "viaje; partida; espera", paginas: 4}
+    - {q: "mar tormenta", tematica: "mar; tormenta; fuerza", paginas: 4}
+    - {q: "puerta abandonada", tematica: "abandono; umbral; misterio", paginas: 4}
+    - {q: "cafe mesa", tematica: "encuentro; cotidiano", paginas: 4}
+    - {q: "espejo", tematica: "identidad; reflejo", paginas: 4}
+    - {q: "faro", tematica: "guia; soledad; mar", paginas: 4}
+    - {q: "puente niebla", tematica: "transicion; misterio", paginas: 4}
+    - {q: "campo atardecer pampa", tematica: "pampa; atardecer; horizonte", paginas: 4}
+
+wikiquote:
+  max_por_autor: 40

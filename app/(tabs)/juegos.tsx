@@ -1,0 +1,136 @@
+import { useMemo, useState } from 'react';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Feather } from '@expo/vector-icons';
+import { useCoreTheme } from '@/design/ThemeProvider';
+import { Screen } from '@/design/components/Screen';
+import { AppText } from '@/design/components/Text';
+import { SectionLabel } from '@/design/components/Primitives';
+import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { gameThemes } from '@/design/themes';
+import { GAME_REGISTRY, PHASE_LABEL, type GameMeta, type GamePhase } from '@/games/registry';
+
+const PHASES: GamePhase[] = ['fase0', 'original', 'nuevo'];
+
+export default function GamesScreen() {
+  const router = useRouter();
+  const { colors } = useCoreTheme();
+  const [query, setQuery] = useState('');
+
+  const games = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    if (!needle) return GAME_REGISTRY;
+    return GAME_REGISTRY.filter((game) =>
+      `${game.name} ${game.summary} ${game.tags.join(' ')}`.toLowerCase().includes(needle),
+    );
+  }, [query]);
+
+  return (
+    <Screen scroll contentStyle={{ paddingTop: spacing.md }}>
+      <View style={styles.head}>
+        <View style={{ flex: 1 }}>
+          <AppText variant="label" color={colors.accentCore}>Juegos</AppText>
+          <AppText variant="title" style={{ marginTop: 4 }}>Formas de empezar</AppText>
+          <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 4 }}>
+            32 juegos, 5 ejercicios de calentamiento.
+          </AppText>
+        </View>
+        <View style={[styles.count, { backgroundColor: colors.accentSoft }]}>
+          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>37</AppText>
+        </View>
+      </View>
+
+      <View style={[styles.search, { backgroundColor: colors.bgRaised, borderColor: colors.lineSubtle }]}>
+        <Feather name="search" size={17} color={colors.textMuted} />
+        <TextInput
+          value={query}
+          onChangeText={setQuery}
+          placeholder="Buscar por nombre, tema o consigna…"
+          placeholderTextColor={colors.textMuted}
+          accessibilityLabel="Buscar juegos"
+          style={[styles.searchInput, { color: colors.textPrimary, fontFamily: fonts.sans }]}
+          autoCorrect={false}
+        />
+        {query ? (
+          <Pressable accessibilityRole="button" accessibilityLabel="Limpiar búsqueda" onPress={() => setQuery('')}>
+            <Feather name="x-circle" size={17} color={colors.textMuted} />
+          </Pressable>
+        ) : null}
+      </View>
+
+      {PHASES.map((phase) => {
+        const phaseGames = games.filter((game) => game.phase === phase);
+        if (phaseGames.length === 0) return null;
+        return (
+          <View key={phase} style={styles.group}>
+            <SectionLabel color={colors.textMuted}>{PHASE_LABEL[phase]}</SectionLabel>
+            {phaseGames.map((game) => (
+              <GameRow key={game.id} game={game} onPress={() => router.push(`/juego/${game.id}`)} />
+            ))}
+          </View>
+        );
+      })}
+
+      {games.length === 0 ? (
+        <View style={styles.empty}>
+          <Feather name="feather" size={24} color={colors.textMuted} />
+          <AppText variant="body" color={colors.textSecondary} style={{ marginTop: spacing.sm }}>
+            No hay juegos con esa búsqueda.
+          </AppText>
+        </View>
+      ) : null}
+    </Screen>
+  );
+}
+
+function GameRow({ game, onPress }: { game: GameMeta; onPress: () => void }) {
+  const { colors } = useCoreTheme();
+  const theme = gameThemes[game.themeId] ?? gameThemes.g01;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${game.name}. ${game.summary}`}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.row,
+        { backgroundColor: theme.surface, borderColor: alpha(theme.accent, 0.22) },
+        pressed && { opacity: 0.8 },
+      ]}
+    >
+      <View style={[styles.number, { backgroundColor: alpha(theme.accent, 0.16) }]}>
+        <AppText variant="caption" color={theme.accentText} style={{ fontFamily: fonts.sansBold, fontSize: 11 }}>
+          {game.phase === 'fase0' ? 'F0' : String(game.number).padStart(2, '0')}
+        </AppText>
+      </View>
+      <View style={{ flex: 1 }}>
+        <View style={styles.rowTitle}>
+          <AppText style={{ fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: theme.ink, flex: 1 }}>
+            {game.name}
+          </AppText>
+          {game.status === 'ready' ? (
+            <View style={[styles.ready, { backgroundColor: alpha(colors.stateSuccess, 0.16) }]}>
+              <AppText variant="caption" color={colors.stateSuccess} style={{ fontSize: 9 }}>Listo</AppText>
+            </View>
+          ) : null}
+        </View>
+        <AppText variant="caption" color={theme.inkSoft} numberOfLines={2} style={{ marginTop: 3 }}>
+          {game.summary}
+        </AppText>
+      </View>
+      <Feather name="chevron-right" size={17} color={theme.inkSoft} />
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  head: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: spacing.lg },
+  count: { width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  search: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.field, paddingHorizontal: spacing.sm, minHeight: 48 },
+  searchInput: { flex: 1, marginLeft: spacing.xs, fontSize: 15, paddingVertical: 10 },
+  group: { marginTop: spacing.lg },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: radii.card, padding: spacing.sm, marginBottom: spacing.xs, minHeight: 78 },
+  number: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  rowTitle: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  ready: { borderRadius: radii.chip, paddingHorizontal: 7, paddingVertical: 2 },
+  empty: { alignItems: 'center', paddingVertical: spacing.xxl },
+});

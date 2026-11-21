@@ -1,0 +1,16 @@
+export const PORTAL_TEXT = {
+  intro: 'Una palabra abre un lugar. Sumá diez asociaciones; al completar, la última palabra se convierte en el nuevo portal.',
+  columnEyebrow: (index: number, seed: string) => `Columna ${index + 1} · ${seed}`,
+  portal: (index: number) => `Portal ${index + 1}`,
+  associationLabel: 'Nueva asociación',
+  associationPlaceholder: 'Escribí una asociación, rima o imagen…',
+  add: 'Agregar',
+  suggestion: 'Sugerencia',
+  suggestionAction: (value: string) => `Usar «${value}»`,
+  anotherSuggestion: 'Otra sugerencia',
+  progress: (count: number) => `${count} de 10 asociaciones. La columna se muestra al completarse.`,
+  completed: 'Cuatro columnas completas. Llevá el recorrido al cuaderno.',
+  restart: 'Empezar de nuevo',
+  seedFallback: 'bosque',
+  bodyLine: (seed: string, entries: readonly string[]) => `${seed}: ${entries.join(', ')}`,
+} as const;

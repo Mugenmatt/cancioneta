@@ -1,0 +1,222 @@
+{
+  "fecha": "2026-11-20",
+  "total_objetivo": 30000,
+  "total_verificados": 350,
+  "faltan_para_objetivo": 29650,
+  "por_categoria": {
+    "libro": {
+      "referencia": 4500,
+      "verificados": 100,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 100
+    },
+    "pelicula": {
+      "referencia": 3000,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "serie": {
+      "referencia": 1500,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "cancion": {
+      "referencia": 4000,
+      "verificados": 100,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 100
+    },
+    "poema": {
+      "referencia": 2500,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "cita": {
+      "referencia": 3000,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "guion": {
+      "referencia": 500,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "personaje": {
+      "referencia": 4500,
+      "verificados": 0,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 0
+    },
+    "prompt": {
+      "referencia": 4000,
+      "verificados": 103,
+      "pendientes": 0,
+      "rechazados": 0,
+      "objetivo_ajustado": 103
+    },
+    "imagen": {
+      "referencia": 2500,
+      "verificados": 47,
+      "pendientes": 0,
+      "rechazados": 3,
+      "objetivo_ajustado": 47
+    }
+  },
+  "plan": {
+    "deficit": {
+      "libro": 4400,
+      "pelicula": 3000,
+      "serie": 1500,
+      "cancion": 3900,
+      "poema": 2500,
+      "cita": 3000,
+      "guion": 500,
+      "personaje": 4500,
+      "prompt": 3897,
+      "imagen": 2453
+    },
+    "excedente": {
+      "libro": 0,
+      "pelicula": 0,
+      "serie": 0,
+      "cancion": 0,
+      "poema": 0,
+      "cita": 0,
+      "guion": 0,
+      "personaje": 0,
+      "prompt": 0,
+      "imagen": 0
+    },
+    "extra_asignado": {
+      "libro": 0,
+      "pelicula": 0,
+      "serie": 0,
+      "cancion": 0,
+      "poema": 0,
+      "cita": 0,
+      "guion": 0,
+      "personaje": 0,
+      "prompt": 0,
+      "imagen": 0
+    },
+    "objetivo_ajustado": {
+      "libro": 100,
+      "pelicula": 0,
+      "serie": 0,
+      "cancion": 100,
+      "poema": 0,
+      "cita": 0,
+      "guion": 0,
+      "personaje": 0,
+      "prompt": 103,
+      "imagen": 47
+    },
+    "faltante_sin_cubrir": 29650
+  },
+  "por_derechos": [
+    {
+      "derechos": "metadatos_obra_protegida",
+      "n": 200
+    },
+    {
+      "derechos": "original",
+      "n": 103
+    },
+    {
+      "derechos": "licencia_abierta",
+      "n": 43
+    },
+    {
+      "derechos": "dominio_publico",
+      "n": 4
+    }
+  ],
+  "por_fuente": [
+    {
+      "fuente": "commons",
+      "estado": "verificado",
+      "n": 47
+    },
+    {
+      "fuente": "musicbrainz",
+      "estado": "verificado",
+      "n": 100
+    },
+    {
+      "fuente": "openlibrary",
+      "estado": "verificado",
+      "n": 100
+    },
+    {
+      "fuente": "prompts_originales",
+      "estado": "verificado",
+      "n": 103
+    }
+  ],
+  "motivos_pendiente": [],
+  "motivos_rechazo": [
+    {
+      "motivo": "falta_autor_artista_creador;falta_atribucion",
+      "n": 3
+    }
+  ],
+  "duplicados": [],
+  "enlaces": [],
+  "corridas": [
+    {
+      "run_id": "20261120T161541459810",
+      "comando": "collect",
+      "fuente": "prompts_originales",
+      "resumen_json": "{\"procesados\": 103, \"resultados\": {\"nuevo\": 103}, \"por_categoria\": {\"prompt\": {\"nuevo\": 103}}}"
+    },
+    {
+      "run_id": "20261120T161441701819",
+      "comando": "collect",
+      "fuente": "prompts_originales",
+      "resumen_json": "{\"procesados\": 0, \"resultados\": {}, \"por_categoria\": {}}"
+    },
+    {
+      "run_id": "20261120T160002502389",
+      "comando": "collect",
+      "fuente": "gutendex",
+      "resumen_json": null
+    },
+    {
+      "run_id": "20261120T151628247679",
+      "comando": "collect",
+      "fuente": "commons",
+      "resumen_json": "{\"procesados\": 50, \"resultados\": {\"rechazado\": 3, \"nuevo\": 47}, \"por_categoria\": {\"imagen\": {\"rechazado\": 3, \"nuevo\": 47}}}"
+    },
+    {
+      "run_id": "20261120T151618419030",
+      "comando": "collect",
+      "fuente": "musicbrainz",
+      "resumen_json": "{\"procesados\": 100, \"resultados\": {\"nuevo\": 100}, \"por_categoria\": {\"cancion\": {\"nuevo\": 100}}}"
+    },
+    {
+      "run_id": "20261120T151551129368",
+      "comando": "collect",
+      "fuente": "openlibrary",
+      "resumen_json": "{\"procesados\": 100, \"resultados\": {\"nuevo\": 100}, \"por_categoria\": {\"libro\": {\"nuevo\": 100}}}"
+    },
+    {
+      "run_id": "20261120T150946203397",
+      "comando": "collect",
+      "fuente": "wikidata",
+      "resumen_json": "{\"procesados\": 0, \"resultados\": {}, \"por_categoria\": {}}"
+    }
+  ]
+}

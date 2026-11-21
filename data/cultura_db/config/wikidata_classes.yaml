@@ -1,0 +1,56 @@
+# Clases (QIDs) y propiedades de Wikidata usadas por el colector.
+# IMPORTANTE: verificá los QIDs con:  python run.py doctor
+# (imprime la etiqueta real de cada QID para confirmar que es la clase que buscás).
+# Wikidata es CC0. Solo se piden elementos que tengan artículo en es.wikipedia.org
+# (evita elementos sin etiqueta y asegura notoriedad y un enlace de lectura).
+
+sitio_articulo: "https://es.wikipedia.org/"
+sitio_wikisource: "https://es.wikisource.org/"
+tamano_pagina: 1000
+
+tipos:
+  libro:
+    categoria: libro
+    clases: [Q8261, Q571, Q7725634, Q49084]        # novela, libro, obra literaria, cuento
+    entidades: {creador: [P50], genero: [P136], tema: [P921]}
+    fechas: [P577]
+    autor_con_fallecimiento: P50
+  poema:
+    categoria: poema
+    clases: [Q5185279]                              # poema
+    entidades: {creador: [P50], genero: [P136], tema: [P921]}
+    fechas: [P577, P571]
+    autor_con_fallecimiento: P50
+    wikisource: true
+  pelicula:
+    categoria: pelicula
+    clases: [Q11424, Q93204, Q202866, Q24862]       # pelicula, documental, animacion, cortometraje
+    entidades: {creador: [P57], genero: [P136], tema: [P921], personajes: [P674]}
+    fechas: [P577]
+  serie:
+    categoria: serie
+    clases: [Q5398426, Q1259759]                    # serie de television, miniserie
+    entidades: {creador: [P170, P57], genero: [P136], tema: [P921], personajes: [P674]}
+    fechas: [P580, P577, P571]
+  cancion:
+    categoria: cancion
+    clases: [Q7366, Q134556]                        # cancion, sencillo
+    entidades: {creador: [P175], genero: [P136], album: [P361]}
+    fechas: [P577]
+  personaje:
+    categoria: personaje
+    clases: [Q95074, Q15632617, Q3658341, Q15773347, Q15773317]
+    entidades: {presente_en: [P1441], universo: [P1080], creador: [P170], tema: [P921]}
+    entidades_inversas: {obra_de: P674}             # ?obra wdt:P674 ?personaje
+    fechas: []
+    medio_por_clase:
+      Q3658341: libro          # personaje literario
+      Q15773347: pelicula      # personaje de pelicula
+      Q15773317: serie         # personaje de television
+      Q95074: sin_determinar   # personaje ficticio
+      Q15632617: sin_determinar
+
+# Semillas de autores para citas (Wikiquote)
+wikiquote:
+  sitio: "https://es.wikiquote.org/"
+  idioma_pagina: "es"

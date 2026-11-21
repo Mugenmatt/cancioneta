@@ -1,0 +1,5 @@
+data/raw/
+data/staging/
+data/reports/
+__pycache__/
+*.part

@@ -1,0 +1,27 @@
+# Relación categoría -> Juegos de la app. COMPLETALA con los IDs reales de tu GAME_CATALOG.
+# El Excel vuelca esta lista en la columna "juegos_compatibles" (separada por "|").
+# Mientras esté vacía, la columna queda vacía (no se inventan compatibilidades).
+juegos_por_categoria:
+  libro: []
+  pelicula: []
+  serie: []
+  cancion: []
+  poema: []
+  cita: []
+  guion: []
+  personaje: []
+  prompt: []
+  imagen: []
+
+# Valores sugeridos para "uso_recomendado" (editables).
+uso_recomendado:
+  libro: "titulo disparador; tematica; autor como estimulo"
+  pelicula: "titulo disparador; escenario; tematica"
+  serie: "titulo disparador; escenario; tematica"
+  cancion: "referencia de estilo/tema (sin letra)"
+  poema: "referencia y enlace para lectura; tematica"
+  cita: "frase disparadora; epigrafe"
+  guion: "referencia de obra y personaje; frase solo si es dominio publico"
+  personaje: "personaje protagonista o antagonista para escribir desde su voz"
+  prompt: "consigna de escritura"
+  imagen: "estimulo visual"

@@ -6,7 +6,7 @@ import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { BackButton, Pill, SectionLabel } from '@/design/components/Primitives';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { fonts, radii, spacing } from '@/design/tokens';
 import { useSettingsStore, type ThemePreference } from '@/stores/settingsStore';
 import { dataService } from '@/services/data/DataService';
 import { randomService } from '@/services/random/RandomService';
@@ -81,12 +81,9 @@ export default function SettingsScreen() {
         <View style={styles.cardHead}>
           <Feather name="database" size={18} color={colors.accentCore} />
           <AppText variant="body" style={{ fontFamily: fonts.sansSemiBold, marginLeft: 8 }}>Paquete de datos</AppText>
-          <View style={[styles.badge, { backgroundColor: alpha(colors.stateWarning, 0.12) }]}>
-            <AppText variant="caption" color={colors.stateWarning}>Prueba</AppText>
-          </View>
         </View>
         <AppText variant="caption" color={colors.textSecondary} style={{ marginTop: spacing.sm }}>
-          {report.totalItems} piezas cargadas en {Object.keys(report.byPool).filter((key) => report.byPool[key] > 0).length} pools. Sin registros culturales reales todavía.
+          {report.totalItems} piezas cargadas en {Object.keys(report.byPool).filter((key) => report.byPool[key] > 0).length} pools.
         </AppText>
         {topPools.map(([pool, count]) => (
           <View key={pool} style={styles.poolRow}>
@@ -183,7 +180,6 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', padding: spacing.md, minHeight: 64, backgroundColor: 'transparent' },
   card: { borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginTop: spacing.md },
   cardHead: { flexDirection: 'row', alignItems: 'center' },
-  badge: { marginLeft: 'auto', borderRadius: radii.chip, paddingHorizontal: 8, paddingVertical: 3 },
   poolRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 },
   linkRow: { flexDirection: 'row', alignItems: 'center', padding: spacing.md, marginTop: spacing.md },
 });

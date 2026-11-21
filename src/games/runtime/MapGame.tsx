@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Alert, Linking, PanResponder, StyleSheet, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
@@ -185,8 +185,8 @@ export function MapGame() {
       const asset = result.assets[0];
       if (!asset) return;
       applyImport(await loadMapFile(asset.uri, {
-        read: (uri) => new FileSystem.File(uri).text(),
-        remove: (uri) => new FileSystem.File(uri).delete(),
+        read: (uri) => new File(uri).text(),
+        remove: (uri) => { try { new File(uri).delete(); } catch { void 0; } },
       }, nextId));
     } catch {
       Alert.alert(MAP_TEXT.importErrorTitle, MAP_TEXT.fileImportErrorBody);
@@ -195,15 +195,15 @@ export function MapGame() {
 
   const saveFile = async () => {
     if (!root) return;
-    const file = new FileSystem.File(FileSystem.Paths.cache, `mapa-${Date.now()}.mapa.json`);
+    const file = new File(Paths.cache, `mapa-${Date.now()}.mapa.json`);
     try {
-      await file.write(JSON.stringify(serializeMap(root), null, 2));
-      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(file.uri, { mimeType: 'application/json' });
+      file.write(JSON.stringify(serializeMap(root), null, 2));
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: MAP_TEXT.saveFile });
       else Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
     } catch {
       Alert.alert(MAP_TEXT.savedErrorTitle, MAP_TEXT.savedErrorBody);
     } finally {
-      try { await file.delete(); } catch { void 0; }
+      try { file.delete(); } catch { void 0; }
     }
   };
 
@@ -211,7 +211,7 @@ export function MapGame() {
     if (!canvasRef.current) return;
     try {
       const uri = await captureRef(canvasRef.current as never, { format: 'png', quality: 1, result: 'tmpfile' });
-      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'image/png' });
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: MAP_TEXT.image });
       else Alert.alert(MAP_TEXT.imageErrorTitle, MAP_TEXT.imageErrorBody);
     } catch {
       Alert.alert(MAP_TEXT.imageErrorTitle, MAP_TEXT.imageErrorBody);
@@ -234,7 +234,7 @@ export function MapGame() {
       const { uri } = await Print.printToFileAsync({
         html: `<html><body style="padding:32px"><h1 style="font-family:Georgia,serif">${MAP_TEXT.pdfTitle}</h1>${toHtml(mapExportEntries(root))}</body></html>`,
       });
-      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'application/pdf' });
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: MAP_TEXT.pdf });
       else Alert.alert(MAP_TEXT.pdfTitle, uri);
     } catch {
       Alert.alert(MAP_TEXT.pdfErrorTitle, MAP_TEXT.pdfErrorBody);

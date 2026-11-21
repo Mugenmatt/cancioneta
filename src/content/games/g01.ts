@@ -15,6 +15,7 @@ export const ASSOCIATION_TEXT = {
   intro: 'Tres columnas de diez palabras. Ninguna se repite entre columnas. Tocá el título de una columna para cambiar su categoría.',
   regenerateAll: 'Regenerar todo',
   regenerateColumn: (index: number) => `Regenerar columna ${index + 1}`,
+  regenerateShort: 'Regenerar',
   changeCategory: (index: number) => `Cambiar categoría de la columna ${index + 1}`,
   fallbackKind: 'Palabras',
   total: (count: number) => `${count} palabras en total. «Llevar al cuaderno» las muestra plegadas en el cuaderno; no cambian la letra.`,

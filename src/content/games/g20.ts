@@ -5,4 +5,9 @@ export const SENSORY_TEXT = {
   subjectLabel: 'Tu punto de partida',
   subjectPlaceholder: 'Una persona, un lugar, un momento…',
   random: 'Al azar',
+  definition: 'Definición',
+  showDefinition: 'Ver definición',
+  hideDefinition: 'Ocultar definición',
+  definitionLoading: 'Buscando definición…',
+  definitionUnavailable: 'No encontré una definición offline por ahora.',
 } as const;

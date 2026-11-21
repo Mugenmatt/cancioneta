@@ -2,12 +2,14 @@ import { GAME_REGISTRY, gameById, gameIds } from '@/games/registry';
 import { ONBOARDING_PAGES } from '@/content/onboarding';
 
 describe('catálogo de juegos', () => {
-  it('tiene los 32 juegos originales y nuevos en orden', () => {
+  it('tiene los juegos numerados habilitados y sin g31', () => {
     const games = GAME_REGISTRY.filter((game) => game.phase !== 'fase0');
-    expect(games).toHaveLength(32);
-    expect(games.map((game) => game.id)).toEqual(
-      Array.from({ length: 32 }, (_, index) => `g${String(index + 1).padStart(2, '0')}`),
-    );
+    expect(games.map((game) => game.id)).toEqual([
+      'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10',
+      'g11', 'g12', 'g13', 'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20',
+      'g21', 'g22', 'g23', 'g24', 'g25', 'g26', 'g27', 'g28', 'g29', 'g30', 'g32',
+    ]);
+    expect(games).not.toContainEqual(expect.objectContaining({ id: 'g31' }));
     expect(new Set(gameIds()).size).toBe(GAME_REGISTRY.length);
   });
 
@@ -17,7 +19,7 @@ describe('catálogo de juegos', () => {
     expect(phase0.every((game) => game.status === 'ready')).toBe(true);
   });
 
-  it('expone los 32 juegos habilitados', () => {
+  it('expone los juegos numerados habilitados', () => {
     const numbered = GAME_REGISTRY.filter((game) => game.phase !== 'fase0');
     expect(numbered.every((game) => game.status === 'ready')).toBe(true);
   });

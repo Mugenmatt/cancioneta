@@ -1,5 +1,6 @@
+import { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
@@ -9,12 +10,36 @@ import { SectionLabel } from '@/design/components/Primitives';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
-import { gamesForToday } from '@/games/registry';
+import { GAME_REGISTRY, type GameMeta } from '@/games/registry';
+import { randomService } from '@/services/random/RandomService';
+
+let lastHomeGameId: string | null = null;
+
+function pickRandomGame(excludeId: string | null): GameMeta {
+  const pool = excludeId ? GAME_REGISTRY.filter((game) => game.id !== excludeId) : GAME_REGISTRY;
+  return randomService.pickOne(pool.length > 0 ? pool : GAME_REGISTRY) ?? GAME_REGISTRY[0];
+}
 
 export default function HomeScreen() {
   const router = useRouter();
   const { colors } = useCoreTheme();
-  const today = gamesForToday();
+  const [today, setToday] = useState<GameMeta>(() => pickRandomGame(null));
+
+  const openRandomGame = useCallback(() => {
+    const next = pickRandomGame(lastHomeGameId);
+    lastHomeGameId = next.id;
+    setToday(next);
+    router.push(`/juego/${next.id}`);
+  }, [router]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const next = pickRandomGame(lastHomeGameId);
+      lastHomeGameId = next.id;
+      setToday(next);
+    }, []),
+  );
+
   const theme = gameThemes[today.themeId] ?? gameThemes.g01;
 
   return (
@@ -86,32 +111,12 @@ export default function HomeScreen() {
 
       <View style={styles.section}>
         <SectionLabel color={colors.textMuted}>Un juego para hoy</SectionLabel>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`Abrir ${today.name}`}
-          onPress={() => router.push(`/juego/${today.id}`)}
-          style={({ pressed }) => [
-            styles.gameCard,
-            { backgroundColor: theme.surface, borderColor: alpha(theme.accent, 0.28) },
-            pressed && { opacity: 0.86 },
-          ]}
-        >
-          <View style={styles.gameHead}>
-            <View style={[styles.gameNumber, { backgroundColor: theme.accent }]}>
-              <AppText variant="caption" color={theme.accentInk} style={{ fontFamily: fonts.sansBold }}>
-                {today.number ? String(today.number).padStart(2, '0') : 'F0'}
-              </AppText>
-            </View>
-            <AppText variant="label" color={theme.accentText} style={{ flex: 1, marginLeft: spacing.sm }}>
-              {today.name}
-            </AppText>
-            <Feather name="arrow-up-right" size={18} color={theme.accentText} />
-          </View>
-          <AppText style={[styles.gameSummary, { color: theme.ink }]}>{today.summary}</AppText>
-          <AppText variant="caption" color={theme.inkSoft} style={{ marginTop: spacing.sm }}>
-            {today.tags.map((tag) => `#${tag}`).join('   ')}
-          </AppText>
-        </Pressable>
+        <Button
+          label="A escribir"
+          onPress={openRandomGame}
+          accent={theme.accent}
+          accentInk={theme.accentInk}
+        />
       </View>
 
       <View style={[styles.privacy, { borderColor: colors.lineSubtle }]}>
@@ -167,9 +172,5 @@ const styles = StyleSheet.create({
   quickRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
   quick: { flex: 1, borderWidth: 1, borderRadius: radii.card, padding: spacing.md, minHeight: 100 },
   section: { marginTop: spacing.xl },
-  gameCard: { borderWidth: 1, borderRadius: radii.card, padding: spacing.lg },
-  gameHead: { flexDirection: 'row', alignItems: 'center' },
-  gameNumber: { width: 36, height: 36, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
-  gameSummary: { fontFamily: fonts.serif, fontSize: 21, lineHeight: 29, marginTop: spacing.md },
   privacy: { flexDirection: 'row', alignItems: 'flex-start', borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginTop: spacing.xl },
 });

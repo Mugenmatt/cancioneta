@@ -32,11 +32,11 @@ export default function GamesScreen() {
           <AppText variant="label" color={colors.accentCore}>Juegos</AppText>
           <AppText variant="title" style={{ marginTop: 4 }}>Formas de empezar</AppText>
           <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 4 }}>
-            32 juegos, 5 ejercicios de calentamiento.
+            31 juegos, 5 ejercicios de calentamiento.
           </AppText>
         </View>
         <View style={[styles.count, { backgroundColor: colors.accentSoft }]}>
-          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>37</AppText>
+          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>36</AppText>
         </View>
       </View>
 
@@ -84,7 +84,6 @@ export default function GamesScreen() {
 }
 
 function GameRow({ game, onPress }: { game: GameMeta; onPress: () => void }) {
-  const { colors } = useCoreTheme();
   const theme = gameThemes[game.themeId] ?? gameThemes.g01;
   return (
     <Pressable
@@ -103,16 +102,9 @@ function GameRow({ game, onPress }: { game: GameMeta; onPress: () => void }) {
         </AppText>
       </View>
       <View style={{ flex: 1 }}>
-        <View style={styles.rowTitle}>
-          <AppText style={{ fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: theme.ink, flex: 1 }}>
-            {game.name}
-          </AppText>
-          {game.status === 'ready' ? (
-            <View style={[styles.ready, { backgroundColor: alpha(colors.stateSuccess, 0.16) }]}>
-              <AppText variant="caption" color={colors.stateSuccess} style={{ fontSize: 9 }}>Listo</AppText>
-            </View>
-          ) : null}
-        </View>
+        <AppText style={{ fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: theme.ink }}>
+          {game.name}
+        </AppText>
         <AppText variant="caption" color={theme.inkSoft} numberOfLines={2} style={{ marginTop: 3 }}>
           {game.summary}
         </AppText>
@@ -130,7 +122,5 @@ const styles = StyleSheet.create({
   group: { marginTop: spacing.lg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: radii.card, padding: spacing.sm, marginBottom: spacing.xs, minHeight: 78 },
   number: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
-  rowTitle: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  ready: { borderRadius: radii.chip, paddingHorizontal: 7, paddingVertical: 2 },
   empty: { alignItems: 'center', paddingVertical: spacing.xxl },
 });

@@ -12,14 +12,13 @@ import { SeventhGame } from './SeventhGame';
 import { MapGame } from './MapGame';
 import { CollageGame } from './CollageGame';
 import { CutupGame } from './CutupGame';
-import { LetterChainGame } from './LetterChainGame';
 import { MorningPagesGame, PromptGame, SpyGame, VoiceGame, WhyGame } from '../phase0';
 
 export const RUNTIME_GAME_IDS = new Set([
   'f0-1', 'f0-2', 'f0-3', 'f0-4', 'f0-5',
   'g01', 'g03', 'g04', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11', 'g12', 'g13',
   'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20', 'g21', 'g22', 'g23', 'g25',
-  'g26', 'g27', 'g28', 'g29', 'g30', 'g31', 'g32',
+  'g26', 'g27', 'g28', 'g29', 'g30', 'g32',
 ]);
 
 export function RuntimeGame({ id }: { id: string }): ReactElement | null {
@@ -75,8 +74,6 @@ export function RuntimeGame({ id }: { id: string }): ReactElement | null {
       return <CollageGame />;
     case 'g29':
       return <CutupGame />;
-    case 'g31':
-      return <LetterChainGame />;
     default:
       return null;
   }

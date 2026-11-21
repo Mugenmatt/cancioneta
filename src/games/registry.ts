@@ -48,7 +48,6 @@ export const GAME_REGISTRY: GameMeta[] = [
   { id: 'g28', number: 28, name: 'Collage textual', phase: 'nuevo', summary: 'Palabras dispuestas como un cartel.', tags: ['collage', 'visual'], status: 'ready', themeId: 'g28' },
   { id: 'g29', number: 29, name: 'Cut-up', phase: 'nuevo', summary: 'Recortar, mezclar y volver a mirar.', tags: ['cut-up', 'azar'], status: 'ready', themeId: 'g29' },
   { id: 'g30', number: 30, name: 'Trenza de palabras', phase: 'nuevo', summary: 'Tres frases que se entrelazan.', tags: ['frases', 'experimental'], status: 'ready', themeId: 'g30' },
-  { id: 'g31', number: 31, name: 'Cadena de letras', phase: 'nuevo', summary: 'Conectá letras y encontrá palabras.', tags: ['letras', 'diccionario'], status: 'ready', themeId: 'g31' },
   { id: 'g32', number: 32, name: 'Acróstico de azar', phase: 'nuevo', summary: 'Una letra por verso, una palabra escondida.', tags: ['acróstico', 'verso'], status: 'ready', themeId: 'g32' },
 ];
 

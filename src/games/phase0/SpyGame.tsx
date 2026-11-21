@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { TimerBadge } from '@/design/components/Feedback';
 import { Button } from '@/design/components/Button';
@@ -6,6 +6,7 @@ import { AppText } from '@/design/components/Text';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { fontSizes, fonts, lineHeights, spacing } from '@/design/tokens';
 import { ActionBar, GameField, GameIntro, Note, PromptCard, runtimeStyles } from '@/games/runtime/ui';
+import { playAlarm, stopAlarm } from '@/services/audio/alarm';
 import { randomService } from '@/services/random/RandomService';
 import { PHASE0_CONTENT } from '@/content/phase0';
 import { createSpyController, type SpyState } from './controllers';
@@ -21,6 +22,7 @@ export function SpyGame() {
   const [observing, setObserving] = useState(false);
   const [seconds, setSeconds] = useState(OBSERVATION_SECONDS);
   const [text, setText] = useState('');
+  const alarmedRef = useRef(false);
   const phase: ObservationPhase = !started ? 'ready' : observing && seconds > 0 ? 'observing' : 'writing';
 
   useEffect(() => {
@@ -39,7 +41,19 @@ export function SpyGame() {
     return () => clearTimeout(timer);
   }, [observing, seconds]);
 
+  useEffect(() => {
+    if (observing && seconds === 0 && !alarmedRef.current) {
+      alarmedRef.current = true;
+      setObserving(false);
+      void playAlarm(3);
+    }
+  }, [observing, seconds]);
+
+  useEffect(() => () => stopAlarm(), []);
+
   const beginObservation = () => {
+    stopAlarm();
+    alarmedRef.current = false;
     setSeconds(OBSERVATION_SECONDS);
     setStarted(true);
     setObserving(true);

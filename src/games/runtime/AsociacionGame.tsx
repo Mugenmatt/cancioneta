@@ -87,14 +87,21 @@ export function AsociacionGame() {
                 <AppText style={[styles.wordText, { color: theme.ink }]}>{item.text}</AppText>
               </View>
             ))}
-            <Button
-              label={ASSOCIATION_TEXT.regenerateColumn(index)}
-              tone="secondary"
-              small
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={ASSOCIATION_TEXT.regenerateColumn(index)}
               onPress={() => drawColumn(index, kinds[index] ?? ASSOCIATION_DEFAULT_KINDS[index])}
-              accent={theme.accentText}
-              accentInk={theme.accentInk}
-            />
+              style={({ pressed }) => [
+                styles.regenerate,
+                { borderColor: alpha(theme.accentText, 0.45) },
+                pressed && { opacity: 0.7 },
+              ]}
+            >
+              <Feather name="refresh-cw" size={12} color={theme.accentText} />
+              <AppText variant="caption" color={theme.accentText} style={styles.regenerateLabel}>
+                {ASSOCIATION_TEXT.regenerateShort}
+              </AppText>
+            </Pressable>
           </View>
         ))}
       </View>
@@ -108,10 +115,22 @@ export function AsociacionGame() {
 }
 
 const styles = StyleSheet.create({
-  columns: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md },
-  column: { flex: 1, borderWidth: 1, borderRadius: radii.card, padding: spacing.xxs, gap: spacing.xxs },
+  columns: { flexDirection: 'row', gap: spacing.xs, marginTop: spacing.md },
+  column: { flex: 1, minWidth: 0, borderWidth: 1, borderRadius: radii.card, padding: spacing.xxs, gap: spacing.xxs },
   columnHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs, minHeight: 34 },
   word: { borderWidth: 1, borderRadius: radii.field, paddingHorizontal: spacing.xxs, paddingVertical: spacing.xxs },
   wordText: { fontFamily: fonts.sansMedium, fontSize: fontSizes.body, lineHeight: fontSizes.body * lineHeights.body },
+  regenerate: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    borderWidth: 1,
+    borderRadius: radii.chip,
+    minHeight: 32,
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+  },
+  regenerateLabel: { fontFamily: fonts.sansSemiBold, fontSize: 11, lineHeight: 14 },
   buttons: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
 });

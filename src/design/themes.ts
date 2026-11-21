@@ -174,10 +174,6 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#201A2C', bgAlt: '#352A47', surface: '#2A2238', ink: '#F2ECF7', inkSoft: '#B9AEC8',
     accent: '#E4B0D4', accentInk: '#2B1024', motif: 'wave', entrance: 'rise', displayFont: 'displayItalic', label: 'Trenza de palabras',
   },
-  'g31': {
-    bg: '#2A2218', bgAlt: '#3F3323', surface: '#342A1D', ink: '#F4EBDC', inkSoft: '#C2B198',
-    accent: '#D8B06C', accentInk: '#241A08', motif: 'grid', entrance: 'drop', displayFont: 'sansBold', label: 'Cadena de letras',
-  },
   'g32': {
     bg: '#26262B', bgAlt: '#3A3A42', surface: '#303037', ink: '#F0EFE9', inkSoft: '#B3B1A9',
     accent: '#C9C4B4', accentInk: '#1F1F1C', motif: 'stairs', entrance: 'drop', displayFont: 'displayRegular', label: 'Acróstico de azar',

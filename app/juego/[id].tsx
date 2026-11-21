@@ -9,6 +9,7 @@ import { BackButton } from '@/design/components/Primitives';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { GAME_FLOW_TEXT } from '@/content/gameFlow';
+import { GAME_INTROS } from '@/content/gameIntros';
 import { PHASE_LABEL, gameById, gameIds } from '@/games/registry';
 import { DiceGame } from '@/games/g24-dados/DiceGame';
 import { TitleGame } from '@/games/g02-titulo/TitleGame';
@@ -71,11 +72,11 @@ export default function GameScreen() {
           <AppText variant="label" color={theme.accentText}>{GAME_FLOW_TEXT.objective}</AppText>
           <AppText variant="caption" color={theme.ink} style={{ marginTop: 4 }}>{game.summary}</AppText>
           <AppText variant="label" color={theme.accentText} style={{ marginTop: spacing.md }}>{GAME_FLOW_TEXT.stepsTitle}</AppText>
-          {GAME_FLOW_TEXT.steps.map((step) => (
+          {(GAME_INTROS[game.id]?.steps ?? GAME_FLOW_TEXT.steps).map((step) => (
             <AppText key={step} variant="caption" color={theme.inkSoft} style={{ lineHeight: 19 }}>{step}</AppText>
           ))}
           <AppText variant="label" color={theme.accentText} style={{ marginTop: spacing.md }}>{GAME_FLOW_TEXT.examplesTitle}</AppText>
-          {GAME_FLOW_TEXT.examples(game.summary, game.tags).map((example) => (
+          {(GAME_INTROS[game.id]?.examples ?? GAME_FLOW_TEXT.examples(game.summary, game.tags)).map((example) => (
             <AppText key={example} variant="caption" color={theme.inkSoft} style={{ lineHeight: 19 }}>{example}</AppText>
           ))}
           <Button

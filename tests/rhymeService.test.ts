@@ -22,7 +22,10 @@ describe('RhymeService', () => {
 
     expect(filterRhymes(results, 'consonant')).toEqual(results.consonants);
     expect(filterRhymes(results, 'assonant')).toEqual(results.assonants);
-    expect(filterRhymes(results, 'all')).toEqual([...results.consonants, ...results.assonants]);
+    const all = filterRhymes(results, 'all');
+    expect(all.length).toBeLessThanOrEqual(300);
+    expect(all[0]).toBe(results.consonants[0]);
+    expect(all[1]).toBe(results.assonants[0]);
   });
 
   it('consulta el vocabulario español sin clave de API', async () => {
@@ -37,10 +40,10 @@ describe('RhymeService', () => {
   });
 
   it('sigue devolviendo rimas locales cuando falla la red', async () => {
-    const fetchFn = fakeFetch([], [], true);
+    const fetchFn = fakeFetch(['zzzor'], [], true);
     const results: RhymeResults = await new RhymeService(fetchFn).search('amor');
     expect(results.online).toBe(false);
-    expect(results.consonants).not.toContain('clamor');
+    expect(results.consonants).not.toContain('zzzor');
   });
 
   it('no consulta nada para una búsqueda vacía', async () => {
@@ -48,5 +51,19 @@ describe('RhymeService', () => {
     const results = await new RhymeService(fetchFn).search('   ');
     expect(results).toEqual({ query: '', consonants: [], assonants: [], online: false });
     expect(fetchFn).not.toHaveBeenCalled();
+  });
+
+  it('muestra como máximo 300 palabras al ver todas las rimas', () => {
+    const results: RhymeResults = {
+      query: 'amor',
+      consonants: Array.from({ length: 300 }, (_, index) => `consonante${index}`),
+      assonants: Array.from({ length: 300 }, (_, index) => `asonante${index}`),
+      online: true,
+    };
+    const all = filterRhymes(results, 'all');
+    expect(all).toHaveLength(300);
+    expect(all[0]).toBe('consonante0');
+    expect(all[1]).toBe('asonante0');
+    expect(filterRhymes(results, 'consonant')).toHaveLength(300);
   });
 });

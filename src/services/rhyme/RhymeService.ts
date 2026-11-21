@@ -14,7 +14,7 @@ type FetchResponse = { ok: boolean; json: () => Promise<unknown> };
 type FetchLike = (url: string, init?: { signal?: AbortSignal }) => Promise<FetchResponse>;
 
 const API_BASE = 'https://api.datamuse.com/words';
-const RESULT_LIMIT = 50;
+const MAX_WORDS = 300;
 const TIMEOUT_MS = 6000;
 const POOLS = ['words.noun', 'words.verb', 'words.adj'] as const;
 
@@ -57,7 +57,7 @@ async function fetchRemote(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const params = new URLSearchParams({ [`rel_${relation}`]: query, v: 'es', max: String(RESULT_LIMIT) });
+    const params = new URLSearchParams({ [`rel_${relation}`]: query, v: 'es', max: String(MAX_WORDS) });
     const response = await fetchFn(`${API_BASE}?${params.toString()}`, { signal: controller.signal });
     if (!response.ok) return { words: [], ok: false };
     return { words: parseWords(await response.json()), ok: true };
@@ -77,7 +77,7 @@ export class RhymeService {
     const target = rhymeKeys(word);
     if (!target) return empty;
 
-    const local = findLocalRhymes(word, getLexiconWords(), RESULT_LIMIT);
+    const local = findLocalRhymes(word, getLexiconWords(), MAX_WORDS);
     const [perfect, near] = await Promise.all([
       fetchRemote('rhy', word, this.fetchFn),
       fetchRemote('nry', word, this.fetchFn),
@@ -88,7 +88,7 @@ export class RhymeService {
     const seen = new Set<string>([normalizeRhymeWord(word)]);
     const merge = (lists: string[][]): string[] => {
       const merged: string[] = [];
-      for (let index = 0; merged.length < RESULT_LIMIT && lists.some((list) => index < list.length); index += 1) {
+      for (let index = 0; merged.length < MAX_WORDS && lists.some((list) => index < list.length); index += 1) {
         for (const list of lists) {
           const candidate = list[index];
           if (candidate === undefined) continue;
@@ -116,7 +116,16 @@ export class RhymeService {
 export function filterRhymes(results: RhymeResults, filter: RhymeFilter): string[] {
   if (filter === 'consonant') return results.consonants;
   if (filter === 'assonant') return results.assonants;
-  return [...results.consonants, ...results.assonants];
+
+  const merged: string[] = [];
+  for (let index = 0; merged.length < MAX_WORDS; index += 1) {
+    const consonant = results.consonants[index];
+    const assonant = results.assonants[index];
+    if (consonant === undefined && assonant === undefined) break;
+    if (consonant !== undefined) merged.push(consonant);
+    if (assonant !== undefined && merged.length < MAX_WORDS) merged.push(assonant);
+  }
+  return merged;
 }
 
 export const rhymeService = new RhymeService();

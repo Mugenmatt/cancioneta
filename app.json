@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "cancioneta",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "icon": "./assets/expo.icon",
       "supportsTablet": false,
@@ -67,7 +66,8 @@
           "microphonePermission": "Usamos el micrófono para grabar tu voz. La grabación queda en tu teléfono y se borra al terminar la sesión.",
           "speechRecognitionPermission": "La transcripción se hace en el dispositivo, sin enviar tu voz a ningún servidor."
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

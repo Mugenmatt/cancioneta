@@ -16,6 +16,7 @@ import {
   realVerbs,
 } from '@/data/lexiconReal';
 import { mapRelationsReal } from '@/data/mapRelationsReal';
+import { gameIds } from '@/games/registry';
 
 export interface CreditEntry {
   source: string;
@@ -33,7 +34,25 @@ export interface DataReport {
 }
 
 const BUILD_DATE = culturalSource.builtAt;
-const INFLECTION_KEYS = new Set(realInflections.map((form) => form.normalize('NFC').toLowerCase()));
+let builtData: ReturnType<typeof buildPools> | null = null;
+let inflectionKeys: Set<string> | null = null;
+
+function getBuiltData(): ReturnType<typeof buildPools> {
+  if (!builtData) {
+    builtData = buildPools();
+    builtData.pools.games = gameIds().map((id) => makeItem('games', id));
+    builtData.report.byPool.games = builtData.pools.games.length;
+    builtData.report.totalItems += builtData.pools.games.length;
+  }
+  return builtData;
+}
+
+function getInflectionKeys(): Set<string> {
+  if (!inflectionKeys) {
+    inflectionKeys = new Set(realInflections.map((form) => form.normalize('NFC').toLowerCase()));
+  }
+  return inflectionKeys;
+}
 
 function makeItem(
   pool: PoolId,
@@ -200,15 +219,9 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
   };
 }
 
-const built = buildPools();
-
 export class DataService {
-  private pools = built.pools;
-  private report = built.report;
-  private credits = built.credits;
-
   getPool(pool: PoolId): PoolItem[] {
-    return this.pools[pool] ?? [];
+    return getBuiltData().pools[pool] ?? [];
   }
 
   getRelations(word: string): SemanticRelations | undefined {
@@ -227,7 +240,7 @@ export class DataService {
   }
 
   isValidWord(word: string): boolean {
-    return INFLECTION_KEYS.has(word.normalize('NFC').toLowerCase());
+    return getInflectionKeys().has(word.normalize('NFC').toLowerCase());
   }
 
   getById(pool: PoolId, id: string): PoolItem | undefined {
@@ -235,15 +248,15 @@ export class DataService {
   }
 
   getAll(): PoolItem[] {
-    return Object.values(this.pools).flat();
+    return Object.values(getBuiltData().pools).flat();
   }
 
   getReport(): DataReport {
-    return this.report;
+    return getBuiltData().report;
   }
 
   getCredits(): CreditEntry[] {
-    return this.credits;
+    return getBuiltData().credits;
   }
 
   search(query: string, pools?: PoolId[]): PoolItem[] {
@@ -254,9 +267,10 @@ export class DataService {
   }
 
   registerGamePool(ids: string[]): void {
-    this.pools.games = ids.map((id) => makeItem('games', id));
-    this.report.byPool.games = this.pools.games.length;
-    this.report.totalItems += this.pools.games.length;
+    const data = getBuiltData();
+    data.pools.games = ids.map((id) => makeItem('games', id));
+    data.report.byPool.games = data.pools.games.length;
+    data.report.totalItems = Object.values(data.report.byPool).reduce((sum, count) => sum + count, 0);
   }
 }
 

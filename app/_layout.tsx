@@ -4,22 +4,35 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useFonts } from 'expo-font';
-import {
-  Fraunces_400Regular, Fraunces_400Regular_Italic, Fraunces_700Bold,
-} from '@expo-google-fonts/fraunces';
-import { Literata_400Regular, Literata_400Regular_Italic, Literata_600SemiBold } from '@expo-google-fonts/literata';
-import { Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
+import * as Font from 'expo-font';
+import { Fraunces_400Regular } from '@expo-google-fonts/fraunces/400Regular';
+import { Fraunces_400Regular_Italic } from '@expo-google-fonts/fraunces/400Regular_Italic';
+import { Fraunces_700Bold } from '@expo-google-fonts/fraunces/700Bold';
+import { Literata_400Regular } from '@expo-google-fonts/literata/400Regular';
+import { Literata_400Regular_Italic } from '@expo-google-fonts/literata/400Regular_Italic';
+import { Literata_600SemiBold } from '@expo-google-fonts/literata/600SemiBold';
+import { Inter_400Regular } from '@expo-google-fonts/inter/400Regular';
+import { Inter_500Medium } from '@expo-google-fonts/inter/500Medium';
+import { Inter_600SemiBold } from '@expo-google-fonts/inter/600SemiBold';
+import { Inter_700Bold } from '@expo-google-fonts/inter/700Bold';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { useSettingsStore } from '@/stores/settingsStore';
-import { dataService } from '@/services/data/DataService';
-import { randomService } from '@/services/random/RandomService';
-import { gameIds } from '@/games/registry';
 import { OnboardingView } from '@/onboarding/OnboardingView';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
-dataService.registerGamePool(gameIds());
+const FONTS = {
+  Fraunces_400Regular,
+  Fraunces_400Regular_Italic,
+  Fraunces_700Bold,
+  Literata_400Regular,
+  Literata_400Regular_Italic,
+  Literata_600SemiBold,
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+};
 
 export default function RootLayout() {
   const { colors, mode } = useCoreTheme();
@@ -27,28 +40,23 @@ export default function RootLayout() {
   const hydrate = useSettingsStore((s) => s.hydrate);
   const onboardingDone = useSettingsStore((s) => s.onboardingDone);
   const completeOnboarding = useSettingsStore((s) => s.completeOnboarding);
-  const [fontsLoaded, fontError] = useFonts({
-    Fraunces_400Regular,
-    Fraunces_400Regular_Italic,
-    Fraunces_700Bold,
-    Literata_400Regular,
-    Literata_400Regular_Italic,
-    Literata_600SemiBold,
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-    Inter_700Bold,
-  });
+  useEffect(() => {
+    void Font.loadAsync(FONTS).catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     void hydrate();
     const subscription = AppState.addEventListener('change', (state) => {
-      if (state === 'background' || state === 'inactive') void randomService.flush();
+      if (state === 'background' || state === 'inactive') {
+        void import('@/services/random/RandomService')
+          .then(({ randomService }) => randomService.flush())
+          .catch(() => undefined);
+      }
     });
     return () => subscription.remove();
   }, [hydrate]);
 
-  const ready = (fontsLoaded || Boolean(fontError)) && hydrated;
+  const ready = hydrated;
 
   useEffect(() => {
     if (ready) void SplashScreen.hideAsync().catch(() => undefined);

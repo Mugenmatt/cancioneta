@@ -170,8 +170,8 @@ export function DiceGame() {
       </View>
 
       <View style={styles.actions}>
-        <Button label={copied ? DICE_TEXT.copied : DICE_TEXT.copy} tone="secondary" small onPress={() => void copy()} accent={theme.accentText} accentInk={theme.accentInk} />
-        <Button label={DICE_TEXT.send} small onPress={sendToEditor} accent={theme.accent} accentInk={theme.accentInk} />
+        <Button label={copied ? DICE_TEXT.copied : DICE_TEXT.copy} tone="secondary" onPress={() => void copy()} accent={theme.accentText} accentInk={theme.accentInk} style={styles.fullButton} />
+        <Button label={DICE_TEXT.send} onPress={sendToEditor} accent={theme.accent} accentInk={theme.accentInk} style={styles.fullButton} />
       </View>
       <AppText variant="caption" color={theme.inkSoft} style={{ marginTop: spacing.sm, lineHeight: 18 }}>
         {DICE_TEXT.note}
@@ -188,5 +188,6 @@ const styles = StyleSheet.create({
   dieText: { fontFamily: fonts.display, fontSize: 22, lineHeight: 28, marginTop: spacing.sm },
   timerBox: { flexDirection: 'row', alignItems: 'center', borderTopWidth: 1, borderBottomWidth: 1, paddingVertical: spacing.md, marginTop: spacing.md },
   pills: { flexDirection: 'row', gap: 6, marginTop: 6 },
-  actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md, flexWrap: 'wrap' },
+  actions: { gap: spacing.sm, marginTop: spacing.md },
+  fullButton: { alignSelf: 'stretch' },
 });

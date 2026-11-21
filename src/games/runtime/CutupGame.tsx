@@ -7,6 +7,7 @@ import { Pill } from '@/design/components/Primitives';
 import { ActionBar, GameField, Note } from './ui';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { randomService } from '@/services/random/RandomService';
+import { dataService } from '@/services/data/DataService';
 import { CUTUP_TEXT } from '@/content/games/g28-g29';
 import { cutUpFragments } from './logic';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
@@ -20,12 +21,13 @@ export function CutupGame() {
   const [own, setOwn] = useState('');
   const [fragments, setFragments] = useState<Fragment[]>([]);
 
-  const drawSource = async () => {
-    const [item] = await randomService.draw('cutup_texts', 1);
+  const drawSource = () => {
+    const pool = dataService.getPool('cutup_texts');
+    const [item] = randomService.pickN(pool, 1);
     setSource(item?.text ?? '');
   };
 
-  useEffect(() => { void Promise.resolve().then(() => { void drawSource(); }); }, []);
+  useEffect(() => { void Promise.resolve().then(drawSource); }, []);
 
   const cut = () => {
     const text = mode === 'casa' ? source : own;
@@ -67,7 +69,7 @@ export function CutupGame() {
       {mode === 'casa' ? (
         <View style={[styles.source, { borderColor: alpha(theme.ink, 0.18), backgroundColor: alpha(theme.surface, 0.6) }]}>
           <AppText style={[styles.sourceText, { color: theme.inkSoft }]}>{source || CUTUP_TEXT.searching}</AppText>
-          <Button label={CUTUP_TEXT.anotherText} tone="secondary" small onPress={() => void drawSource()} accent={theme.accentText} accentInk={theme.accentInk} style={{ alignSelf: 'flex-start', marginTop: spacing.sm }} />
+          <Button label={CUTUP_TEXT.anotherText} tone="secondary" small onPress={drawSource} accent={theme.accentText} accentInk={theme.accentInk} style={{ alignSelf: 'flex-start', marginTop: spacing.sm }} />
         </View>
       ) : (
         <GameField theme={theme} label={CUTUP_TEXT.ownLabel} value={own} onChangeText={setOwn} placeholder={CUTUP_TEXT.ownPlaceholder} multiline style={{ marginTop: spacing.md }} />

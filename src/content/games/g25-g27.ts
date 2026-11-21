@@ -36,9 +36,13 @@ export const UNIVERSO_TEXT = {
 } as const;
 
 export const TRENZA_TEXT = {
-  intro: 'Escribí tres frases. La app entrelaza sus palabras; cambiá una frase sin tocar las otras dos y probá otras intercalaciones.',
+  intro: 'Escribí tres frases o pedile una a la app. Después trenzalas, mezclando sus partes como hebras.',
   phraseLabel: (index: number) => `Frase ${index + 1}`,
-  phrasePlaceholder: 'Una frase independiente…',
+  phrasePlaceholder: 'Una frase suelta…',
   braid: 'Trenzar',
-  resultTitle: 'Resultado',
+  changeOne: 'Cambiar frase',
+  addOne: 'Agregar frase',
+  changeAll: 'Cambiar/agregar todas',
+  resultTitle: 'Trenza',
+  body: (phrases: readonly string[], result: string) => `Frases:\n${phrases.join('\n')}\n\nTrenza:\n${result}`,
 } as const;

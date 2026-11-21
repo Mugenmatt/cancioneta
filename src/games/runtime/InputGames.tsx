@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { Pill } from '@/design/components/Primitives';
-import { ActionBar, GameField, Note, PromptCard } from './ui';
+import { ActionBar, GameField, MiniButton, Note, PromptCard } from './ui';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { randomService } from '@/services/random/RandomService';
 import { letterDestinations } from '@/data/prompts';
@@ -170,22 +170,53 @@ function Trenza() {
   const theme = useGameTheme('g30');
   const [phrases, setPhrases] = useState(['', '', '']);
   const [result, setResult] = useState('');
+
+  const drawPhrase = async (index: number) => {
+    const [item] = await randomService.draw('prompts', 1);
+    if (!item) return;
+    setPhrases((current) => current.map((entry, i) => (i === index ? item.text : entry)));
+    setResult('');
+  };
+
+  const drawAll = async () => {
+    const items = await randomService.draw('prompts', 3);
+    if (items.length === 0) return;
+    setPhrases((current) => current.map((entry, i) => items[i]?.text ?? entry));
+    setResult('');
+  };
+
+  const addOrChange = async (index: number) => {
+    if (phrases[index].trim()) {
+      await drawPhrase(index);
+      return;
+    }
+    await drawPhrase(index);
+  };
+
   const braid = () => {
     const order = randomService.shuffle([0, 1, 2]);
     setResult(braidPhrases(phrases, order));
   };
+
   const update = (index: number, value: string) => {
     setPhrases((current) => current.map((entry, i) => (i === index ? value : entry)));
     setResult('');
   };
+
   return (
     <View>
       <Note theme={theme}>{TRENZA_TEXT.intro}</Note>
       {phrases.map((phrase, index) => (
-        <GameField key={index} theme={theme} label={TRENZA_TEXT.phraseLabel(index)} value={phrase} onChangeText={(value) => update(index, value)} placeholder={TRENZA_TEXT.phrasePlaceholder} multiline style={{ marginTop: spacing.sm }} />
+        <View key={index} style={{ marginTop: spacing.sm }}>
+          <GameField theme={theme} label={TRENZA_TEXT.phraseLabel(index)} value={phrase} onChangeText={(value) => update(index, value)} placeholder={TRENZA_TEXT.phrasePlaceholder} multiline />
+          <View style={styles.inlineActions}>
+            <MiniButton label={phrase.trim() ? TRENZA_TEXT.changeOne : TRENZA_TEXT.addOne} theme={theme} icon="refresh-cw" onPress={() => void addOrChange(index)} />
+          </View>
+        </View>
       ))}
       <View style={styles.buttons}>
         <Button label={TRENZA_TEXT.braid} small onPress={braid} disabled={phrases.some((phrase) => !phrase.trim())} accent={theme.accent} accentInk={theme.accentInk} />
+        <Button label={TRENZA_TEXT.changeAll} tone="secondary" small onPress={() => void drawAll()} accent={theme.accentText} accentInk={theme.accentInk} />
       </View>
       {result ? (
         <View style={[styles.result, { borderColor: theme.accent, backgroundColor: alpha(theme.accent, 0.08) }]}>
@@ -203,6 +234,7 @@ const styles = StyleSheet.create({
   prompt: { fontFamily: fonts.serif, fontSize: 20, lineHeight: 29 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: spacing.md },
   buttons: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
+  inlineActions: { flexDirection: 'row', marginTop: spacing.xs },
   fragments: { gap: 6, marginTop: spacing.md },
   fragment: { borderWidth: 1, borderRadius: radii.field, padding: 8 },
   twoPanels: { borderWidth: 1, borderRadius: radii.card, marginTop: spacing.md, overflow: 'hidden' },

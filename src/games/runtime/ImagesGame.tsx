@@ -12,6 +12,8 @@ import { licenseLabel } from '@/content/games/common';
 import { IMAGES_TEXT } from '@/content/games/g19';
 import { alpha, fonts, spacing } from '@/design/tokens';
 
+const IMAGE_HEADERS = { 'User-Agent': 'Cancioneta/1.0' };
+
 const PALETTES: [string, string][] = [
   ['#7C8FA3', '#27384A'], ['#C66A4A', '#4A1D14'], ['#8A9B91', '#27352D'],
   ['#9BA66D', '#38421F'], ['#7A6A9A', '#2A2038'], ['#D6B36A', '#5A3E12'],
@@ -22,8 +24,10 @@ export function ImagesGame() {
   const [mode, setMode] = useState<'random' | 'thematic'>('random');
   const [images, setImages] = useState<(PoolItem | null)[]>([null, null, null]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [failed, setFailed] = useState<Record<string, boolean>>({});
 
   const drawSet = useCallback(async (nextMode: 'random' | 'thematic') => {
+    setFailed({});
     if (nextMode === 'random') {
       const next = await randomService.draw('images', 3);
       setImages([next[0] ?? null, next[1] ?? null, next[2] ?? null]);
@@ -40,6 +44,8 @@ export function ImagesGame() {
   useEffect(() => { void Promise.resolve().then(() => { void drawSet('random'); }); }, [drawSet]);
 
   const replace = async (index: number) => {
+    const previous = images[index];
+    if (previous) setFailed((current) => ({ ...current, [previous.fingerprint]: false }));
     if (mode === 'thematic') {
       const anchor = images.find((item, i) => i !== index && item?.tags?.length)?.tags?.[0];
       const [next] = await randomService.draw('images', 1, anchor ? { filter: (item) => Boolean(item.tags?.includes(anchor)) } : {});
@@ -72,7 +78,16 @@ export function ImagesGame() {
             <View key={index} style={styles.slot}>
               <Pressable accessibilityRole="button" accessibilityLabel={IMAGES_TEXT.open(item?.text ?? IMAGES_TEXT.titleFallback)} onPress={() => item && setOpenIndex(index)} style={styles.imageButton}>
                 <LinearGradient colors={palette} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.image}>
-                  {item?.externalLink ? <Image source={{ uri: item.externalLink }} resizeMode="cover" style={StyleSheet.absoluteFill} /> : <View style={[styles.form, { borderColor: alpha('#FFFFFF', 0.5) }]} />}
+                  {item?.externalLink && !failed[item.fingerprint] ? (
+                    <Image
+                      source={{ uri: item.externalLink, headers: IMAGE_HEADERS }}
+                      resizeMode="cover"
+                      style={StyleSheet.absoluteFill}
+                      onError={() => item && setFailed((current) => ({ ...current, [item.fingerprint]: true }))}
+                    />
+                  ) : (
+                    <View style={[styles.form, { borderColor: alpha('#FFFFFF', 0.5) }]} />
+                  )}
                   <AppText style={styles.number}>{String(Number(item?.extra?.seed ?? index + 1)).padStart(2, '0')}</AppText>
                   <AppText variant="caption" color="#FFFFFF" style={{ fontFamily: fonts.sansSemiBold }}>
                     {item?.text ?? IMAGES_TEXT.loading}
@@ -102,7 +117,19 @@ export function ImagesGame() {
           </Pressable>
           {openIndex !== null ? (
             <LinearGradient colors={PALETTES[Number(images[openIndex]?.extra?.palette ?? openIndex) % PALETTES.length]} style={styles.fullImage}>
-              {images[openIndex]?.externalLink ? <Image source={{ uri: images[openIndex]?.externalLink }} resizeMode="contain" style={StyleSheet.absoluteFill} /> : <View style={[styles.bigForm, { borderColor: alpha('#FFFFFF', 0.45) }]} />}
+              {images[openIndex]?.externalLink && !failed[images[openIndex]!.fingerprint] ? (
+                <Image
+                  source={{ uri: images[openIndex]?.externalLink, headers: IMAGE_HEADERS }}
+                  resizeMode="contain"
+                  style={StyleSheet.absoluteFill}
+                  onError={() => {
+                    const item = images[openIndex];
+                    if (item) setFailed((current) => ({ ...current, [item.fingerprint]: true }));
+                  }}
+                />
+              ) : (
+                <View style={[styles.bigForm, { borderColor: alpha('#FFFFFF', 0.45) }]} />
+              )}
               <AppText style={styles.bigNumber}>{String(Number(images[openIndex]?.extra?.seed ?? openIndex + 1)).padStart(2, '0')}</AppText>
               <AppText variant="label" color="#FFFFFF">{images[openIndex]?.text}</AppText>
                 <AppText variant="caption" color="#FFFFFF" style={{ marginTop: 6 }}>

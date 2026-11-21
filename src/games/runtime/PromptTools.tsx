@@ -62,11 +62,38 @@ function ContarMostrar() {
 function InvisibleWords() {
   const theme = useGameTheme('g07');
   const [prompt, setPrompt] = useState<PoolItem | null>(null);
-  const [words, setWords] = useState(['', '', '', '']);
-  const draw = async () => { const [next] = await randomService.draw('prompts', 1); setPrompt(next ?? null); };
-  useEffect(() => { void Promise.resolve().then(() => { void draw(); }); }, []);
+  const [words, setWords] = useState<string[]>(['', '', '', '']);
+
+  const drawPrompt = async () => {
+    const [next] = await randomService.draw('prompts', 1);
+    setPrompt(next ?? null);
+  };
+
+  const drawWord = async (index: number) => {
+    const exclude = new Set(words.filter((_, i) => i !== index).map((word) => word.trim().toLowerCase()).filter(Boolean));
+    const [next] = await randomService.draw('words.noun', 1, {
+      filter: (item) => !exclude.has(item.text.trim().toLowerCase()),
+    });
+    if (!next) return;
+    setWords((current) => current.map((entry, i) => (i === index ? next.text : entry)));
+  };
+
+  const drawAllWords = async () => {
+    const items = await randomService.draw('words.noun', 4);
+    if (items.length === 0) return;
+    setWords((current) => current.map((entry, index) => items[index]?.text ?? entry));
+  };
+
+  useEffect(() => {
+    void Promise.resolve().then(() => {
+      void drawPrompt();
+      void drawAllWords();
+    });
+  }, []);
+
   const filled = words.map((word) => word.trim()).filter(Boolean);
   const body = prompt ? INVISIBLE_WORDS_TEXT.body(prompt.text, filled) : '';
+
   return (
     <View>
       <Note theme={theme}>{INVISIBLE_WORDS_TEXT.intro}</Note>
@@ -75,8 +102,20 @@ function InvisibleWords() {
       </PromptCard>
       <View style={styles.wordsGrid}>
         {words.map((word, index) => (
-          <View key={index} style={{ width: '48%' }}>
-            <GameField theme={theme} label={INVISIBLE_WORDS_TEXT.wordLabel(index)} value={word} onChangeText={(value) => setWords((current) => current.map((entry, i) => (i === index ? value : entry)))} placeholder={INVISIBLE_WORDS_TEXT.wordPlaceholder} />
+          <View key={index} style={styles.wordCard}>
+            <AppText variant="label" color={theme.accentText}>{INVISIBLE_WORDS_TEXT.wordLabel(index)}</AppText>
+            <View style={[styles.wordValue, { borderColor: alpha(theme.ink, 0.16), backgroundColor: alpha(theme.surface, 0.65) }]}>
+              <AppText style={[styles.wordText, { color: theme.ink }]}>{word || INVISIBLE_WORDS_TEXT.emptyVisible}</AppText>
+            </View>
+            <Button
+              label={INVISIBLE_WORDS_TEXT.regenerateWord(index)}
+              tone="secondary"
+              small
+              onPress={() => void drawWord(index)}
+              accent={theme.accentText}
+              accentInk={theme.accentInk}
+              style={styles.wordButton}
+            />
           </View>
         ))}
       </View>
@@ -85,7 +124,8 @@ function InvisibleWords() {
         <AppText style={[styles.invisible, { color: theme.ink }]}>{filled.length ? filled.join(' · ') : INVISIBLE_WORDS_TEXT.emptyVisible}</AppText>
       </View>
       <View style={styles.buttons}>
-        <Button label={INVISIBLE_WORDS_TEXT.anotherPrompt} small onPress={() => void draw()} accent={theme.accent} accentInk={theme.accentInk} />
+        <Button label={INVISIBLE_WORDS_TEXT.regenerateAll} small onPress={() => void drawAllWords()} accent={theme.accent} accentInk={theme.accentInk} />
+        <Button label={INVISIBLE_WORDS_TEXT.anotherPrompt} tone="secondary" small onPress={() => void drawPrompt()} accent={theme.accentText} accentInk={theme.accentInk} />
       </View>
       <ActionBar text={body} theme={theme} />
     </View>
@@ -183,6 +223,10 @@ const styles = StyleSheet.create({
   compareCol: { flex: 1, gap: 4 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: spacing.md },
   wordsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
+  wordCard: { width: '48%', gap: 6 },
+  wordValue: { borderWidth: 1, borderRadius: radii.field, paddingHorizontal: spacing.sm, paddingVertical: spacing.sm, minHeight: 48, justifyContent: 'center' },
+  wordText: { fontFamily: fonts.sansSemiBold, fontSize: 16, lineHeight: 22 },
+  wordButton: { alignSelf: 'stretch' },
   visibleWords: { borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginTop: spacing.md },
   invisible: { fontFamily: fonts.displayItalic, fontSize: 27, lineHeight: 34, marginTop: 4 },
   examples: { gap: 8, borderTopWidth: 1, borderColor: alpha('#888888', 0.25), marginTop: spacing.md, paddingTop: spacing.sm },

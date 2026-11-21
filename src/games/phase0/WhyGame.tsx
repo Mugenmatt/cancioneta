@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { StyleSheet, TextInput, View, type TextInputInstance } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { useGameTheme } from '@/design/ThemeProvider';
@@ -9,20 +9,22 @@ import { PHASE0_CONTENT } from '@/content/phase0';
 
 export function WhyGame() {
   const theme = useGameTheme('f0-5');
-  const inputRef = useRef<TextInputInstance>(null);
+  const inputRef = useRef<TextInput>(null);
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });
 
   const insertQuestion = () => {
-    const before = text.slice(0, selection.start);
-    const after = text.slice(selection.end);
+    const start = Math.max(0, Math.min(selection.start, text.length));
+    const end = Math.max(start, Math.min(selection.end, text.length));
+    const before = text.slice(0, start);
+    const after = text.slice(end);
     const lead = before.length > 0 && !before.endsWith('\n') ? '\n' : '';
     const insertion = `${lead}${PHASE0_CONTENT.why.question}\n`;
     const next = `${before}${insertion}${after}`;
     const cursor = before.length + insertion.length;
     setText(next);
     setSelection({ start: cursor, end: cursor });
-    requestAnimationFrame(() => inputRef.current?.setSelection(cursor, cursor));
+    requestAnimationFrame(() => inputRef.current?.focus());
   };
 
   return (

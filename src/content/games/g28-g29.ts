@@ -14,6 +14,8 @@ export const COLLAGE_SIZES = [34, 22, 27, 18, 31, 20] as const;
 export const COLLAGE_TEXT = {
   intro: 'Una composición visual abre una atmósfera. No la interpretes: escribí lo que te deja.',
   anotherAtmosphere: 'Otra atmósfera',
+  addWord: 'Sumar palabra',
+  removeWord: 'Quitar palabra al azar',
   body: (atmosphere: string, words: readonly string[]) => `${atmosphere}\n${words.join('\n')}`,
 } as const;
 

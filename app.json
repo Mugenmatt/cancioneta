@@ -13,7 +13,9 @@
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Usamos el micrófono para grabar tu voz. La grabación queda en tu teléfono y se borra al terminar la sesión.",
         "NSSpeechRecognitionUsageDescription": "La transcripción se hace en el dispositivo, sin enviar tu voz a ningún servidor.",
-        "LSApplicationQueriesSchemes": ["whatsapp"]
+        "LSApplicationQueriesSchemes": [
+          "whatsapp"
+        ]
       }
     },
     "android": {
@@ -66,7 +68,8 @@
           "speechRecognitionPermission": "La transcripción se hace en el dispositivo, sin enviar tu voz a ningún servidor."
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      "react-native-audio-api"
     ],
     "experiments": {
       "typedRoutes": true,

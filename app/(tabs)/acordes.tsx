@@ -13,16 +13,14 @@ import { Sheet } from '@/design/components/Sheet';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
-import { nextPlaybackStep } from '@/music/playback';
-import { METERS, chordBarMs, getMeter, type MeterId } from '@/music/meter';
+import { METERS, getMeter, type MeterId } from '@/music/meter';
 import {
   KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
 } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
 import { chordMidi } from '@/music/voicing';
 import { commonSubstitutions, secondaryDominants, relatedKeys } from '@/music/relations';
-import { piano } from '@/services/audio/PianoEngine';
-import { metronomeEngine } from '@/services/audio/MetronomeEngine';
+import { audioScheduler } from '@/services/audio/AudioScheduler';
 import { useMusicStore } from '@/stores/musicStore';
 
 const ADVENTURE = [0, 25, 50, 75, 100];
@@ -44,12 +42,11 @@ export default function ChordsScreen() {
   const [meterId, setMeterId] = useState<MeterId>('4/4');
   const [beat, setBeat] = useState(-1);
   const [metronomeArmed, setMetronomeArmed] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const stepRef = useRef(0);
   const loopRef = useRef(loop);
 
   useEffect(() => {
     loopRef.current = loop;
+    audioScheduler.setLoop(loop);
   }, [loop]);
 
   const detection = useMemo(() => detectKeys(chords), [chords]);
@@ -59,50 +56,38 @@ export default function ChordsScreen() {
   const meter = useMemo(() => getMeter(meterId), [meterId]);
 
   const stop = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = null;
-    metronomeEngine.stop();
+    audioScheduler.stop();
     setPlaying(false);
     setStep(-1);
     setBeat(-1);
-    stepRef.current = 0;
   }, [setPlaying, setStep]);
-
-  const playChord = useCallback((step: number, items: Chord[]) => {
-    const chord = items[step];
-    if (!chord) return;
-    stepRef.current = step;
-    setStep(step);
-    void piano.playMidiSequence(chordMidi(chord), 35);
-  }, [setStep]);
 
   useEffect(() => {
     if (!isPlaying || chords.length === 0) return;
-    stepRef.current = 0;
-    setStep(0);
-    playChord(0, chords);
-    if (metronomeArmed) {
-      metronomeEngine.start(bpm, meter, (pulse, accent) => {
+    void audioScheduler.start({
+      bpm,
+      meter,
+      chords,
+      loop: loopRef.current,
+      metronome: metronomeArmed,
+    }, {
+      onStart: () => {
+        setStep(0);
+        setBeat(-1);
+      },
+      onStep: (step) => setStep(step),
+      onPulse: (pulse, accent) => {
         setBeat(pulse);
         if (accent === 'strong') void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      });
-    } else {
-      metronomeEngine.stop();
-    }
-    intervalRef.current = setInterval(() => {
-      const next = nextPlaybackStep(stepRef.current, chords.length, loopRef.current);
-      if (next === null) {
-        stop();
-        return;
-      }
-      playChord(next, chords);
-    }, chordBarMs(bpm, meter));
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      intervalRef.current = null;
-      metronomeEngine.stop();
-    };
-  }, [bpm, chords, isPlaying, meter, metronomeArmed, playChord, setStep, stop]);
+      },
+      onFinish: () => {
+        setPlaying(false);
+        setStep(-1);
+        setBeat(-1);
+      },
+    });
+    return () => audioScheduler.stop();
+  }, [bpm, chords, isPlaying, metronomeArmed, meter, setPlaying, setStep]);
 
   const togglePlay = useCallback(() => {
     if (isPlaying) {
@@ -118,11 +103,6 @@ export default function ChordsScreen() {
     setMetronomeArmed((armed) => !armed);
     setBeat(-1);
   };
-
-  useEffect(() => () => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    metronomeEngine.stop();
-  }, []);
 
   const degreeFor = (chord: Chord): string => {
     const match = diatonic.find((d) => pitchClass(d.root) === pitchClass(chord.root));
@@ -147,22 +127,24 @@ export default function ChordsScreen() {
         <DiceButton compact label="Tirar acordes" onPress={() => void roll()} />
       </View>
 
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Cambiar tonalidad"
-        onPress={() => setKeyOpen(true)}
-        style={[styles.keyCard, { borderColor: colors.lineSubtle, backgroundColor: colors.bgRaised }]}
-      >
-        <View style={{ flex: 1 }}>
-          <AppText variant="label" color={colors.textMuted}>Tonalidad</AppText>
-          <AppText style={[styles.keyName, { color: colors.textPrimary }]}>{keyTitle}</AppText>
-          <AppText variant="caption" color={keyState.key ? colors.accentCore : colors.textMuted}>{keySource}</AppText>
-          {detection.top ? (
-            <View style={{ marginTop: spacing.sm }}>
-              <ProgressBar value={detection.top.score} total={100} accent={colors.accentCore} />
-            </View>
-          ) : null}
-        </View>
+      <View style={[styles.keyCard, { borderColor: colors.lineSubtle, backgroundColor: colors.bgRaised }]}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Cambiar tonalidad"
+          onPress={() => setKeyOpen(true)}
+          style={styles.keyMain}
+        >
+          <View style={{ flex: 1 }}>
+            <AppText variant="label" color={colors.textMuted}>Tonalidad</AppText>
+            <AppText style={[styles.keyName, { color: colors.textPrimary }]}>{keyTitle}</AppText>
+            <AppText variant="caption" color={keyState.key ? colors.accentCore : colors.textMuted}>{keySource}</AppText>
+            {detection.top ? (
+              <View style={{ marginTop: spacing.sm }}>
+                <ProgressBar value={detection.top.score} total={100} accent={colors.accentCore} />
+              </View>
+            ) : null}
+          </View>
+        </Pressable>
         <View style={styles.keyRight}>
           <Feather name="chevron-down" size={18} color={colors.textMuted} />
           <Pressable
@@ -175,7 +157,7 @@ export default function ChordsScreen() {
             <Feather name="refresh-cw" size={16} color={colors.textMuted} />
           </Pressable>
         </View>
-      </Pressable>
+      </View>
 
       <View style={styles.actionRow}>
         <DiceButton label="Tirar progresión" onPress={() => void roll()} />
@@ -229,13 +211,13 @@ export default function ChordsScreen() {
             current={currentStep === index}
             width={cardWidth}
             compact={columns > 1}
-            onPlay={() => void piano.playMidiSequence(chordMidi(chord), 35)}
+            onPlay={() => void audioScheduler.playPreview(chordMidi(chord), 35)}
             onLock={() => toggleLock(chord.id)}
             onRootChange={(semitones) => {
               const nextPc = (pitchClass(chord.root) + semitones + 120) % 12;
               const next = { ...chord, root: noteFromPitchClass(nextPc, keyState.key?.mode === 'minor' ? 'flat' : 'sharp') };
               cycleRoot(chord.id, semitones);
-              void piano.playMidiSequence(chordMidi(next), 30);
+              void audioScheduler.playPreview(chordMidi(next), 30);
             }}
             onQuality={() => setQualityFor(chord.id)}
           />
@@ -335,7 +317,7 @@ export default function ChordsScreen() {
               onPress={() => {
                 if (selectedChord) {
                   setQuality(selectedChord.id, quality);
-                  void piano.playMidiSequence(chordMidi({ ...selectedChord, quality }), 30);
+                  void audioScheduler.playPreview(chordMidi({ ...selectedChord, quality }), 30);
                 }
                 setQualityFor(null);
               }}
@@ -429,6 +411,7 @@ function ExploreContent({ currentKey, chords }: { currentKey: Key; chords: Chord
 const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'flex-start', marginTop: spacing.md, marginBottom: spacing.md },
   keyCard: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginBottom: spacing.md },
+  keyMain: { flex: 1, alignItems: 'flex-start' },
   keyName: { fontFamily: fonts.display, fontSize: 28, lineHeight: 34, marginTop: 2 },
   keyRight: { alignItems: 'center', marginLeft: spacing.sm },
   actionRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },

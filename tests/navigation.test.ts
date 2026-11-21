@@ -1,4 +1,4 @@
-import { goBackOrHome, type BackRouter } from '@/core/navigation';
+import { goBackOrHome, HOME_HREF, type BackRouter } from '@/core/navigation';
 
 function makeRouter(canGoBack: boolean): BackRouter<string> & { back: jest.Mock; replace: jest.Mock } {
   return {
@@ -7,6 +7,12 @@ function makeRouter(canGoBack: boolean): BackRouter<string> & { back: jest.Mock;
     replace: jest.fn(),
   };
 }
+
+describe('HOME_HREF', () => {
+  it('apunta a la ruta raíz', () => {
+    expect(HOME_HREF).toBe('/');
+  });
+});
 
 describe('goBackOrHome', () => {
   it('usa el historial real cuando hay una pantalla anterior', () => {
@@ -21,9 +27,9 @@ describe('goBackOrHome', () => {
   it('va al inicio cuando no hay historial previo', () => {
     const router = makeRouter(false);
 
-    goBackOrHome(router, '/');
+    goBackOrHome(router, HOME_HREF);
 
-    expect(router.replace).toHaveBeenCalledWith('/');
+    expect(router.replace).toHaveBeenCalledWith(HOME_HREF);
     expect(router.back).not.toHaveBeenCalled();
   });
 });

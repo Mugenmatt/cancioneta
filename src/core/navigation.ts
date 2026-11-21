@@ -1,4 +1,4 @@
-export const HOME_HREF = '/(tabs)/index' as const;
+export const HOME_HREF = '/' as const;
 
 export interface BackRouter<Href> {
   canGoBack: () => boolean;

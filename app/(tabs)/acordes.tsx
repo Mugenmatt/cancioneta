@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useCoreTheme } from '@/design/ThemeProvider';
@@ -12,6 +12,8 @@ import { ProgressBar } from '@/design/components/Feedback';
 import { Sheet } from '@/design/components/Sheet';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
+import { getChordCardLayout } from '@/music/components/chordCardLayout';
+import { chordIntervalMs, nextPlaybackStep } from '@/music/playback';
 import {
   KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
 } from '@/music/theory';
@@ -26,6 +28,8 @@ const COUNTS = [4, 6, 8];
 
 export default function ChordsScreen() {
   const { colors } = useCoreTheme();
+  const { width, fontScale } = useWindowDimensions();
+  const { columns, cardWidth } = useMemo(() => getChordCardLayout(width, fontScale), [width, fontScale]);
   const {
     chords, count, keyState, bpm, adventure, includeSevenths, isPlaying, currentStep,
     roll, toggleLock, cycleRoot, setQuality, moveChord, setCount, setBpm, setAdventure,
@@ -40,6 +44,8 @@ export default function ChordsScreen() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stepRef = useRef(0);
   const loopRef = useRef(loop);
+  const chordsRef = useRef(chords);
+  const previousChordsRef = useRef(chords);
 
   useEffect(() => {
     loopRef.current = loop;
@@ -58,33 +64,49 @@ export default function ChordsScreen() {
     stepRef.current = 0;
   }, [setPlaying, setStep]);
 
+  const playStep = useCallback((step: number) => {
+    const chord = chordsRef.current[step];
+    if (!chord) return;
+    stepRef.current = step;
+    setStep(step);
+    void piano.playMidiSequence(chordMidi(chord), 35);
+  }, [setStep]);
+
+  useEffect(() => {
+    chordsRef.current = chords;
+    if (chords === previousChordsRef.current) return;
+    previousChordsRef.current = chords;
+    if (!isPlaying || chords.length === 0) return;
+    playStep(0);
+  }, [chords, isPlaying, playStep]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const advance = () => {
+      const next = nextPlaybackStep(stepRef.current, chordsRef.current.length, loopRef.current);
+      if (next === null) {
+        stop();
+        return;
+      }
+      playStep(next);
+    };
+    intervalRef.current = setInterval(advance, chordIntervalMs(bpm));
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    };
+  }, [bpm, isPlaying, playStep, stop]);
+
   const togglePlay = useCallback(() => {
     if (isPlaying) {
       stop();
       return;
     }
-    if (chords.length === 0) return;
+    if (chordsRef.current.length === 0) return;
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPlaying(true);
-    stepRef.current = 0;
-    setStep(0);
-    void piano.playMidiSequence(chordMidi(chords[0]), 35);
-    const wait = Math.max(150, (60000 / bpm) * 2);
-    intervalRef.current = setInterval(() => {
-      const next = stepRef.current + 1;
-      if (next >= chords.length) {
-        if (!loopRef.current) {
-          stop();
-          return;
-        }
-        stepRef.current = 0;
-      } else {
-        stepRef.current = next;
-      }
-      setStep(stepRef.current);
-      void piano.playMidiSequence(chordMidi(chords[stepRef.current]), 35);
-    }, wait);
-  }, [bpm, chords, isPlaying, setPlaying, setStep, stop]);
+    playStep(0);
+  }, [isPlaying, playStep, setPlaying, stop]);
 
   const toggleBeat = () => {
     if (beatRunning) {
@@ -193,6 +215,8 @@ export default function ChordsScreen() {
             degree={degreeFor(chord)}
             accent={colors.accentCore}
             current={currentStep === index}
+            width={cardWidth}
+            compact={columns > 1}
             onPlay={() => void piano.playMidiSequence(chordMidi(chord), 35)}
             onLock={() => toggleLock(chord.id)}
             onRootChange={(semitones) => {

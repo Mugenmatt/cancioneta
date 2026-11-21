@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { Chord, Key, KeyState, QualityId } from '@/music/theory';
 import { createChord, MAX_CHORD_COUNT, progressionFingerprint, rollProgression, type RollResult } from '@/music/progressionDice';
+import { clampBpm } from '@/music/meter';
 import { parseNote, noteFromPitchClass, pitchClass } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
 import { randomService } from '@/services/random/RandomService';
@@ -45,7 +46,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   chords: initialChords(),
   count: 4,
   keyState: { key: null, source: 'auto' },
-  bpm: 90,
+  bpm: 120,
   adventure: 20,
   includeSevenths: false,
   isPlaying: false,
@@ -124,7 +125,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
     void get().roll();
   },
 
-  setBpm: (bpm) => set({ bpm: Math.max(40, Math.min(300, Math.round(bpm))) }),
+  setBpm: (bpm) => set({ bpm: clampBpm(bpm) }),
   setAdventure: (adventure) => set({ adventure: Math.max(0, Math.min(100, Math.round(adventure))) }),
   setSevenths: (enabled) => set({ includeSevenths: enabled }),
 

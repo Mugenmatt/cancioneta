@@ -18,4 +18,6 @@ export const CHORDS_TEXT = {
   addChord: 'Agregar acorde',
   maxChords: 'Máximo 16 acordes',
   clearProgression: 'Borrar progresión',
+  tempo: 'Tempo',
+  bpm: 'Pulso por minuto',
 } as const;

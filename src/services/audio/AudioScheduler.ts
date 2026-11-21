@@ -7,6 +7,7 @@ import {
   type GainNode,
 } from 'react-native-audio-api';
 import type { Accent } from '@/music/meter';
+import type { Chord } from '@/music/theory';
 import { PIANO_SAMPLE_FILES } from './pianoSamples';
 import { PlaybackTimeline, type PlaybackConfig } from './playbackTimeline';
 
@@ -15,7 +16,7 @@ const MAX_MIDI = 84;
 const LOOKAHEAD_SECONDS = 0.12;
 const SCHEDULER_INTERVAL_MS = 25;
 const PIANO_VOLUME = 0.65;
-const TICK_MIDI: Record<Accent, number> = { strong: 84, secondary: 79, weak: 72 };
+const CLICK_SECONDS: Record<Accent, number> = { strong: 0.075, secondary: 0.055, weak: 0.04 };
 const TICK_VOLUME: Record<Accent, number> = { strong: 0.5, secondary: 0.36, weak: 0.225 };
 
 type SoundKind = 'chords' | 'metronome';
@@ -44,9 +45,28 @@ function volumeScale(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
+function createClickBuffer(context: AudioContext, seconds: number): AudioBuffer {
+  const length = Math.max(1, Math.floor(context.sampleRate * seconds));
+  const buffer = context.createBuffer(1, length, context.sampleRate);
+  const data = buffer.getChannelData(0);
+  let seed = 0x9e3779b9;
+  let previous = 0;
+  for (let i = 0; i < length; i += 1) {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    const noise = (seed / 0xffffffff) * 2 - 1;
+    const highPassed = noise - previous * 0.75;
+    previous = noise;
+    const progress = i / length;
+    const envelope = Math.exp(-progress * 16) * Math.min(1, progress * 500);
+    data[i] = highPassed * envelope * 0.7;
+  }
+  return buffer;
+}
+
 export class AudioScheduler {
   private context: AudioContext | null = null;
   private readonly buffers = new Map<number, AudioBuffer>();
+  private readonly clickBuffers = new Map<Accent, AudioBuffer>();
   private readonly sources = new Set<AudioBufferSourceNode>();
   private readonly gains = new Map<GainNode, ActiveGain>();
   private readonly uiTimers = new Set<ReturnType<typeof setTimeout>>();
@@ -58,6 +78,10 @@ export class AudioScheduler {
   private config: PlaybackConfig | null = null;
   private chordsVolume = 1;
   private metronomeVolume = 1;
+  private progressionSignature: string | null = null;
+  private currentBpm: number | null = null;
+  private currentMetronome: boolean | null = null;
+  private currentLoop: boolean | null = null;
   private runId = 0;
 
   prepare(): Promise<void> {
@@ -77,6 +101,10 @@ export class AudioScheduler {
     if (token !== this.runId || !this.context) return;
 
     this.config = { ...config };
+    this.progressionSignature = JSON.stringify(config.chords);
+    this.currentBpm = config.bpm;
+    this.currentMetronome = config.metronome;
+    this.currentLoop = config.loop;
     this.callbacks = callbacks;
     this.timeline = new PlaybackTimeline(this.config, this.context.currentTime + LOOKAHEAD_SECONDS);
     this.callbacks.onStart?.();
@@ -110,7 +138,29 @@ export class AudioScheduler {
   }
 
   setLoop(loop: boolean): void {
+    if (loop === this.currentLoop) return;
+    this.currentLoop = loop;
     if (this.config) this.config.loop = loop;
+    this.timeline?.setPendingConfig({ loop });
+  }
+
+  setProgression(chords: Chord[]): void {
+    const signature = JSON.stringify(chords);
+    if (signature === this.progressionSignature) return;
+    this.progressionSignature = signature;
+    this.timeline?.setPendingConfig({ chords });
+  }
+
+  setTempo(bpm: number): void {
+    if (bpm === this.currentBpm) return;
+    this.currentBpm = bpm;
+    this.timeline?.setPendingConfig({ bpm });
+  }
+
+  setMetronome(enabled: boolean): void {
+    if (enabled === this.currentMetronome) return;
+    this.currentMetronome = enabled;
+    this.timeline?.setPendingConfig({ metronome: enabled });
   }
 
   setVolumes(chordsVolume: number, metronomeVolume: number): void {
@@ -130,8 +180,10 @@ export class AudioScheduler {
     const spacing = Math.max(0, spacingMs) / 1000;
     const balance = 1 / Math.sqrt(midis.length);
     for (let i = 0; i < midis.length; i += 1) {
+      const buffer = this.buffers.get(playableMidi(midis[i]));
+      if (!buffer) continue;
       const level = (i === 0 ? velocity : velocity * 0.78) * balance;
-      this.playBuffer(midis[i], start + i * spacing, PIANO_VOLUME * level, 'chords');
+      this.playBuffer(buffer, start + i * spacing, PIANO_VOLUME * level, 'chords');
     }
   }
 
@@ -140,6 +192,10 @@ export class AudioScheduler {
     const context = new AudioContext();
     if (context.state === 'suspended') await context.resume();
     this.context = context;
+
+    for (const accent of ['strong', 'secondary', 'weak'] as const) {
+      this.clickBuffers.set(accent, createClickBuffer(context, CLICK_SECONDS[accent]));
+    }
 
     const midis = Object.keys(PIANO_SAMPLE_FILES).map(Number);
     await Promise.all(midis.map(async (midi) => {
@@ -162,15 +218,21 @@ export class AudioScheduler {
     const events = timeline.takeEventsUntil(context.currentTime + LOOKAHEAD_SECONDS);
     for (const event of events) {
       if (event.kind === 'note') {
-        this.playBuffer(event.midi, event.time, PIANO_VOLUME * event.velocity, 'chords');
+        const buffer = this.buffers.get(playableMidi(event.midi));
+        if (buffer) this.playBuffer(buffer, event.time, PIANO_VOLUME * event.velocity, 'chords');
         this.scheduleUi(event.time, () => this.callbacks?.onStep(event.step));
       } else {
-        this.playBuffer(TICK_MIDI[event.accent], event.time, TICK_VOLUME[event.accent], 'metronome');
+        const buffer = this.clickBuffers.get(event.accent);
+        if (buffer) this.playBuffer(buffer, event.time, TICK_VOLUME[event.accent], 'metronome');
         this.scheduleUi(event.time, () => this.callbacks?.onPulse(event.pulse, event.accent));
       }
     }
 
     const endTime = timeline.endTime;
+    if (endTime === null && this.finishTimer !== null) {
+      clearTimeout(this.finishTimer);
+      this.finishTimer = null;
+    }
     if (endTime !== null && this.finishTimer === null) {
       this.finishTimer = setTimeout(() => {
         this.finishTimer = null;
@@ -181,12 +243,9 @@ export class AudioScheduler {
     }
   };
 
-  private playBuffer(midi: number, when: number, baseVolume: number, kind: SoundKind): void {
+  private playBuffer(buffer: AudioBuffer, when: number, baseVolume: number, kind: SoundKind): void {
     const context = this.context;
     if (!context) return;
-    const target = playableMidi(midi);
-    const buffer = this.buffers.get(target);
-    if (!buffer) return;
 
     const source = context.createBufferSource();
     const gain = context.createGain();

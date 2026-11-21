@@ -1,4 +1,6 @@
-import { clampVolume, positionFromVolume, volumeFromPosition } from '@/design/volumeSliderMath';
+import {
+  clampToRange, clampVolume, positionFromValue, positionFromVolume, valueFromPosition, volumeFromPosition,
+} from '@/design/volumeSliderMath';
 
 describe('matemática del slider de volumen', () => {
   it('limita el valor entre 0 y 1', () => {
@@ -20,5 +22,13 @@ describe('matemática del slider de volumen', () => {
     expect(positionFromVolume(0.5, 200)).toBe(100);
     expect(positionFromVolume(2, 200)).toBe(200);
     expect(positionFromVolume(0.4, -10)).toBe(0);
+  });
+
+  it('usa rangos arbitrarios con paso entero para el BPM', () => {
+    expect(clampToRange(599.6, 40, 600, 1)).toBe(600);
+    expect(clampToRange(700, 40, 600, 1)).toBe(600);
+    expect(clampToRange(20, 40, 600, 1)).toBe(40);
+    expect(valueFromPosition(100, 200, 40, 600, 1)).toBe(320);
+    expect(positionFromValue(320, 200, 40, 600)).toBe(100);
   });
 });

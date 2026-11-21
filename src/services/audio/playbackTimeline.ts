@@ -19,12 +19,15 @@ export type PlaybackEvent =
   | { kind: 'pulse'; time: number; pulse: number; accent: Accent }
   | { kind: 'note'; time: number; midi: number; velocity: number; step: number };
 
+export type PlaybackOverrides = Partial<Pick<PlaybackConfig, 'bpm' | 'chords' | 'loop' | 'metronome'>>;
+
 export class PlaybackTimeline {
-  private readonly config: PlaybackConfig;
-  private readonly pulseSeconds: number;
-  private readonly barSeconds: number;
+  private config: PlaybackConfig;
+  private pulseSeconds: number;
+  private barSeconds: number;
   private readonly queue: PlaybackEvent[] = [];
-  private readonly voicings: number[][];
+  private voicings: number[][];
+  private pending: PlaybackOverrides | null = null;
   private pulse = 0;
   private step = 0;
   private time: number;
@@ -40,6 +43,10 @@ export class PlaybackTimeline {
 
   get endTime(): number | null {
     return this.endAt;
+  }
+
+  setPendingConfig(overrides: PlaybackOverrides): void {
+    this.pending = { ...this.pending, ...overrides };
   }
 
   get hasEvents(): boolean {
@@ -63,9 +70,21 @@ export class PlaybackTimeline {
   }
 
   private fillPulse(): void {
-    const { meter, chords, loop, metronome } = this.config;
+    const meter = this.config.meter;
     const pulseInBar = this.pulse % meter.pulses;
     const barTime = this.time;
+
+    if (pulseInBar === 0 && this.pending) {
+      const next = { ...this.config, ...this.pending };
+      this.pending = null;
+      this.config = next;
+      this.voicings = voicingForProgression(next.chords);
+      this.pulseSeconds = pulseIntervalMs(next.bpm) / 1000;
+      this.barSeconds = next.meter.pulses * this.pulseSeconds;
+      this.endAt = null;
+    }
+
+    const { chords, loop, metronome } = this.config;
 
     if (metronome) {
       this.queue.push({

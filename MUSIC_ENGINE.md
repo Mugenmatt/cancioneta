@@ -21,7 +21,7 @@ interface Chord {
 }
 interface Progression {
   chords: Chord[];       // 1 a 16
-  bpm: number;           // 40–300
+  bpm: number;           // 40–600
   loop: boolean;
   muted: boolean;
   key: KeyState;         // ver sección 7
@@ -72,9 +72,11 @@ Notación: **cifrado americano** (C, Dm, G7). Opcional en Ajustes: mostrar nombr
 |---|---|
 | Play / Pausa | Reproduce desde el acorde 1; Pausa conserva la posición |
 | Loop | Si **off**: se reproduce **una vez** y se detiene. Si **on**: repite indefinidamente |
-| BPM | **40–300** (D-08), por defecto 90, paso 1. El cambio se aplica **desde el siguiente compás** |
+| BPM | **40–600** (D-08), por defecto 120, paso 1, control deslizable. El cambio se aplica **desde el siguiente compás** |
 | Silenciar | Silencia el sonido pero **la reproducción continúa** y se ve el avance |
 | Duración | **1 acorde = 1 compás de 4 tiempos**; duración de un compás = `4 × 60 / BPM` segundos |
+
+El metrónomo suena con un **click percusivo generado** en el contexto de audio: no usa notas de piano ni agregados para descargar.
 
 ### Panel flotante
 Según el encargo, en fases posteriores el reproductor queda oculto en un control accesible. Al tocarlo aparece **por encima** del contenido actual (hoja deslizable) **sin perder** la posición de escritura ni el estado del Juego. El estado de la progresión vive en un *store* global independiente de las pantallas.
@@ -87,7 +89,7 @@ Al tocar el dado:
 - **Mantiene la cantidad** de acordes.
 - **Respeta la tonalidad** seleccionada cuando corresponda.
 - **Conserva el BPM** y el **estado de Loop**.
-- **Reproduce instantáneamente** la nueva progresión.
+- Si está sonando, **encola** la nueva progresión y la aplica **al empezar el próximo compás**: el acorde actual no se corta y el metrónomo sigue su pulso. Si está detenido, la muestra enseguida.
 
 ### 6.2 Algoritmo [REC]
 1. **Tonalidad objetivo:** si el usuario fijó una tonalidad, usarla. Si no, y hay acordes con candado, inferirla con el detector (§7) y tomar la de mayor compatibilidad. Si no hay nada, sortear una de las 24 (12 mayores + 12 menores).
@@ -254,7 +256,7 @@ flowchart LR
 3. **Dado con tonalidad fijada:** todos los acordes pertenecen a la tonalidad (modo «Simple»).
 4. **Reproducción:** a 120 BPM un acorde dura 2,0 s; 4 acordes sin Loop = 8,0 s y se detiene.
 5. **Loop:** con Loop activo no hay silencio audible entre el último y el primer compás.
-6. **BPM:** 40 y 300 aceptados; 39 y 301 rechazados.
+6. **BPM:** 40 y 600 aceptados; 39 y 601 rechazados; valor inicial 120.
 7. **Detección:** los casos de §7.4 dan el resultado esperado.
 8. **Panel:** abrir y cerrar el reproductor desde el editor no mueve el cursor ni cambia el Juego.
 9. **Sustituciones:** cada sugerencia mostrada corresponde a una regla del catálogo §8.1.

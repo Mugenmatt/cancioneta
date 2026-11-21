@@ -106,7 +106,7 @@ Cada etapa lista: **Objetivo · Documentos de entrada · Tareas · Entregable ·
 
 ### E8 — Piano y reproductor (M–L)
 - **Entrada:** `MUSIC_ENGINE.md` §5, §10.
-- **Tareas:** carga de muestras, programación con reloj de audio, voicing con conducción de voces, controles (Play, Pausa, Loop, BPM 40–300, silenciar), panel flotante, sesión de audio, manejo de interrupciones.
+- **Tareas:** carga de muestras, programación con reloj de audio, voicing con conducción de voces, controles (Play, Pausa, Loop, BPM deslizable 40–600, Silenciar), metrónomo con click percusivo, panel flotante, sesión de audio, manejo de interrupciones.
 - **Entregable:** reproductor que suena una progresión fija con precisión.
 - **DoD:** criterios 4, 5, 6, 8 y 10 de `MUSIC_ENGINE.md` §13. **Riesgo:** latencia/compatibilidad de la librería de audio (R-02); plan B documentado en `MUSIC_ENGINE.md` §10.2.
 

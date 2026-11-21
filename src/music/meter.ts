@@ -28,8 +28,16 @@ export function nextMetronomePulse(current: number, meter: Meter): number {
   return (current + 1) % meter.pulses;
 }
 
+export const MIN_BPM = 40;
+export const MAX_BPM = 600;
+
+export function clampBpm(bpm: number): number {
+  if (!Number.isFinite(bpm)) return MIN_BPM;
+  return Math.max(MIN_BPM, Math.min(MAX_BPM, Math.round(bpm)));
+}
+
 export function pulseIntervalMs(bpm: number): number {
-  return Math.max(80, 60000 / Math.max(40, Math.min(300, bpm)));
+  return Math.max(80, 60000 / clampBpm(bpm));
 }
 
 export function chordBarMs(bpm: number, meter: Meter): number {

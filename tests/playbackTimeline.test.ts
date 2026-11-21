@@ -1,7 +1,7 @@
 import { getMeter } from '@/music/meter';
 import { createChord } from '@/music/progressionDice';
 import { parseNote } from '@/music/theory';
-import { chordMidi } from '@/music/voicing';
+import { chordMidi, voicingForProgression } from '@/music/voicing';
 import { NOTE_SPACING_SECONDS, PlaybackTimeline, type PlaybackConfig } from '@/services/audio/playbackTimeline';
 
 const chords = [
@@ -81,5 +81,24 @@ describe('PlaybackTimeline', () => {
     const notes = events.filter((event) => event.kind === 'note');
 
     expect(notes.map((event) => (event.kind === 'note' ? event.midi : -1))).toEqual(chordMidi(changedChords[0]));
+  });
+
+  it('aplica la progresión encolada recién en el próximo compás', () => {
+    const changedChords = [
+      createChord(parseNote('D'), 'maj', false, 'd'),
+      createChord(parseNote('A'), 'maj', false, 'a'),
+    ];
+    const timeline = new PlaybackTimeline(baseConfig, 0);
+    const firstBar = timeline.takeEventsUntil(2.1);
+    timeline.setPendingConfig({ chords: changedChords });
+    const rest = timeline.takeEventsUntil(4.1);
+    const events = [...firstBar, ...rest];
+    const notesAt = (time: number) => events
+      .filter((event) => event.kind === 'note' && event.time === time)
+      .map((event) => (event.kind === 'note' ? event.midi : -1));
+
+    expect(notesAt(0)).toEqual(voicingForProgression(chords)[0]);
+    expect(notesAt(2)).toEqual(voicingForProgression(chords)[1]);
+    expect(notesAt(4)).toEqual(voicingForProgression(changedChords)[0]);
   });
 });

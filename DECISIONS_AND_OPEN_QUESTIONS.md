@@ -53,7 +53,7 @@ El dado debe saber la tonalidad. Si el usuario no eligió ninguna, no hay con qu
 **[REC]:** tonalidad por defecto = «automática»: el dado genera progresiones diatónicas de una tonalidad aleatoria con acordes bloqueados respetados; si hay acordes bloqueados, se infiere la tonalidad con el detector y se generan los demás compatibles.
 
 ### D-08 — Rango del BPM
-Solo se fija el máximo (300). **[REC]:** mínimo 40, por defecto 90, paso de 1.
+Máximo ampliado a 600 a pedido del usuario. **[REC]:** mínimo 40, por defecto 120, paso 1, control deslizable como el de volumen.
 
 ### D-09 — Piano offline y licencia de muestras
 Se necesita sonido de piano sin servicios externos. **[REC]:** muestras de piano con licencia libre, recortadas (una muestra cada tres notas, con ajuste de tono), cargadas en un reproductor de audio nativo de baja latencia. [VERIFICAR] licencia y atribución exacta del banco elegido antes de incluirlo. Configurar la sesión de audio de iOS en modo «playback» para que suene aunque el interruptor de silencio esté activado.

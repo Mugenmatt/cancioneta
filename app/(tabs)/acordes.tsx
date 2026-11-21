@@ -15,7 +15,7 @@ import { VolumeSlider } from '@/design/components/VolumeSlider';
 import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
-import { METERS, getMeter, type MeterId } from '@/music/meter';
+import { MAX_BPM, METERS, MIN_BPM, getMeter, type MeterId } from '@/music/meter';
 import {
   KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
 } from '@/music/theory';
@@ -63,6 +63,11 @@ export default function ChordsScreen() {
   const diatonic = displayKey ? diatonicChords(displayKey) : [];
   const selectedChord = chords.find((c) => c.id === qualityFor) ?? null;
   const meter = useMemo(() => getMeter(meterId), [meterId]);
+  const playbackRef = useRef({ bpm, meter, chords, metronome: metronomeArmed, loop });
+
+  useEffect(() => {
+    playbackRef.current = { bpm, meter, chords, metronome: metronomeArmed, loop };
+  }, [bpm, meter, chords, metronomeArmed, loop]);
 
   const stop = useCallback(() => {
     audioScheduler.stop();
@@ -72,14 +77,9 @@ export default function ChordsScreen() {
   }, [setPlaying, setStep]);
 
   useEffect(() => {
-    if (!isPlaying || chords.length === 0) return;
-    void audioScheduler.start({
-      bpm,
-      meter,
-      chords,
-      loop: loopRef.current,
-      metronome: metronomeArmed,
-    }, {
+    const config = playbackRef.current;
+    if (!isPlaying || config.chords.length === 0) return;
+    void audioScheduler.start({ ...config }, {
       onStart: () => {
         setStep(0);
         setBeat(-1);
@@ -96,7 +96,19 @@ export default function ChordsScreen() {
       },
     });
     return () => audioScheduler.stop();
-  }, [bpm, chords, isPlaying, metronomeArmed, meter, setPlaying, setStep]);
+  }, [isPlaying, setPlaying, setStep]);
+
+  useEffect(() => {
+    audioScheduler.setProgression(chords);
+  }, [chords]);
+
+  useEffect(() => {
+    audioScheduler.setTempo(bpm);
+  }, [bpm]);
+
+  useEffect(() => {
+    audioScheduler.setMetronome(metronomeArmed);
+  }, [metronomeArmed]);
 
   const togglePlay = useCallback(() => {
     if (isPlaying) {
@@ -311,17 +323,17 @@ export default function ChordsScreen() {
         ))}
       </View>
 
-      <View style={styles.bpmRow}>
-        <AppText variant="caption" color={colors.textMuted}>Pulso</AppText>
-        <Pressable accessibilityRole="button" accessibilityLabel="Bajar tempo" onPress={() => setBpm(bpm - 5)} style={[styles.stepBtn, { borderColor: colors.lineSubtle }]}>
-          <Feather name="minus" size={14} color={colors.textSecondary} />
-        </Pressable>
-        <AppText variant="caption" color={colors.textPrimary} style={{ fontFamily: fonts.sansSemiBold, minWidth: 58, textAlign: 'center' }}>
-          {bpm} BPM
-        </AppText>
-        <Pressable accessibilityRole="button" accessibilityLabel="Subir tempo" onPress={() => setBpm(bpm + 5)} style={[styles.stepBtn, { borderColor: colors.lineSubtle }]}>
-          <Feather name="plus" size={14} color={colors.textSecondary} />
-        </Pressable>
+      <View style={styles.tempoBlock}>
+        <SectionLabel color={colors.textMuted}>{CHORDS_TEXT.tempo}</SectionLabel>
+        <VolumeSlider
+          label={CHORDS_TEXT.bpm}
+          value={bpm}
+          min={MIN_BPM}
+          max={MAX_BPM}
+          step={1}
+          formatValue={(value) => `${value} BPM`}
+          onValueChange={setBpm}
+        />
       </View>
 
       <View style={{ marginTop: spacing.lg }}>
@@ -485,8 +497,7 @@ const styles = StyleSheet.create({
   beats: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, justifyContent: 'center' },
   beat: { width: 7, height: 7, borderRadius: 4 },
   beatAccent: { width: spacing.xs, height: spacing.xs, borderRadius: spacing.xxs },
-  bpmRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.md },
-  stepBtn: { width: 30, height: 30, borderRadius: 9, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  tempoBlock: { marginTop: spacing.md },
   footer: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.lg },
   qualityGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   keyOption: { borderWidth: 1, borderRadius: radii.field, padding: spacing.md, marginBottom: spacing.sm },

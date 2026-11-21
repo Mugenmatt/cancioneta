@@ -61,12 +61,12 @@ Regla: **lógica pura = prueba automática obligatoria.** Interfaz y sensaciones
 | M3 | Dado con tonalidad fijada, modo simple | Todos los acordes diatónicos |
 | M4 | 120 BPM, 4 acordes, sin Loop | 8,0 s y se detiene |
 | M5 | Loop activo | Sin silencio audible entre el último y el primer compás |
-| M6 | BPM límite | 40 y 300 aceptados; 39 y 301 rechazados |
+| M6 | BPM límite | 40 y 600 aceptados; 39 y 601 rechazados; slider arranca en 120 |
 | M7 | Detección | Casos de §7.4 del documento (p. ej. Am–F–C–G → C mayor y A menor, ambiguas) |
 | M8 | Panel del reproductor | Abrir/cerrar no mueve el cursor ni cambia el Juego |
 | M9 | Sustituciones | Cada sugerencia corresponde a una regla del catálogo |
 | M10 | Modo avión | Todo funciona |
-| M11 | Dado reproduce al instante | Suena en < 300 ms desde el toque (medición manual con cronómetro de video) |
+| M11 | Dado encolado | Con reproducción en marcha, el acorde actual termina completo y la progresión nueva entra en el próximo compás; el metrónomo no pierde el pulso |
 | M12 | Silenciar | El avance visual sigue; no suena |
 
 ### 4.3 Editor y exportación — `LYRIC_EDITOR_AND_EXPORT.md` §9

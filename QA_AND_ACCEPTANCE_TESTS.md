@@ -68,6 +68,7 @@ Regla: **lógica pura = prueba automática obligatoria.** Interfaz y sensaciones
 | M10 | Modo avión | Todo funciona |
 | M11 | Dado encolado | Con reproducción en marcha, el acorde actual termina completo y la progresión nueva entra en el próximo compás; el metrónomo no pierde el pulso |
 | M12 | Silenciar | El avance visual sigue; no suena |
+| M13 | Cambio de compás durante la reproducción | El acorde actual termina completo; el nuevo patrón de acentos entra en el próximo compás sin perder el pulso |
 
 ### 4.3 Editor y exportación — `LYRIC_EDITOR_AND_EXPORT.md` §9
 | # | Prueba | Resultado esperado |

@@ -101,4 +101,19 @@ describe('PlaybackTimeline', () => {
     expect(notesAt(2)).toEqual(voicingForProgression(chords)[1]);
     expect(notesAt(4)).toEqual(voicingForProgression(changedChords)[0]);
   });
+
+  it('aplica el compás encolado recién en el próximo compás', () => {
+    const timeline = new PlaybackTimeline(baseConfig, 0);
+    const firstBar = timeline.takeEventsUntil(2.1);
+    timeline.setPendingConfig({ meter: getMeter('3/4') });
+    const rest = timeline.takeEventsUntil(5.6);
+    const events = [...firstBar, ...rest];
+    const pulses = events.filter((event) => event.kind === 'pulse');
+    const notes = events.filter((event) => event.kind === 'note');
+
+    expect(pulses.map((event) => event.time)).toEqual([0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5]);
+    expect(pulses.filter((event) => event.time >= 4).map((event) => (event.kind === 'pulse' ? event.accent : '')))
+      .toEqual(['strong', 'weak', 'weak', 'strong']);
+    expect(notes.find((event) => event.time === 2)).toBeDefined();
+  });
 });

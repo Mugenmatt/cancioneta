@@ -107,6 +107,10 @@ export default function ChordsScreen() {
   }, [bpm]);
 
   useEffect(() => {
+    audioScheduler.setMeter(meter);
+  }, [meter]);
+
+  useEffect(() => {
     audioScheduler.setMetronome(metronomeArmed);
   }, [metronomeArmed]);
 

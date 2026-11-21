@@ -77,6 +77,7 @@ Notación: **cifrado americano** (C, Dm, G7). Opcional en Ajustes: mostrar nombr
 | Duración | **1 acorde = 1 compás de 4 tiempos**; duración de un compás = `4 × 60 / BPM` segundos |
 
 El metrónomo suena con un **click percusivo generado** en el contexto de audio: no usa notas de piano ni agregados para descargar.
+El cambio de compás se aplica **al empezar el próximo compás del compás vigente**: el acorde actual suena completo y el metrónomo cambia de patrón sin perder el pulso.
 
 ### Panel flotante
 Según el encargo, en fases posteriores el reproductor queda oculto en un control accesible. Al tocarlo aparece **por encima** del contenido actual (hoja deslizable) **sin perder** la posición de escritura ni el estado del Juego. El estado de la progresión vive en un *store* global independiente de las pantallas.

@@ -167,6 +167,7 @@ describe('AudioScheduler', () => {
 
     scheduler.setProgression([createChord(parseNote('D'), 'maj', false, 'd')]);
     scheduler.setTempo(240);
+    scheduler.setMeter(getMeter('3/4'));
     scheduler.setMetronome(false);
 
     expect(mockAudio.contexts).toHaveLength(1);

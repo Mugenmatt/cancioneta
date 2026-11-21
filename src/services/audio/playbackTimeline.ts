@@ -19,7 +19,7 @@ export type PlaybackEvent =
   | { kind: 'pulse'; time: number; pulse: number; accent: Accent }
   | { kind: 'note'; time: number; midi: number; velocity: number; step: number };
 
-export type PlaybackOverrides = Partial<Pick<PlaybackConfig, 'bpm' | 'chords' | 'loop' | 'metronome'>>;
+export type PlaybackOverrides = Partial<Pick<PlaybackConfig, 'bpm' | 'chords' | 'loop' | 'metronome' | 'meter'>>;
 
 export class PlaybackTimeline {
   private config: PlaybackConfig;
@@ -76,12 +76,14 @@ export class PlaybackTimeline {
 
     if (pulseInBar === 0 && this.pending) {
       const next = { ...this.config, ...this.pending };
+      const meterChanged = next.meter !== this.config.meter;
       this.pending = null;
       this.config = next;
       this.voicings = voicingForProgression(next.chords);
       this.pulseSeconds = pulseIntervalMs(next.bpm) / 1000;
       this.barSeconds = next.meter.pulses * this.pulseSeconds;
       this.endAt = null;
+      if (meterChanged) this.pulse = 0;
     }
 
     const { chords, loop, metronome } = this.config;

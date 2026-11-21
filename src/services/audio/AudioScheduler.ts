@@ -6,7 +6,7 @@ import {
   type AudioBufferSourceNode,
   type GainNode,
 } from 'react-native-audio-api';
-import type { Accent } from '@/music/meter';
+import type { Accent, Meter } from '@/music/meter';
 import type { Chord } from '@/music/theory';
 import { PIANO_SAMPLE_FILES } from './pianoSamples';
 import { PlaybackTimeline, type PlaybackConfig } from './playbackTimeline';
@@ -80,6 +80,7 @@ export class AudioScheduler {
   private metronomeVolume = 1;
   private progressionSignature: string | null = null;
   private currentBpm: number | null = null;
+  private currentMeter: Meter | null = null;
   private currentMetronome: boolean | null = null;
   private currentLoop: boolean | null = null;
   private runId = 0;
@@ -103,6 +104,7 @@ export class AudioScheduler {
     this.config = { ...config };
     this.progressionSignature = JSON.stringify(config.chords);
     this.currentBpm = config.bpm;
+    this.currentMeter = config.meter;
     this.currentMetronome = config.metronome;
     this.currentLoop = config.loop;
     this.callbacks = callbacks;
@@ -155,6 +157,12 @@ export class AudioScheduler {
     if (bpm === this.currentBpm) return;
     this.currentBpm = bpm;
     this.timeline?.setPendingConfig({ bpm });
+  }
+
+  setMeter(meter: Meter): void {
+    if (meter === this.currentMeter) return;
+    this.currentMeter = meter;
+    this.timeline?.setPendingConfig({ meter });
   }
 
   setMetronome(enabled: boolean): void {

@@ -9,6 +9,13 @@ dist/
 web-build/
 expo-env.d.ts
 
+# Datos volátiles/pesados (no versionar)
+/data/
+*.sqlite
+*.jsonl.gz
+*.tgz
+*.zip
+
 # Native
 .kotlin/
 *.orig.*

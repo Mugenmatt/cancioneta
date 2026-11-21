@@ -3,7 +3,7 @@
 Convenciones en `README.md`. Resumen de producto en `PRODUCT_SPEC.md` §4.2. Decisiones relacionadas: D-06 (alteraciones), D-07 (dado y tonalidad), D-08 (rango de BPM), D-09 (piano).
 
 ## 1. Alcance
-La Fase 1 permite armar una progresión de hasta **8 acordes**, escucharla con piano, generar progresiones al azar con un dado, detectar su tonalidad y explorar escalas, modos y sustituciones. Todo funciona **sin conexión**.
+La Fase 1 permite armar una progresión de hasta **16 acordes**, escucharla con piano, generar progresiones al azar con un dado, detectar su tonalidad y explorar escalas, modos y sustituciones. Todo funciona **sin conexión**.
 Referencia de experiencia: la fluidez de chordchord.com (tocar el dado y escuchar al instante). **No** se copian sus funciones innecesarias.
 
 ## 2. Modelo de datos
@@ -20,7 +20,7 @@ interface Chord {
   locked: boolean;       // protegido del dado
 }
 interface Progression {
-  chords: Chord[];       // 1 a 8
+  chords: Chord[];       // 1 a 16
   bpm: number;           // 40–200
   loop: boolean;
   muted: boolean;
@@ -63,7 +63,7 @@ Notación: **cifrado americano** (C, Dm, G7). Opcional en Ajustes: mostrar nombr
 - Cada bloque muestra el nombre y, al tocarlo, lo **hace sonar** (vista previa).
 - Quitar un acorde: deslizar hacia arriba o mantener presionado → «Eliminar» (mínimo 1).
 - **Candado** por bloque (D del dado).
-- Máximo 8: el «+» desaparece y se muestra «Máximo 8 acordes».
+- Máximo 16: el «+» desaparece y se muestra «Máximo 16 acordes».
 - Editar un acorde **no altera** los demás.
 
 ## 5. Reproductor
@@ -197,7 +197,7 @@ Diseño **basado en datos** (la lista definitiva se incorporará después).
 - Clasificación: por **tonalidad**, **emoción**, **estilo** y **característica** (según el encargo).
 - Los nombres de ejemplo («axis», etc.) son **placeholders**; los textos descriptivos deben ser de autoría propia.
 - El ledger evita repetir la misma preestablecida hasta agotar el conjunto.
-- Cargar una preestablecida respeta cantidad máxima (8); si trae más, se rechaza en la compilación del dato.
+- Cargar una preestablecida respeta cantidad máxima (16); si trae más, se rechaza en la compilación del dato.
 
 ## 10. Motor de audio (piano)
 

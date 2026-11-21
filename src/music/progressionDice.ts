@@ -3,6 +3,8 @@ import type { Chord, Key, KeyState, QualityId } from './theory';
 import { KEYS, chordName, diatonicChords, formatChord, pitchClass, keyScalePcs } from './theory';
 import { detectKeys } from './keyDetector';
 
+export const MAX_CHORD_COUNT = 16;
+
 export interface RollOptions {
   count: number;
   keyState: KeyState;
@@ -111,7 +113,7 @@ export function progressionFingerprint(key: Key, chords: Chord[]): string {
 }
 
 export function rollProgression(options: RollOptions): RollResult {
-  const count = Math.max(1, Math.min(8, Math.round(options.count)));
+  const count = Math.max(1, Math.min(MAX_CHORD_COUNT, Math.round(options.count)));
   const { key, ambiguous } = chooseKey(options);
   const diatonic = diatonicChords(key);
   const current = options.current ?? [];

@@ -12,7 +12,7 @@ import { Pill, SectionLabel } from '@/design/components/Primitives';
 import { ProgressBar } from '@/design/components/Feedback';
 import { Sheet } from '@/design/components/Sheet';
 import { VolumeSlider } from '@/design/components/VolumeSlider';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
 import { METERS, getMeter, type MeterId } from '@/music/meter';
@@ -20,6 +20,7 @@ import {
   KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
 } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
+import { MAX_CHORD_COUNT } from '@/music/progressionDice';
 import { chordMidi } from '@/music/voicing';
 import { commonSubstitutions, secondaryDominants, relatedKeys } from '@/music/relations';
 import { audioScheduler } from '@/services/audio/AudioScheduler';
@@ -27,7 +28,7 @@ import { useMusicStore } from '@/stores/musicStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 
 const ADVENTURE = [0, 25, 50, 75, 100];
-const COUNTS = [4, 6, 8];
+const COUNTS = [4, 6, 8, 10, 12, 14, 16];
 
 export default function ChordsScreen() {
   const { colors } = useCoreTheme();
@@ -35,7 +36,7 @@ export default function ChordsScreen() {
   const { columns, cardWidth } = useMemo(() => getChordCardLayout(width, fontScale), [width, fontScale]);
   const {
     chords, count, keyState, bpm, adventure, includeSevenths, isPlaying, currentStep,
-    roll, toggleLock, cycleRoot, setQuality, moveChord, setCount, setBpm, setAdventure,
+    roll, addChord, toggleLock, cycleRoot, setQuality, moveChord, setCount, setBpm, setAdventure,
     setSevenths, setKey, clear, setPlaying, setStep,
   } = useMusicStore();
   const { metronomeVolume, chordsVolume, setMetronomeVolume, setChordsVolume } = useSettingsStore();
@@ -182,13 +183,13 @@ export default function ChordsScreen() {
       </View>
 
       <View style={styles.options}>
-        <View style={{ flex: 1 }}>
+        <View>
           <SectionLabel color={colors.textMuted}>Acordes</SectionLabel>
           <View style={styles.pillRow}>
             {COUNTS.map((n) => <Pill key={n} label={String(n)} selected={count === n} onPress={() => setCount(n)} />)}
           </View>
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={styles.sevenths}>
           <SectionLabel color={colors.textMuted}>Séptimas</SectionLabel>
           <Pill label={includeSevenths ? 'Sí' : 'No'} selected={includeSevenths} onPress={() => setSevenths(!includeSevenths)} />
         </View>
@@ -230,6 +231,26 @@ export default function ChordsScreen() {
             onQuality={() => setQualityFor(chord.id)}
           />
         ))}
+        {chords.length < MAX_CHORD_COUNT ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={CHORDS_TEXT.addChord}
+            onPress={addChord}
+            style={({ pressed }) => [
+              styles.addCard,
+              { width: cardWidth, borderColor: colors.lineSubtle, backgroundColor: colors.bgRaised },
+              pressed && { opacity: 0.72 },
+            ]}
+          >
+            <Feather name="plus" size={24} color={colors.accentCore} />
+          </Pressable>
+        ) : (
+          <View style={[styles.addCard, { width: cardWidth, borderColor: colors.lineSubtle }]}>
+            <AppText variant="caption" color={colors.textMuted} style={{ textAlign: 'center' }}>
+              {CHORDS_TEXT.maxChords}
+            </AppText>
+          </View>
+        )}
       </View>
 
       <View style={styles.playRow}>
@@ -438,10 +459,19 @@ const styles = StyleSheet.create({
   keyRight: { alignItems: 'center', marginLeft: spacing.sm },
   actionRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
   smallAction: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: spacing.sm, minHeight: 38 },
-  options: { flexDirection: 'row', gap: spacing.md },
+  options: { gap: spacing.md },
+  sevenths: { marginTop: spacing.md },
   meterBlock: { marginTop: spacing.md },
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
+  addCard: {
+    minHeight: minTouch * 3,
+    borderRadius: radii.card,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xs,
+  },
   playRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
   volumeBlock: { marginTop: spacing.md },
   loop: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },

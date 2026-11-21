@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Chord, Key, KeyState, QualityId } from '@/music/theory';
-import { createChord, progressionFingerprint, rollProgression, type RollResult } from '@/music/progressionDice';
+import { createChord, MAX_CHORD_COUNT, progressionFingerprint, rollProgression, type RollResult } from '@/music/progressionDice';
 import { parseNote, noteFromPitchClass, pitchClass } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
 import { randomService } from '@/services/random/RandomService';
@@ -79,7 +79,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   },
 
   addChord: () => set((state) => {
-    if (state.chords.length >= 8) return state;
+    if (state.chords.length >= MAX_CHORD_COUNT) return state;
     const key = state.keyState.key;
     const root = key ? key.tonic : parseNote('C');
     return { chords: [...state.chords, createChord(root, 'maj')], count: state.chords.length + 1 };
@@ -119,7 +119,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   }),
 
   setCount: (count) => {
-    const next = Math.max(1, Math.min(8, count));
+    const next = Math.max(1, Math.min(MAX_CHORD_COUNT, count));
     set({ count: next });
     void get().roll();
   },

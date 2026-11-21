@@ -1,5 +1,5 @@
 import type { RandomSource } from '@/core/types';
-import { createChord, progressionFingerprint, rollProgression } from '@/music/progressionDice';
+import { createChord, MAX_CHORD_COUNT, progressionFingerprint, rollProgression } from '@/music/progressionDice';
 import { KEYS, parseNote } from '@/music/theory';
 
 function seeded(seed: number): RandomSource {
@@ -38,6 +38,18 @@ describe('dados de progresión', () => {
     expect(result.chords).toHaveLength(6);
     expect(result.degrees).toHaveLength(6);
     expect([1, 5]).toContain(result.degrees[5]);
+  });
+
+  it('genera hasta 16 acordes y no pasa del máximo', () => {
+    const result = rollProgression({
+      count: 20,
+      keyState: { key: null, source: 'auto' },
+      sevenths: false,
+      adventure: 20,
+      random: seeded(21),
+    });
+    expect(result.chords).toHaveLength(MAX_CHORD_COUNT);
+    expect(result.degrees).toHaveLength(MAX_CHORD_COUNT);
   });
 
   it('respeta los acordes bloqueados', () => {

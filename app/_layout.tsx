@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AppState, StyleSheet, View } from 'react-native';
+import { AppState, Platform, StyleSheet, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
@@ -41,6 +41,7 @@ export default function RootLayout() {
   const onboardingDone = useSettingsStore((s) => s.onboardingDone);
   const completeOnboarding = useSettingsStore((s) => s.completeOnboarding);
   useEffect(() => {
+    if (Platform.OS === 'web') return;
     void Font.loadAsync(FONTS).catch(() => undefined);
   }, []);
 

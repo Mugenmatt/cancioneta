@@ -1,9 +1,7 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Alert, Linking, PanResponder, StyleSheet, View } from 'react-native';
+import { Alert, PanResponder, StyleSheet, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
-import { File, Paths } from 'expo-file-system';
-import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import { AppText } from '@/design/components/Text';
@@ -11,8 +9,10 @@ import { Button } from '@/design/components/Button';
 import { GameField, MiniButton, Note } from './ui';
 import { MapCanvas } from './MapCanvas';
 import { loadMapFile } from './mapFile';
+import { mapToSvg } from './mapSvg';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { dataService } from '@/services/data/DataService';
+import { isWebPlatform, printHtml, readTextFile, releaseTextFile, saveTextFile, shareText } from '@/services/export/TextFileService';
 import { randomService } from '@/services/random/RandomService';
 import { normalizeWord } from './logic';
 import {
@@ -185,8 +185,8 @@ export function MapGame() {
       const asset = result.assets[0];
       if (!asset) return;
       applyImport(await loadMapFile(asset.uri, {
-        read: (uri) => new File(uri).text(),
-        remove: (uri) => { try { new File(uri).delete(); } catch { void 0; } },
+        read: readTextFile,
+        remove: releaseTextFile,
       }, nextId));
     } catch {
       Alert.alert(MAP_TEXT.importErrorTitle, MAP_TEXT.fileImportErrorBody);
@@ -195,19 +195,24 @@ export function MapGame() {
 
   const saveFile = async () => {
     if (!root) return;
-    const file = new File(Paths.cache, `mapa-${Date.now()}.mapa.json`);
     try {
-      file.write(JSON.stringify(serializeMap(root), null, 2));
-      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: MAP_TEXT.saveFile });
-      else Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
+      await saveTextFile(`mapa-${Date.now()}.mapa.json`, JSON.stringify(serializeMap(root), null, 2), 'application/json');
+      Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
     } catch {
       Alert.alert(MAP_TEXT.savedErrorTitle, MAP_TEXT.savedErrorBody);
-    } finally {
-      try { file.delete(); } catch { void 0; }
     }
   };
 
   const exportImage = async () => {
+    if (isWebPlatform() && layout) {
+      try {
+        await saveTextFile(`mapa-${Date.now()}.svg`, mapToSvg(layout, theme), 'image/svg+xml');
+        Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
+      } catch {
+        Alert.alert(MAP_TEXT.imageErrorTitle, MAP_TEXT.imageErrorBody);
+      }
+      return;
+    }
     if (!canvasRef.current) return;
     try {
       const uri = await captureRef(canvasRef.current as never, { format: 'png', quality: 1, result: 'tmpfile' });
@@ -224,18 +229,17 @@ export function MapGame() {
       .filter((entry) => entry.text.trim())
       .map((entry) => MAP_TEXT.exportLine(entry.text, relationLabel(entry.relation)))
       .join('\n');
-    try { await Linking.openURL(`whatsapp://send?text=${encodeURIComponent(MAP_TEXT.whatsappMessage(text))}`); }
+    try { await shareText(MAP_TEXT.whatsappMessage(text), MAP_TEXT.whatsapp); }
     catch { Alert.alert(MAP_TEXT.shareErrorTitle, MAP_TEXT.shareErrorBody); }
   };
 
   const exportPdf = async () => {
     if (!root) return;
     try {
-      const { uri } = await Print.printToFileAsync({
-        html: `<html><body style="padding:32px"><h1 style="font-family:Georgia,serif">${MAP_TEXT.pdfTitle}</h1>${toHtml(mapExportEntries(root))}</body></html>`,
-      });
-      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: MAP_TEXT.pdf });
-      else Alert.alert(MAP_TEXT.pdfTitle, uri);
+      await printHtml(
+        `<html><body style="padding:32px"><h1 style="font-family:Georgia,serif">${MAP_TEXT.pdfTitle}</h1>${toHtml(mapExportEntries(root))}</body></html>`,
+        MAP_TEXT.pdf,
+      );
     } catch {
       Alert.alert(MAP_TEXT.pdfErrorTitle, MAP_TEXT.pdfErrorBody);
     }

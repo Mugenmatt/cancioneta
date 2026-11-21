@@ -20,6 +20,12 @@ export function ignoreError(action: () => void): void {
 
 export function removeTemporaryAudio(uri: string | null): void {
   if (!uri) return;
+  if (uri.startsWith('blob:')) {
+    if (typeof URL !== 'undefined' && typeof URL.revokeObjectURL === 'function') {
+      URL.revokeObjectURL(uri);
+    }
+    return;
+  }
   try {
     const file = new File(uri);
     if (file.exists) file.delete();

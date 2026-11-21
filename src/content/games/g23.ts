@@ -34,7 +34,7 @@ export const MAP_TEXT = {
   copiedTitle: 'Mapa copiado',
   copiedBody: 'El JSON del mapa quedó en el portapapeles.',
   savedTitle: 'Archivo guardado',
-  savedBody: () => 'Elegí dónde guardarlo desde el menú de compartir.',
+  savedBody: () => 'El archivo quedó listo para guardar.',
   savedErrorTitle: 'No se pudo guardar el archivo',
   savedErrorBody: 'Probá de nuevo o copiá el JSON.',
   importErrorTitle: 'No se pudo importar',

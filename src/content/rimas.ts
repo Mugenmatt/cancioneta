@@ -1,0 +1,22 @@
+export const RIMAS_TEXT = {
+  eyebrow: 'Herramientas',
+  title: 'Rimas',
+  subtitle: 'Escribí una palabra y tocá Buscar.',
+  placeholder: 'Por ejemplo: amor',
+  search: 'Buscar',
+  clear: 'Limpiar',
+  searching: 'Buscando…',
+  filters: {
+    all: 'Todas',
+    consonant: 'Consonante',
+    assonant: 'Asonante',
+  },
+  results: (count: number) => `${count} ${count === 1 ? 'palabra' : 'palabras'}`,
+  empty: 'No encontramos rimas para esa palabra. Probá con otra.',
+  idle: 'Acá van a aparecer las rimas.',
+  onlineNote: 'Buscamos también en Datamuse: tu palabra viaja solo cuando tocás Buscar.',
+  offlineNote: 'Sin conexión: mostramos solo las rimas del léxico incluido.',
+  credit: 'Rimas online: Datamuse API',
+  copyWord: (word: string) => `Copiar ${word}`,
+  copied: 'Copiado',
+} as const;

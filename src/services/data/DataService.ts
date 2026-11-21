@@ -198,6 +198,12 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
       url: 'https://commons.wikimedia.org',
     },
     {
+      source: 'Datamuse API (rimas online)',
+      license: 'Gratuita sin clave hasta 2027-02-01; 100.000 consultas/día',
+      attribution: 'La sección Rimas consulta Datamuse solo al tocar Buscar; la palabra no se guarda.',
+      url: 'https://www.datamuse.com/api/',
+    },
+    {
       source: 'Tipografías', license: 'SIL Open Font License', attribution: 'Fraunces, Literata e Inter distribuidas por Google Fonts para Expo.',
       url: 'https://fonts.google.com',
     },

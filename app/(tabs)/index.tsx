@@ -102,10 +102,10 @@ export default function HomeScreen() {
           onPress={() => router.push('/acordes')}
         />
         <QuickCard
-          icon="book-open"
+          icon="search"
           title="Buscar"
-          body="Material"
-          onPress={() => router.push('/material')}
+          body="Rimas"
+          onPress={() => router.push('/rimas')}
         />
       </View>
 

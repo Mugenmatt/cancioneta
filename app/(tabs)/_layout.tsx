@@ -33,9 +33,10 @@ export default function TabsLayout() {
         options={{ title: 'Inicio', tabBarIcon: ({ color }) => <TabIcon name="home" color={color as string} /> }}
       />
       <Tabs.Screen
-        name="material"
-        options={{ title: 'Material', tabBarIcon: ({ color }) => <TabIcon name="book-open" color={color as string} /> }}
+        name="rimas"
+        options={{ title: 'Rimas', tabBarIcon: ({ color }) => <TabIcon name="search" color={color as string} /> }}
       />
+      <Tabs.Screen name="material" options={{ href: null }} />
       <Tabs.Screen
         name="acordes"
         options={{ title: 'Acordes', tabBarIcon: ({ color }) => <TabIcon name="music" color={color as string} /> }}

@@ -38,6 +38,8 @@ describe('compases del metrónomo', () => {
   it('respeta el rango de BPM', () => {
     expect(pulseIntervalMs(90)).toBeCloseTo(666.67, 1);
     expect(pulseIntervalMs(200)).toBe(300);
+    expect(pulseIntervalMs(300)).toBe(200);
+    expect(pulseIntervalMs(400)).toBe(200);
     expect(pulseIntervalMs(20)).toBe(1500);
   });
 

@@ -131,6 +131,12 @@ export function rollProgression(options: RollOptions): RollResult {
     }
   }
 
+  const useSeventh = Array.from({ length: count }, () => options.sevenths && options.random.next() < 0.5);
+  if (options.sevenths && useSeventh.every(Boolean)) {
+    const free = slots.findIndex((slot) => !slot);
+    useSeventh[free < 0 ? 0 : free] = false;
+  }
+
   let previous: number | null = degrees.find((d) => d !== null) ?? null;
   let previousPrevious: number | null = null;
 
@@ -155,7 +161,7 @@ export function rollProgression(options: RollOptions): RollResult {
       }
     }
     const degreeInfo = diatonic[degree - 1];
-    const quality = options.sevenths ? degreeInfo.seventhQuality : degreeInfo.quality;
+    const quality = useSeventh[i] ? degreeInfo.seventhQuality : degreeInfo.quality;
     slots[i] = createChord(degreeInfo.root, quality);
     degrees[i] = degree;
     previousPrevious = previous;

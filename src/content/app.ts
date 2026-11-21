@@ -17,4 +17,5 @@ export const CHORDS_TEXT = {
   chordsVolume: 'Volumen de los acordes',
   addChord: 'Agregar acorde',
   maxChords: 'Máximo 16 acordes',
+  clearProgression: 'Borrar progresión',
 } as const;

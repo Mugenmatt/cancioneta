@@ -28,7 +28,7 @@ describe('PlaybackTimeline', () => {
     expect(notes[0].time).toBe(pulses[0].time);
     expect(notes[1].time).toBeCloseTo(10 + NOTE_SPACING_SECONDS);
     expect(notes[2].time).toBeCloseTo(10 + NOTE_SPACING_SECONDS * 2);
-    expect(notes.map((event) => (event.kind === 'note' ? event.step : -1)).filter((step, index) => index % 3 === 0)).toEqual([0, 1]);
+    expect(notes.map((event) => (event.kind === 'note' ? event.step : -1)).filter((step, index) => index % 4 === 0)).toEqual([0, 1]);
   });
 
   it('mantiene el loop sin perder el downbeat', () => {
@@ -36,9 +36,12 @@ describe('PlaybackTimeline', () => {
     const events = timeline.takeEventsUntil(4.1);
     const notes = events.filter((event) => event.kind === 'note');
 
-    expect(notes.filter((event) => event.kind === 'note' && event.time === 0).map((event) => event.step)).toEqual([0]);
-    expect(notes.filter((event) => event.kind === 'note' && event.time === 2).map((event) => event.step)).toEqual([1]);
-    expect(notes.filter((event) => event.kind === 'note' && event.time === 4).map((event) => event.step)).toEqual([0]);
+    const stepsAt = (time: number) => Array.from(new Set(
+      notes.filter((event) => event.kind === 'note' && event.time === time).map((event) => event.step),
+    ));
+    expect(stepsAt(0)).toEqual([0]);
+    expect(stepsAt(2)).toEqual([1]);
+    expect(stepsAt(4)).toEqual([0]);
   });
 
   it('termina al final del último compás cuando no hay loop', () => {
@@ -49,7 +52,7 @@ describe('PlaybackTimeline', () => {
 
     expect(timeline.endTime).toBe(4);
     expect(pulses.map((event) => event.time)).toEqual([0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5]);
-    expect(notes.map((event) => (event.kind === 'note' ? event.step : -1)).filter((step, index) => index % 3 === 0)).toEqual([0, 1]);
+    expect(notes.map((event) => (event.kind === 'note' ? event.step : -1)).filter((step, index) => index % 4 === 0)).toEqual([0, 1]);
     expect(timeline.hasEvents).toBe(false);
   });
 

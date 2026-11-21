@@ -21,7 +21,7 @@ interface Chord {
 }
 interface Progression {
   chords: Chord[];       // 1 a 16
-  bpm: number;           // 40–200
+  bpm: number;           // 40–300
   loop: boolean;
   muted: boolean;
   key: KeyState;         // ver sección 7
@@ -72,7 +72,7 @@ Notación: **cifrado americano** (C, Dm, G7). Opcional en Ajustes: mostrar nombr
 |---|---|
 | Play / Pausa | Reproduce desde el acorde 1; Pausa conserva la posición |
 | Loop | Si **off**: se reproduce **una vez** y se detiene. Si **on**: repite indefinidamente |
-| BPM | **40–200** (D-08), por defecto 90, paso 1. El cambio se aplica **desde el siguiente compás** |
+| BPM | **40–300** (D-08), por defecto 90, paso 1. El cambio se aplica **desde el siguiente compás** |
 | Silenciar | Silencia el sonido pero **la reproducción continúa** y se ve el avance |
 | Duración | **1 acorde = 1 compás de 4 tiempos**; duración de un compás = `4 × 60 / BPM` segundos |
 
@@ -92,7 +92,7 @@ Al tocar el dado:
 ### 6.2 Algoritmo [REC]
 1. **Tonalidad objetivo:** si el usuario fijó una tonalidad, usarla. Si no, y hay acordes con candado, inferirla con el detector (§7) y tomar la de mayor compatibilidad. Si no hay nada, sortear una de las 24 (12 mayores + 12 menores).
 2. **Grados:** generar una secuencia de grados diatónicos con una **tabla de transiciones ponderada** (cadena de Markov simple) propia de la tonalidad mayor o menor. Ejemplos de tendencias comunes: I → {IV, V, vi, ii, iii}; V → {I, vi}; ii → {V, vii°}; etc. Los pesos viven en un archivo de datos editable.
-3. **Calidad de cada acorde:** la diatónica de la tonalidad (triada o séptima según un ajuste «Simple / Con séptimas», por defecto Simple).
+3. **Calidad de cada acorde:** la diatónica de la tonalidad. Con «Con séptimas» activo, cada acorde tiene 50 % de probabilidad de ser séptima y la progresión siempre incluye al menos una triada.
 4. **Variedad opcional:** ajuste «Aventura» (desactivado por defecto) que permite, con baja probabilidad, un préstamo modal o un dominante secundario del catálogo de §8.
 5. **Posiciones bloqueadas:** los acordes con candado se mantienen en su posición; los demás se generan alrededor.
 6. **Restricciones:** no más de 2 acordes iguales consecutivos; no todos iguales; el primer acorde tiene sesgo hacia la tónica.
@@ -254,7 +254,7 @@ flowchart LR
 3. **Dado con tonalidad fijada:** todos los acordes pertenecen a la tonalidad (modo «Simple»).
 4. **Reproducción:** a 120 BPM un acorde dura 2,0 s; 4 acordes sin Loop = 8,0 s y se detiene.
 5. **Loop:** con Loop activo no hay silencio audible entre el último y el primer compás.
-6. **BPM:** 40 y 200 aceptados; 39 y 201 rechazados.
+6. **BPM:** 40 y 300 aceptados; 39 y 301 rechazados.
 7. **Detección:** los casos de §7.4 dan el resultado esperado.
 8. **Panel:** abrir y cerrar el reproductor desde el editor no mueve el cursor ni cambia el Juego.
 9. **Sustituciones:** cada sugerencia mostrada corresponde a una regla del catálogo §8.1.

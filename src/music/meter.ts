@@ -29,7 +29,7 @@ export function nextMetronomePulse(current: number, meter: Meter): number {
 }
 
 export function pulseIntervalMs(bpm: number): number {
-  return Math.max(80, 60000 / Math.max(40, Math.min(200, bpm)));
+  return Math.max(80, 60000 / Math.max(40, Math.min(300, bpm)));
 }
 
 export function chordBarMs(bpm: number, meter: Meter): number {

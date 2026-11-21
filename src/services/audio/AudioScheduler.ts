@@ -122,14 +122,16 @@ export class AudioScheduler {
     }
   }
 
-  async playPreview(midis: number[], spacingMs = 35, velocity = 1): Promise<void> {
+  async playPreview(midis: number[], spacingMs = 0, velocity = 1): Promise<void> {
     await this.prepare();
     const context = this.context;
     if (!context) return;
     const start = context.currentTime;
     const spacing = Math.max(0, spacingMs) / 1000;
+    const balance = 1 / Math.sqrt(midis.length);
     for (let i = 0; i < midis.length; i += 1) {
-      this.playBuffer(midis[i], start + i * spacing, PIANO_VOLUME * velocity, 'chords');
+      const level = (i === 0 ? velocity : velocity * 0.78) * balance;
+      this.playBuffer(midis[i], start + i * spacing, PIANO_VOLUME * level, 'chords');
     }
   }
 

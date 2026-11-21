@@ -1,9 +1,9 @@
 import { nextPlaybackStep } from '@/music/playback';
 import { pulseIntervalMs, type Accent, type Meter } from '@/music/meter';
 import type { Chord } from '@/music/theory';
-import { chordMidi } from '@/music/voicing';
+import { voicingForProgression } from '@/music/voicing';
 
-export const NOTE_SPACING_SECONDS = 0.035;
+export const NOTE_SPACING_SECONDS = 0;
 
 const EPSILON = 0.000001;
 
@@ -24,6 +24,7 @@ export class PlaybackTimeline {
   private readonly pulseSeconds: number;
   private readonly barSeconds: number;
   private readonly queue: PlaybackEvent[] = [];
+  private readonly voicings: number[][];
   private pulse = 0;
   private step = 0;
   private time: number;
@@ -33,6 +34,7 @@ export class PlaybackTimeline {
     this.config = config;
     this.pulseSeconds = pulseIntervalMs(config.bpm) / 1000;
     this.barSeconds = config.meter.pulses * this.pulseSeconds;
+    this.voicings = voicingForProgression(config.chords);
     this.time = startTime;
   }
 
@@ -79,15 +81,15 @@ export class PlaybackTimeline {
         this.endAt = barTime;
         return;
       }
-      const chord = chords[this.step];
-      if (chord) {
-        const midis = chordMidi(chord);
+      const midis = this.voicings[this.step];
+      if (midis) {
+        const balance = 1 / Math.sqrt(midis.length);
         for (let i = 0; i < midis.length; i += 1) {
           this.queue.push({
             kind: 'note',
             time: barTime + i * NOTE_SPACING_SECONDS,
             midi: midis[i],
-            velocity: 1,
+            velocity: (i === 0 ? 1 : 0.78) * balance,
             step: this.step,
           });
         }

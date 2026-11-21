@@ -61,11 +61,11 @@ Requisitos clave:
 
 ### 4.2 Fase 1 — Progresión de acordes
 Especificación completa en `MUSIC_ENGINE.md`. Resumen:
-- 2 a 8 acordes (inicia con 2 y un «+»).
+- 4 a 16 acordes (inicia con 4 y un «+»).
 - Dado: regenera toda la progresión conservando cantidad, BPM y estado de Loop; respeta tonalidad y acordes bloqueados; reproduce al instante.
 - Detección de tonalidad con varias opciones y nivel de compatibilidad, editable a mano.
 - Exploración armónica (relativas, paralelas, modos, sustituciones) solo con teoría verificable, audible en piano.
-- Reproductor: Play, Pausa, Loop, BPM (máx. 200), mute. Un acorde = un compás de 4 tiempos.
+- Reproductor: Play, Pausa, Loop, BPM (máx. 300), mute. Un acorde = un compás de 4 tiempos.
 - En fases posteriores el reproductor queda oculto en un panel accesible y se abre por encima del contenido sin perder posición de escritura ni estado del Juego.
 
 ### 4.3 Fase 2 — Los 32 Juegos

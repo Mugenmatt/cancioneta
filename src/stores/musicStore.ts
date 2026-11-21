@@ -124,7 +124,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
     void get().roll();
   },
 
-  setBpm: (bpm) => set({ bpm: Math.max(40, Math.min(200, Math.round(bpm))) }),
+  setBpm: (bpm) => set({ bpm: Math.max(40, Math.min(300, Math.round(bpm))) }),
   setAdventure: (adventure) => set({ adventure: Math.max(0, Math.min(100, Math.round(adventure))) }),
   setSevenths: (enabled) => set({ includeSevenths: enabled }),
 

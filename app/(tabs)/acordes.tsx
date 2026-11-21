@@ -220,13 +220,13 @@ export default function ChordsScreen() {
             current={currentStep === index}
             width={cardWidth}
             compact={columns > 1}
-            onPlay={() => void audioScheduler.playPreview(chordMidi(chord), 35)}
+            onPlay={() => void audioScheduler.playPreview(chordMidi(chord))}
             onLock={() => toggleLock(chord.id)}
             onRootChange={(semitones) => {
               const nextPc = (pitchClass(chord.root) + semitones + 120) % 12;
               const next = { ...chord, root: noteFromPitchClass(nextPc, keyState.key?.mode === 'minor' ? 'flat' : 'sharp') };
               cycleRoot(chord.id, semitones);
-              void audioScheduler.playPreview(chordMidi(next), 30);
+              void audioScheduler.playPreview(chordMidi(next));
             }}
             onQuality={() => setQualityFor(chord.id)}
           />
@@ -334,7 +334,14 @@ export default function ChordsScreen() {
       </View>
 
       <View style={styles.footer}>
-        <Button label="Vaciar" tone="ghost" small onPress={clear} />
+        <Button
+          label={CHORDS_TEXT.clearProgression}
+          tone="danger"
+          small
+          icon={<Feather name="trash-2" size={14} color={colors.stateError} />}
+          style={{ borderColor: colors.stateError }}
+          onPress={clear}
+        />
         <View style={{ flex: 1 }} />
         {chords.map((chord, index) => (
           <Pressable
@@ -360,7 +367,7 @@ export default function ChordsScreen() {
               onPress={() => {
                 if (selectedChord) {
                   setQuality(selectedChord.id, quality);
-                  void audioScheduler.playPreview(chordMidi({ ...selectedChord, quality }), 30);
+                  void audioScheduler.playPreview(chordMidi({ ...selectedChord, quality }));
                 }
                 setQualityFor(null);
               }}

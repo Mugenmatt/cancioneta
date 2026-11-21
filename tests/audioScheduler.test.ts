@@ -116,7 +116,7 @@ describe('AudioScheduler', () => {
     expect(context.decodeAudioData).toHaveBeenCalledWith('file://sample.wav');
     expect(context.starts[0]).toBeCloseTo(10.12);
     expect(context.starts[1]).toBe(context.starts[0]);
-    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.5, 0.65]));
+    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.5, 0.325]));
   });
 
   it('aplica los volúmenes configurados a los sonidos ya programados', async () => {
@@ -134,6 +134,6 @@ describe('AudioScheduler', () => {
 
     scheduler.setVolumes(0.5, 0.4);
 
-    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.325, 0.2]));
+    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.1625, 0.2]));
   });
 });

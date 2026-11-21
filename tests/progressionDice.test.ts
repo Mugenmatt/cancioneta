@@ -1,6 +1,6 @@
 import type { RandomSource } from '@/core/types';
 import { createChord, MAX_CHORD_COUNT, progressionFingerprint, rollProgression } from '@/music/progressionDice';
-import { KEYS, parseNote } from '@/music/theory';
+import { KEYS, QUALITIES, parseNote } from '@/music/theory';
 
 function seeded(seed: number): RandomSource {
   let state = seed >>> 0;
@@ -50,6 +50,23 @@ describe('dados de progresión', () => {
     });
     expect(result.chords).toHaveLength(MAX_CHORD_COUNT);
     expect(result.degrees).toHaveLength(MAX_CHORD_COUNT);
+  });
+
+  it('con séptimas activas mezcla triadas y séptimas', () => {
+    let sawSeventh = false;
+    for (let seed = 1; seed <= 20; seed += 1) {
+      const result = rollProgression({
+        count: 8,
+        keyState: { key: null, source: 'auto' },
+        sevenths: true,
+        adventure: 20,
+        random: seeded(seed),
+      });
+      const sizes = result.chords.map((chord) => QUALITIES[chord.quality].intervals.length);
+      expect(sizes.some((size) => size === 3)).toBe(true);
+      if (sizes.some((size) => size > 3)) sawSeventh = true;
+    }
+    expect(sawSeventh).toBe(true);
   });
 
   it('respeta los acordes bloqueados', () => {

@@ -114,6 +114,11 @@ export class RandomService implements RandomSource {
     return items[this.int(items.length)];
   }
 
+  pickN<T>(items: readonly T[], count: number): T[] {
+    if (count <= 0 || items.length === 0) return [];
+    return this.shuffle(items).slice(0, Math.min(count, items.length));
+  }
+
   private poolLedger(pool: string): PoolLedger {
     if (!this.ledger.pools[pool]) this.ledger.pools[pool] = { cycle: 0, used: [], last: null };
     return this.ledger.pools[pool];

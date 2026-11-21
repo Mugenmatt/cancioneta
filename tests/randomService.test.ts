@@ -61,6 +61,19 @@ describe('RandomService', () => {
     expect(await service.isProgressionUsed('c mayor|C,G,Am,F')).toBe(true);
   });
 
+  it('elige n elementos distintos sin modificar el ledger', () => {
+    const service = new RandomService({ storage: new MemoryLedgerStorage(), rng: seeded(61) });
+    const items = ['a', 'b', 'c', 'd'];
+
+    expect(service.pickN(items, 0)).toEqual([]);
+    const picked = service.pickN(items, 3);
+    expect(picked).toHaveLength(3);
+    expect(new Set(picked).size).toBe(3);
+    expect(picked.every((item) => items.includes(item))).toBe(true);
+    expect(service.pickN(items, 9)).toHaveLength(items.length);
+    expect(service.getSnapshot().pools).toEqual({});
+  });
+
   it('puede reiniciar la memoria', async () => {
     const service = new RandomService({ storage: new MemoryLedgerStorage(), rng: seeded(51) });
     await service.draw('words.verb', 3);

@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState, type ComponentRef } from 'react';
-import { Alert, PanResponder, StyleSheet, View } from 'react-native';
+import { Alert, Linking, PanResponder, StyleSheet, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as DocumentPicker from 'expo-document-picker';
+import { File, Paths } from 'expo-file-system';
+import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 import { AppText } from '@/design/components/Text';
@@ -185,8 +187,8 @@ export function MapGame() {
       const asset = result.assets[0];
       if (!asset) return;
       applyImport(await loadMapFile(asset.uri, {
-        read: readTextFile,
-        remove: releaseTextFile,
+        read: isWebPlatform() ? readTextFile : (uri) => new File(uri).text(),
+        remove: isWebPlatform() ? releaseTextFile : (uri) => { try { new File(uri).delete(); } catch { void 0; } },
       }, nextId));
     } catch {
       Alert.alert(MAP_TEXT.importErrorTitle, MAP_TEXT.fileImportErrorBody);
@@ -195,11 +197,24 @@ export function MapGame() {
 
   const saveFile = async () => {
     if (!root) return;
+    if (isWebPlatform()) {
+      try {
+        await saveTextFile(`mapa-${Date.now()}.mapa.json`, JSON.stringify(serializeMap(root), null, 2), 'application/json');
+        Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBodyWeb());
+      } catch {
+        Alert.alert(MAP_TEXT.savedErrorTitle, MAP_TEXT.savedErrorBody);
+      }
+      return;
+    }
+    const file = new File(Paths.cache, `mapa-${Date.now()}.mapa.json`);
     try {
-      await saveTextFile(`mapa-${Date.now()}.mapa.json`, JSON.stringify(serializeMap(root), null, 2), 'application/json');
-      Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
+      file.write(JSON.stringify(serializeMap(root), null, 2));
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(file.uri, { mimeType: 'application/json', dialogTitle: MAP_TEXT.saveFile });
+      else Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
     } catch {
       Alert.alert(MAP_TEXT.savedErrorTitle, MAP_TEXT.savedErrorBody);
+    } finally {
+      try { file.delete(); } catch { void 0; }
     }
   };
 
@@ -207,7 +222,7 @@ export function MapGame() {
     if (isWebPlatform() && layout) {
       try {
         await saveTextFile(`mapa-${Date.now()}.svg`, mapToSvg(layout, theme), 'image/svg+xml');
-        Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBody());
+        Alert.alert(MAP_TEXT.savedTitle, MAP_TEXT.savedBodyWeb());
       } catch {
         Alert.alert(MAP_TEXT.imageErrorTitle, MAP_TEXT.imageErrorBody);
       }
@@ -229,17 +244,29 @@ export function MapGame() {
       .filter((entry) => entry.text.trim())
       .map((entry) => MAP_TEXT.exportLine(entry.text, relationLabel(entry.relation)))
       .join('\n');
-    try { await shareText(MAP_TEXT.whatsappMessage(text), MAP_TEXT.whatsapp); }
-    catch { Alert.alert(MAP_TEXT.shareErrorTitle, MAP_TEXT.shareErrorBody); }
+    try {
+      if (isWebPlatform()) await shareText(MAP_TEXT.whatsappMessage(text), MAP_TEXT.whatsapp);
+      else await Linking.openURL(`whatsapp://send?text=${encodeURIComponent(MAP_TEXT.whatsappMessage(text))}`);
+    } catch {
+      Alert.alert(MAP_TEXT.shareErrorTitle, MAP_TEXT.shareErrorBody);
+    }
   };
 
   const exportPdf = async () => {
     if (!root) return;
+    const html = `<html><body style="padding:32px"><h1 style="font-family:Georgia,serif">${MAP_TEXT.pdfTitle}</h1>${toHtml(mapExportEntries(root))}</body></html>`;
+    if (isWebPlatform()) {
+      try {
+        await printHtml(html, MAP_TEXT.pdf);
+      } catch {
+        Alert.alert(MAP_TEXT.pdfErrorTitle, MAP_TEXT.pdfErrorBody);
+      }
+      return;
+    }
     try {
-      await printHtml(
-        `<html><body style="padding:32px"><h1 style="font-family:Georgia,serif">${MAP_TEXT.pdfTitle}</h1>${toHtml(mapExportEntries(root))}</body></html>`,
-        MAP_TEXT.pdf,
-      );
+      const { uri } = await Print.printToFileAsync({ html });
+      if (await Sharing.isAvailableAsync()) await Sharing.shareAsync(uri, { mimeType: 'application/pdf', dialogTitle: MAP_TEXT.pdf });
+      else Alert.alert(MAP_TEXT.pdfTitle, uri);
     } catch {
       Alert.alert(MAP_TEXT.pdfErrorTitle, MAP_TEXT.pdfErrorBody);
     }

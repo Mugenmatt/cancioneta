@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View, type TextInputInstance } from 'react-native';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { useGameTheme } from '@/design/ThemeProvider';
@@ -9,7 +9,7 @@ import { PHASE0_CONTENT } from '@/content/phase0';
 
 export function WhyGame() {
   const theme = useGameTheme('f0-5');
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<TextInputInstance>(null);
   const [text, setText] = useState('');
   const [selection, setSelection] = useState({ start: 0, end: 0 });
 

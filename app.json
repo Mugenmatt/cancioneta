@@ -4,11 +4,11 @@
     "slug": "cancioneta",
     "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/icono-cancioneta.png",
     "scheme": "cancioneta",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icono-cancioneta.png",
       "supportsTablet": false,
       "infoPlist": {
         "NSMicrophoneUsageDescription": "Usamos el micrófono para grabar tu voz. La grabación queda en tu teléfono y se borra al terminar la sesión.",
@@ -18,11 +18,10 @@
     },
     "android": {
       "package": "com.cancioneta.app",
+      "icon": "./assets/images/icono-cancioneta.png",
       "adaptiveIcon": {
         "backgroundColor": "#F7F3EC",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/icono-cancioneta.png"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -41,7 +40,7 @@
       "scope": "/",
       "themeColor": "#F7F3EC",
       "backgroundColor": "#F7F3EC",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icono-cancioneta.png"
     },
     "plugins": [
       "expo-router",

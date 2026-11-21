@@ -13,14 +13,16 @@ import { Sheet } from '@/design/components/Sheet';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
-import { chordIntervalMs, nextPlaybackStep } from '@/music/playback';
+import { nextPlaybackStep } from '@/music/playback';
+import { METERS, chordBarMs, getMeter, type MeterId } from '@/music/meter';
 import {
   KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
 } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
 import { chordMidi } from '@/music/voicing';
 import { commonSubstitutions, secondaryDominants, relatedKeys } from '@/music/relations';
-import { piano, metronome } from '@/services/audio/PianoEngine';
+import { piano } from '@/services/audio/PianoEngine';
+import { metronomeEngine } from '@/services/audio/MetronomeEngine';
 import { useMusicStore } from '@/stores/musicStore';
 
 const ADVENTURE = [0, 25, 50, 75, 100];
@@ -39,13 +41,12 @@ export default function ChordsScreen() {
   const [keyOpen, setKeyOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [loop, setLoop] = useState(true);
+  const [meterId, setMeterId] = useState<MeterId>('4/4');
   const [beat, setBeat] = useState(-1);
-  const [beatRunning, setBeatRunning] = useState(false);
+  const [metronomeArmed, setMetronomeArmed] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stepRef = useRef(0);
   const loopRef = useRef(loop);
-  const chordsRef = useRef(chords);
-  const previousChordsRef = useRef(chords);
 
   useEffect(() => {
     loopRef.current = loop;
@@ -55,17 +56,20 @@ export default function ChordsScreen() {
   const displayKey = keyState.key ?? detection.top?.key ?? null;
   const diatonic = displayKey ? diatonicChords(displayKey) : [];
   const selectedChord = chords.find((c) => c.id === qualityFor) ?? null;
+  const meter = useMemo(() => getMeter(meterId), [meterId]);
 
   const stop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
     intervalRef.current = null;
+    metronomeEngine.stop();
     setPlaying(false);
     setStep(-1);
+    setBeat(-1);
     stepRef.current = 0;
   }, [setPlaying, setStep]);
 
-  const playStep = useCallback((step: number) => {
-    const chord = chordsRef.current[step];
+  const playChord = useCallback((step: number, items: Chord[]) => {
+    const chord = items[step];
     if (!chord) return;
     stepRef.current = step;
     setStep(step);
@@ -73,58 +77,51 @@ export default function ChordsScreen() {
   }, [setStep]);
 
   useEffect(() => {
-    chordsRef.current = chords;
-    if (chords === previousChordsRef.current) return;
-    previousChordsRef.current = chords;
     if (!isPlaying || chords.length === 0) return;
-    playStep(0);
-  }, [chords, isPlaying, playStep]);
-
-  useEffect(() => {
-    if (!isPlaying) return;
-    const advance = () => {
-      const next = nextPlaybackStep(stepRef.current, chordsRef.current.length, loopRef.current);
+    stepRef.current = 0;
+    setStep(0);
+    playChord(0, chords);
+    if (metronomeArmed) {
+      metronomeEngine.start(bpm, meter, (pulse, accent) => {
+        setBeat(pulse);
+        if (accent === 'strong') void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      });
+    } else {
+      metronomeEngine.stop();
+    }
+    intervalRef.current = setInterval(() => {
+      const next = nextPlaybackStep(stepRef.current, chords.length, loopRef.current);
       if (next === null) {
         stop();
         return;
       }
-      playStep(next);
-    };
-    intervalRef.current = setInterval(advance, chordIntervalMs(bpm));
+      playChord(next, chords);
+    }, chordBarMs(bpm, meter));
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       intervalRef.current = null;
+      metronomeEngine.stop();
     };
-  }, [bpm, isPlaying, playStep, stop]);
+  }, [bpm, chords, isPlaying, meter, metronomeArmed, playChord, setStep, stop]);
 
   const togglePlay = useCallback(() => {
     if (isPlaying) {
       stop();
       return;
     }
-    if (chordsRef.current.length === 0) return;
+    if (chords.length === 0) return;
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPlaying(true);
-    playStep(0);
-  }, [isPlaying, playStep, setPlaying, stop]);
+  }, [chords.length, isPlaying, setPlaying, stop]);
 
-  const toggleBeat = () => {
-    if (beatRunning) {
-      metronome.stop();
-      setBeatRunning(false);
-      setBeat(-1);
-      return;
-    }
-    setBeatRunning(true);
-    metronome.start(bpm, (tick) => {
-      setBeat(tick);
-      if (tick === 0) void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    });
+  const toggleMetronome = () => {
+    setMetronomeArmed((armed) => !armed);
+    setBeat(-1);
   };
 
   useEffect(() => () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-    metronome.stop();
+    metronomeEngine.stop();
   }, []);
 
   const degreeFor = (chord: Chord): string => {
@@ -207,6 +204,21 @@ export default function ChordsScreen() {
         </View>
       </View>
 
+      <View style={styles.meterBlock}>
+        <SectionLabel color={colors.textMuted}>Compás</SectionLabel>
+        <View style={styles.pillRow}>
+          {METERS.map((item) => (
+            <Pill
+              key={item.id}
+              label={item.id}
+              accessibilityLabel={`Compás ${item.id}`}
+              selected={meter.id === item.id}
+              onPress={() => setMeterId(item.id)}
+            />
+          ))}
+        </View>
+      </View>
+
       <View style={styles.chordGrid}>
         {chords.map((chord, index) => (
           <ChordCard
@@ -249,17 +261,28 @@ export default function ChordsScreen() {
         <Pressable
           accessibilityRole="switch"
           accessibilityLabel="Metrónomo"
-          accessibilityState={{ checked: beatRunning }}
-          onPress={toggleBeat}
-          style={[styles.loop, { borderColor: beatRunning ? colors.accentCore : colors.lineSubtle }]}
+          accessibilityState={{ checked: metronomeArmed }}
+          onPress={toggleMetronome}
+          style={[styles.loop, { borderColor: metronomeArmed ? colors.accentCore : colors.lineSubtle }]}
         >
-          <Feather name="clock" size={17} color={beatRunning ? colors.accentCore : colors.textMuted} />
+          <Feather name="clock" size={17} color={metronomeArmed ? colors.accentCore : colors.textMuted} />
         </Pressable>
       </View>
 
       <View style={styles.beats}>
-        {[0, 1, 2, 3].map((tick) => (
-          <View key={tick} style={[styles.beat, { backgroundColor: beat === tick ? colors.accentCore : colors.lineSubtle }]} />
+        {meter.accents.map((accent, pulse) => (
+          <View
+            key={pulse}
+            style={[
+              styles.beat,
+              accent !== 'weak' && styles.beatAccent,
+              {
+                backgroundColor: beat === pulse
+                  ? colors.accentCore
+                  : accent === 'weak' ? colors.lineSubtle : colors.lineStrong,
+              },
+            ]}
+          />
         ))}
       </View>
 
@@ -411,12 +434,14 @@ const styles = StyleSheet.create({
   actionRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
   smallAction: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: spacing.sm, minHeight: 38 },
   options: { flexDirection: 'row', gap: spacing.md },
+  meterBlock: { marginTop: spacing.md },
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
   playRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
   loop: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   beats: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, justifyContent: 'center' },
   beat: { width: 7, height: 7, borderRadius: 4 },
+  beatAccent: { width: spacing.xs, height: spacing.xs, borderRadius: spacing.xxs },
   bpmRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm, marginTop: spacing.md },
   stepBtn: { width: 30, height: 30, borderRadius: 9, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   footer: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.lg },

@@ -103,29 +103,3 @@ export class PianoEngine {
 }
 
 export const piano = new PianoEngine();
-
-export class Metronome {
-  private timer: ReturnType<typeof setInterval> | null = null;
-
-  start(bpm: number, onTick: (beat: number) => void): void {
-    this.stop();
-    let beat = 0;
-    const interval = Math.max(80, 60000 / Math.max(40, Math.min(200, bpm)));
-    onTick(beat);
-    this.timer = setInterval(() => {
-      beat = (beat + 1) % 4;
-      onTick(beat);
-    }, interval);
-  }
-
-  stop(): void {
-    if (this.timer) clearInterval(this.timer);
-    this.timer = null;
-  }
-
-  isRunning(): boolean {
-    return this.timer !== null;
-  }
-}
-
-export const metronome = new Metronome();

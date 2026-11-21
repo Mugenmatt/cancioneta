@@ -1,4 +1,4 @@
-import { chordIntervalMs, nextPlaybackStep } from '@/music/playback';
+import { nextPlaybackStep } from '@/music/playback';
 
 describe('avance de la progresión', () => {
   it('avanza al siguiente acorde', () => {
@@ -18,10 +18,5 @@ describe('avance de la progresión', () => {
   it('arranca desde cero y no avanza sin acordes', () => {
     expect(nextPlaybackStep(-1, 6, true)).toBe(0);
     expect(nextPlaybackStep(0, 0, true)).toBeNull();
-  });
-
-  it('calcula la espera según el pulso', () => {
-    expect(chordIntervalMs(90)).toBeCloseTo(1333.33, 1);
-    expect(chordIntervalMs(200)).toBe(600);
   });
 });

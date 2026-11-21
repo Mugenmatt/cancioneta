@@ -116,6 +116,24 @@ describe('AudioScheduler', () => {
     expect(context.decodeAudioData).toHaveBeenCalledWith('file://sample.wav');
     expect(context.starts[0]).toBeCloseTo(10.12);
     expect(context.starts[1]).toBe(context.starts[0]);
-    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([1, 0.65]));
+    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.5, 0.65]));
+  });
+
+  it('aplica los volúmenes configurados a los sonidos ya programados', async () => {
+    await scheduler.start({
+      bpm: 120,
+      meter: getMeter('4/4'),
+      chords: [createChord(parseNote('C'), 'maj', false, 'c')],
+      loop: true,
+      metronome: true,
+    }, {
+      onStep: jest.fn(),
+      onPulse: jest.fn(),
+      onFinish: jest.fn(),
+    });
+
+    scheduler.setVolumes(0.5, 0.4);
+
+    expect(mockAudio.gainValues).toEqual(expect.arrayContaining([0.325, 0.2]));
   });
 });

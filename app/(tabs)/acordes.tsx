@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { CHORDS_TEXT } from '@/content/app';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
@@ -10,6 +11,7 @@ import { DiceButton } from '@/design/components/DiceButton';
 import { Pill, SectionLabel } from '@/design/components/Primitives';
 import { ProgressBar } from '@/design/components/Feedback';
 import { Sheet } from '@/design/components/Sheet';
+import { VolumeSlider } from '@/design/components/VolumeSlider';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { ChordCard } from '@/music/components/ChordCard';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
@@ -22,6 +24,7 @@ import { chordMidi } from '@/music/voicing';
 import { commonSubstitutions, secondaryDominants, relatedKeys } from '@/music/relations';
 import { audioScheduler } from '@/services/audio/AudioScheduler';
 import { useMusicStore } from '@/stores/musicStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 const ADVENTURE = [0, 25, 50, 75, 100];
 const COUNTS = [4, 6, 8];
@@ -35,6 +38,7 @@ export default function ChordsScreen() {
     roll, toggleLock, cycleRoot, setQuality, moveChord, setCount, setBpm, setAdventure,
     setSevenths, setKey, clear, setPlaying, setStep,
   } = useMusicStore();
+  const { metronomeVolume, chordsVolume, setMetronomeVolume, setChordsVolume } = useSettingsStore();
   const [qualityFor, setQualityFor] = useState<string | null>(null);
   const [keyOpen, setKeyOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
@@ -48,6 +52,10 @@ export default function ChordsScreen() {
     loopRef.current = loop;
     audioScheduler.setLoop(loop);
   }, [loop]);
+
+  useEffect(() => {
+    audioScheduler.setVolumes(chordsVolume, metronomeVolume);
+  }, [chordsVolume, metronomeVolume]);
 
   const detection = useMemo(() => detectKeys(chords), [chords]);
   const displayKey = keyState.key ?? detection.top?.key ?? null;
@@ -251,6 +259,20 @@ export default function ChordsScreen() {
         </Pressable>
       </View>
 
+      <View style={styles.volumeBlock}>
+        <SectionLabel color={colors.textMuted}>{CHORDS_TEXT.volume}</SectionLabel>
+        <VolumeSlider
+          label={CHORDS_TEXT.metronomeVolume}
+          value={metronomeVolume}
+          onValueChange={setMetronomeVolume}
+        />
+        <VolumeSlider
+          label={CHORDS_TEXT.chordsVolume}
+          value={chordsVolume}
+          onValueChange={setChordsVolume}
+        />
+      </View>
+
       <View style={styles.beats}>
         {meter.accents.map((accent, pulse) => (
           <View
@@ -421,6 +443,7 @@ const styles = StyleSheet.create({
   pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   chordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
   playRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
+  volumeBlock: { marginTop: spacing.md },
   loop: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   beats: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, justifyContent: 'center' },
   beat: { width: 7, height: 7, borderRadius: 4 },

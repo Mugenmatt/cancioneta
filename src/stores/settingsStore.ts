@@ -8,11 +8,15 @@ interface SettingsState {
   theme: ThemePreference;
   includeStructure: boolean;
   reduceMotion: boolean;
+  metronomeVolume: number;
+  chordsVolume: number;
   onboardingDone: boolean;
   onboardingReview: boolean;
   setTheme: (theme: ThemePreference) => void;
   setIncludeStructure: (value: boolean) => void;
   setReduceMotion: (value: boolean) => void;
+  setMetronomeVolume: (value: number) => void;
+  setChordsVolume: (value: number) => void;
   completeOnboarding: () => void;
   reviewOnboarding: () => void;
   dismissOnboardingReview: () => void;
@@ -23,7 +27,12 @@ const KEY = 'cancioneta.settings.v1';
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
-function persist(state: Pick<SettingsState, 'theme' | 'includeStructure' | 'reduceMotion' | 'onboardingDone'>) {
+function normalizeVolume(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 1;
+  return Math.max(0, Math.min(1, value));
+}
+
+function persist(state: Pick<SettingsState, 'theme' | 'includeStructure' | 'reduceMotion' | 'metronomeVolume' | 'chordsVolume' | 'onboardingDone'>) {
   if (saveTimer) clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     void AsyncStorage.setItem(KEY, JSON.stringify(state));
@@ -35,6 +44,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   theme: 'system',
   includeStructure: true,
   reduceMotion: false,
+  metronomeVolume: 1,
+  chordsVolume: 1,
   onboardingDone: false,
   onboardingReview: false,
   setTheme: (theme) => {
@@ -48,6 +59,16 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   setReduceMotion: (reduceMotion) => {
     set({ reduceMotion });
     persist({ ...get(), reduceMotion });
+  },
+  setMetronomeVolume: (value) => {
+    const metronomeVolume = normalizeVolume(value);
+    set({ metronomeVolume });
+    persist({ ...get(), metronomeVolume });
+  },
+  setChordsVolume: (value) => {
+    const chordsVolume = normalizeVolume(value);
+    set({ chordsVolume });
+    persist({ ...get(), chordsVolume });
   },
   completeOnboarding: () => {
     set({ onboardingDone: true, onboardingReview: false });
@@ -64,6 +85,8 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
           theme: parsed.theme ?? 'system',
           includeStructure: parsed.includeStructure ?? true,
           reduceMotion: parsed.reduceMotion ?? false,
+          metronomeVolume: normalizeVolume(parsed.metronomeVolume),
+          chordsVolume: normalizeVolume(parsed.chordsVolume),
           onboardingDone: parsed.onboardingDone ?? false,
         });
       }

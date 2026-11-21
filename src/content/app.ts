@@ -10,3 +10,9 @@ export const APP_META = {
 export const NAVIGATION_TEXT = {
   back: 'Volver',
 } as const;
+
+export const CHORDS_TEXT = {
+  volume: 'Volumen',
+  metronomeVolume: 'Volumen del metrónomo',
+  chordsVolume: 'Volumen de los acordes',
+} as const;

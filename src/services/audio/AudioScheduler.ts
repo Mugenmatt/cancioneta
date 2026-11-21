@@ -4,6 +4,7 @@ import {
   AudioManager,
   type AudioBuffer,
   type AudioBufferSourceNode,
+  type GainNode,
 } from 'react-native-audio-api';
 import type { Accent } from '@/music/meter';
 import { PIANO_SAMPLE_FILES } from './pianoSamples';
@@ -15,7 +16,14 @@ const LOOKAHEAD_SECONDS = 0.12;
 const SCHEDULER_INTERVAL_MS = 25;
 const PIANO_VOLUME = 0.65;
 const TICK_MIDI: Record<Accent, number> = { strong: 84, secondary: 79, weak: 72 };
-const TICK_VOLUME: Record<Accent, number> = { strong: 1, secondary: 0.72, weak: 0.45 };
+const TICK_VOLUME: Record<Accent, number> = { strong: 0.5, secondary: 0.36, weak: 0.225 };
+
+type SoundKind = 'chords' | 'metronome';
+
+interface ActiveGain {
+  base: number;
+  kind: SoundKind;
+}
 
 export interface ScheduledPlaybackCallbacks {
   onStart?: () => void;
@@ -31,10 +39,16 @@ function playableMidi(midi: number): number {
   return value;
 }
 
+function volumeScale(value: number): number {
+  if (!Number.isFinite(value)) return 1;
+  return Math.max(0, Math.min(1, value));
+}
+
 export class AudioScheduler {
   private context: AudioContext | null = null;
   private readonly buffers = new Map<number, AudioBuffer>();
   private readonly sources = new Set<AudioBufferSourceNode>();
+  private readonly gains = new Map<GainNode, ActiveGain>();
   private readonly uiTimers = new Set<ReturnType<typeof setTimeout>>();
   private preparePromise: Promise<void> | null = null;
   private schedulerTimer: ReturnType<typeof setInterval> | null = null;
@@ -42,6 +56,8 @@ export class AudioScheduler {
   private timeline: PlaybackTimeline | null = null;
   private callbacks: ScheduledPlaybackCallbacks | null = null;
   private config: PlaybackConfig | null = null;
+  private chordsVolume = 1;
+  private metronomeVolume = 1;
   private runId = 0;
 
   prepare(): Promise<void> {
@@ -90,10 +106,20 @@ export class AudioScheduler {
       }
     }
     this.sources.clear();
+    this.gains.clear();
   }
 
   setLoop(loop: boolean): void {
     if (this.config) this.config.loop = loop;
+  }
+
+  setVolumes(chordsVolume: number, metronomeVolume: number): void {
+    this.chordsVolume = volumeScale(chordsVolume);
+    this.metronomeVolume = volumeScale(metronomeVolume);
+    for (const [node, active] of this.gains) {
+      const scale = active.kind === 'chords' ? this.chordsVolume : this.metronomeVolume;
+      node.gain.value = active.base * scale;
+    }
   }
 
   async playPreview(midis: number[], spacingMs = 35, velocity = 1): Promise<void> {
@@ -103,7 +129,7 @@ export class AudioScheduler {
     const start = context.currentTime;
     const spacing = Math.max(0, spacingMs) / 1000;
     for (let i = 0; i < midis.length; i += 1) {
-      this.playBuffer(midis[i], start + i * spacing, PIANO_VOLUME * velocity);
+      this.playBuffer(midis[i], start + i * spacing, PIANO_VOLUME * velocity, 'chords');
     }
   }
 
@@ -134,10 +160,10 @@ export class AudioScheduler {
     const events = timeline.takeEventsUntil(context.currentTime + LOOKAHEAD_SECONDS);
     for (const event of events) {
       if (event.kind === 'note') {
-        this.playBuffer(event.midi, event.time, PIANO_VOLUME * event.velocity);
+        this.playBuffer(event.midi, event.time, PIANO_VOLUME * event.velocity, 'chords');
         this.scheduleUi(event.time, () => this.callbacks?.onStep(event.step));
       } else {
-        this.playBuffer(TICK_MIDI[event.accent], event.time, TICK_VOLUME[event.accent]);
+        this.playBuffer(TICK_MIDI[event.accent], event.time, TICK_VOLUME[event.accent], 'metronome');
         this.scheduleUi(event.time, () => this.callbacks?.onPulse(event.pulse, event.accent));
       }
     }
@@ -153,7 +179,7 @@ export class AudioScheduler {
     }
   };
 
-  private playBuffer(midi: number, when: number, volume: number): void {
+  private playBuffer(midi: number, when: number, baseVolume: number, kind: SoundKind): void {
     const context = this.context;
     if (!context) return;
     const target = playableMidi(midi);
@@ -163,11 +189,14 @@ export class AudioScheduler {
     const source = context.createBufferSource();
     const gain = context.createGain();
     source.buffer = buffer;
-    gain.gain.value = Math.max(0, Math.min(1, volume));
+    const scale = kind === 'chords' ? this.chordsVolume : this.metronomeVolume;
+    gain.gain.value = Math.max(0, Math.min(1, baseVolume * scale));
+    this.gains.set(gain, { base: baseVolume, kind });
     source.connect(gain);
     gain.connect(context.destination);
     source.onended = () => {
       this.sources.delete(source);
+      this.gains.delete(gain);
       source.disconnect();
       gain.disconnect();
     };

@@ -133,7 +133,7 @@ export function ScreenHeader({ title, subtitle, right, onBack = true, color }: {
 const styles = StyleSheet.create({
   pill: {
     borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: spacing.sm + 2,
-    paddingVertical: 7, minHeight: 34, justifyContent: 'center',
+    paddingVertical: spacing.xs, minHeight: minTouch, justifyContent: 'center',
   },
   surface: { borderWidth: StyleSheet.hairlineWidth, borderRadius: radii.card, padding: spacing.md },
   back: { flexDirection: 'row', alignItems: 'center', minHeight: minTouch, minWidth: minTouch },

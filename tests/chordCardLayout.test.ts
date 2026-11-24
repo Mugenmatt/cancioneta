@@ -1,4 +1,4 @@
-import { spacing } from '@/design/tokens';
+import { minTouch, spacing } from '@/design/tokens';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
 
 describe('layout de tarjetas de acorde', () => {
@@ -14,10 +14,11 @@ describe('layout de tarjetas de acorde', () => {
     expect(layout.cardWidth).toBeCloseTo((390 - spacing.lg * 2 - spacing.sm) / 2);
   });
 
-  it('no desborda con dieciséis acordes', () => {
+  it('no desborda con dieciséis acordes y deja lugar a tres controles de 44pt', () => {
     const layout = getChordCardLayout(375);
     const used = layout.columns * layout.cardWidth + (layout.columns - 1) * spacing.sm;
     expect(used).toBeLessThanOrEqual(375 - spacing.lg * 2);
+    expect(layout.cardWidth - spacing.xs * 2).toBeGreaterThanOrEqual(minTouch * 3 + spacing.xxs * 2);
   });
 
   it('pasa a una columna con texto ampliado al 200%', () => {

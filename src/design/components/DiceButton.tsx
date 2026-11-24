@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { DICE_TEXT } from '../../content/app';
 import { useCoreTheme } from '../ThemeProvider';
-import { motion, semanticRoles, shadows } from '../tokens';
+import { minTouch, motion, radii, semanticRoles, shadows, spacing } from '../tokens';
 import { AppText } from './Text';
 
 interface DiceButtonProps {
@@ -15,7 +16,7 @@ interface DiceButtonProps {
   compact?: boolean;
 }
 
-export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabled, compact = false }: DiceButtonProps) {
+export function DiceButton({ onPress, label = DICE_TEXT.label, accent, accentInk, disabled, compact = false }: DiceButtonProps) {
   const { mode, colors, reduceMotion } = useCoreTheme();
   const [rotate] = useState(() => new Animated.Value(0));
   const [scale] = useState(() => new Animated.Value(1));
@@ -54,12 +55,12 @@ export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabl
           { backgroundColor: color, shadowColor: shadows.color, transform: [{ rotate: spin }, { scale }] },
         ]}
       >
-        <Feather name="shuffle" size={compact ? 20 : 26} color={accentInk ?? semanticRoles[mode]['accent.onAccent']} />
+        <Feather name="shuffle" size={compact ? spacing.md : spacing.lg - spacing.xxs} color={accentInk ?? semanticRoles[mode]['accent.onAccent']} />
       </Animated.View>
       {compact ? null : (
-        <View style={{ marginLeft: 10 }}>
-          <AppText variant="label" color={color} style={{ fontSize: 11 }}>{label}</AppText>
-          <AppText variant="caption" color={colors.textMuted}>sorprendeme</AppText>
+        <View style={{ marginLeft: spacing.sm }}>
+          <AppText variant="label" color={color} style={{ fontSize: spacing.md - spacing.xxs }}>{label}</AppText>
+          <AppText variant="caption" color={colors.textMuted}>{DICE_TEXT.hint}</AppText>
         </View>
       )}
     </Pressable>
@@ -67,10 +68,11 @@ export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabl
 }
 
 const styles = StyleSheet.create({
-  wrap: { flexDirection: 'row', alignItems: 'center', minHeight: 44 },
-  compact: { minHeight: 40 },
+  wrap: { flexDirection: 'row', alignItems: 'center', minHeight: minTouch },
+  compact: { minHeight: minTouch },
   square: {
-    width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
+    width: minTouch + spacing.xs, height: minTouch + spacing.xs, borderRadius: radii.card,
+    alignItems: 'center', justifyContent: 'center',
     ...shadows.raised,
   },
 });

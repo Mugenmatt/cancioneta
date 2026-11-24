@@ -1,6 +1,6 @@
 import { minTouch, spacing } from '@/design/tokens';
 
-const MIN_CARD_WIDTH = minTouch * 3 + spacing.sm;
+const MIN_CARD_WIDTH = minTouch * 3 + spacing.sm * 2;
 const HORIZONTAL_INSET = spacing.lg * 2;
 
 export function getChordCardLayout(windowWidth: number, fontScale = 1) {

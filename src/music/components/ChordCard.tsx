@@ -1,8 +1,11 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import {
+  CHORDS_TEXT, chordsQualityChangeLabel,
+} from '@/content/app';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { AppText } from '@/design/components/Text';
-import { alpha, fontSizes, fonts, hitSlop, lineHeights, minTouch, radii, spacing } from '@/design/tokens';
+import { alpha, fontSizes, fonts, lineHeights, minTouch, radii, spacing } from '@/design/tokens';
 import type { Chord } from '@/music/theory';
 import { QUALITIES, formatChord } from '@/music/theory';
 
@@ -38,9 +41,9 @@ export function ChordCard({
       <View style={styles.top}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={`Escuchar ${formatChord(chord)}`}
+          accessibilityLabel={`${CHORDS_TEXT.playChord} ${formatChord(chord)}`}
           onPress={onPlay}
-          style={{ flex: 1 }}
+          style={styles.play}
         >
           <AppText variant="caption" color={colors.textMuted} style={{ fontFamily: fonts.sansSemiBold }}>
             {degree}
@@ -54,33 +57,30 @@ export function ChordCard({
         </Pressable>
         <Pressable
           accessibilityRole="switch"
-          accessibilityLabel={chord.locked ? 'Desbloquear acorde' : 'Bloquear acorde'}
+          accessibilityLabel={chord.locked ? CHORDS_TEXT.unlockChord : CHORDS_TEXT.lockChord}
           accessibilityState={{ checked: chord.locked }}
           onPress={onLock}
-          hitSlop={8}
           style={[styles.lock, {
             borderColor: chord.locked ? accent : colors.lineSubtle,
             backgroundColor: chord.locked ? alpha(accent, 0.14) : 'transparent',
           }]}
         >
-          <Feather name={chord.locked ? 'lock' : 'unlock'} size={13} color={chord.locked ? accent : colors.textMuted} />
+          <Feather name={chord.locked ? 'lock' : 'unlock'} size={spacing.sm + spacing.xxs / 2} color={chord.locked ? accent : colors.textMuted} />
         </Pressable>
       </View>
 
       <View style={styles.controls}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Bajar medio tono"
-          hitSlop={hitSlop}
+          accessibilityLabel={CHORDS_TEXT.lowerHalf}
           onPress={() => onRootChange(-1)}
           style={[styles.step, { borderColor: colors.lineSubtle }]}
         >
-          <Feather name="minus" size={14} color={colors.textSecondary} />
+          <Feather name="minus" size={spacing.md - spacing.xxs / 2} color={colors.textSecondary} />
         </Pressable>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={`Cambiar calidad de ${formatChord(chord)}`}
-          hitSlop={hitSlop}
+          accessibilityLabel={chordsQualityChangeLabel(formatChord(chord))}
           onPress={onQuality}
           style={[styles.quality, { borderColor: colors.lineSubtle }]}
         >
@@ -95,23 +95,23 @@ export function ChordCard({
         </Pressable>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Subir medio tono"
-          hitSlop={hitSlop}
+          accessibilityLabel={CHORDS_TEXT.raiseHalf}
           onPress={() => onRootChange(1)}
           style={[styles.step, { borderColor: colors.lineSubtle }]}
         >
-          <Feather name="plus" size={14} color={colors.textSecondary} />
+          <Feather name="plus" size={spacing.md - spacing.xxs / 2} color={colors.textSecondary} />
         </Pressable>
       </View>
     </View>
   );
 }
 
-const stepSize = minTouch - spacing.md;
+const stepSize = minTouch;
 
 const styles = StyleSheet.create({
-  card: { borderRadius: radii.card, padding: spacing.sm + 2, minHeight: minTouch * 3 },
+  card: { borderRadius: radii.card, padding: spacing.xs, minHeight: minTouch * 3 },
   top: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.xs },
+  play: { flex: 1, minHeight: minTouch, justifyContent: 'center' },
   name: {
     fontFamily: fonts.display,
     fontSize: fontSizes.title,
@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
   },
   nameCompact: { fontSize: fontSizes.lead, lineHeight: fontSizes.lead * lineHeights.tight },
   lock: {
-    width: minTouch - spacing.sm,
-    height: minTouch - spacing.sm,
+    width: stepSize,
+    height: stepSize,
     borderRadius: radii.field,
     borderWidth: 1,
     alignItems: 'center',

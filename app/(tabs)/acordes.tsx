@@ -1,39 +1,44 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { CHORDS_TEXT } from '@/content/app';
+import { CHORDS_TEXT, chordsKeySource, chordsKeyTitle } from '@/content/app';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { DiceButton } from '@/design/components/DiceButton';
-import { Pill, SectionLabel } from '@/design/components/Primitives';
+import { Pill } from '@/design/components/Primitives';
 import { ProgressBar } from '@/design/components/Feedback';
 import { Sheet } from '@/design/components/Sheet';
-import { VolumeSlider } from '@/design/components/VolumeSlider';
-import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
+import { fontSizes, fonts, lineHeights, minTouch, radii, semanticRoles, spacing } from '@/design/tokens';
+import { getScreenLayout } from '@/design/screenLayout';
 import { ChordCard } from '@/music/components/ChordCard';
+import { ChordsKeySheet } from '@/music/components/ChordsKeySheet';
+import { ChordsSecondarySheet } from '@/music/components/ChordsSecondarySheet';
 import { getChordCardLayout } from '@/music/components/chordCardLayout';
-import { MAX_BPM, METERS, MIN_BPM, getMeter, type MeterId } from '@/music/meter';
+import { getMeter, type MeterId } from '@/music/meter';
 import {
-  KEYS, QUALITIES, QUALITY_ORDER, chordName, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord, type Key,
+  QUALITIES, QUALITY_ORDER, diatonicChords, formatChord, noteFromPitchClass, pitchClass, type Chord,
 } from '@/music/theory';
 import { detectKeys } from '@/music/keyDetector';
 import { MAX_CHORD_COUNT } from '@/music/progressionDice';
 import { chordMidi } from '@/music/voicing';
-import { commonSubstitutions, secondaryDominants, relatedKeys } from '@/music/relations';
 import { audioScheduler } from '@/services/audio/AudioScheduler';
 import { useMusicStore } from '@/stores/musicStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 
-const ADVENTURE = [0, 25, 50, 75, 100];
-const COUNTS = [4, 6, 8, 10, 12, 14, 16];
-
 export default function ChordsScreen() {
-  const { colors } = useCoreTheme();
+  const { colors, mode } = useCoreTheme();
   const { width, fontScale } = useWindowDimensions();
-  const { columns, cardWidth } = useMemo(() => getChordCardLayout(width, fontScale), [width, fontScale]);
+  const screenLayout = useMemo(() => getScreenLayout(width, 'reading'), [width]);
+  const cardLayoutWidth = Math.min(width, screenLayout.maxWidth)
+    - screenLayout.paddingHorizontal * 2
+    + spacing.lg * 2;
+  const { columns, cardWidth } = useMemo(
+    () => getChordCardLayout(cardLayoutWidth, fontScale),
+    [cardLayoutWidth, fontScale],
+  );
   const {
     chords, count, keyState, bpm, adventure, includeSevenths, isPlaying, currentStep,
     roll, addChord, toggleLock, cycleRoot, setQuality, moveChord, setCount, setBpm, setAdventure,
@@ -42,7 +47,7 @@ export default function ChordsScreen() {
   const { metronomeVolume, chordsVolume, setMetronomeVolume, setChordsVolume } = useSettingsStore();
   const [qualityFor, setQualityFor] = useState<string | null>(null);
   const [keyOpen, setKeyOpen] = useState(false);
-  const [exploreOpen, setExploreOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [loop, setLoop] = useState(true);
   const [meterId, setMeterId] = useState<MeterId>('4/4');
   const [beat, setBeat] = useState(-1);
@@ -139,91 +144,62 @@ export default function ChordsScreen() {
     setKey(null, 'auto');
   };
 
-  const keyTitle = keyState.key ? keyState.key.name : detection.top ? `Posible: ${detection.top.key.name}` : 'Sin tonalidad';
-  const keySource = keyState.key ? 'Elegida a mano' : detection.ambiguous ? 'Ambigua · elegí una' : 'Detección automática';
+  const keyTitle = chordsKeyTitle(keyState.key?.name ?? null, detection.top?.key.name ?? null);
+  const keySource = chordsKeySource(Boolean(keyState.key), detection.ambiguous);
 
   return (
     <Screen scroll>
       <View style={styles.head}>
-        <View style={{ flex: 1 }}>
-          <AppText variant="label" color={colors.accentCore}>Laboratorio</AppText>
-          <AppText variant="title" style={{ marginTop: 4 }}>Acordes</AppText>
+        <View style={styles.headText}>
+          <AppText variant="label" color={colors.accentCore}>{CHORDS_TEXT.laboratory}</AppText>
+          <AppText variant="title" style={styles.title}>{CHORDS_TEXT.title}</AppText>
         </View>
-        <DiceButton compact label="Tirar acordes" onPress={() => void roll()} />
+        <DiceButton compact label={CHORDS_TEXT.rollChords} onPress={() => void roll()} />
       </View>
 
       <View style={[styles.keyCard, { borderColor: colors.lineSubtle, backgroundColor: colors.bgRaised }]}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Cambiar tonalidad"
+          accessibilityLabel={CHORDS_TEXT.changeKey}
           onPress={() => setKeyOpen(true)}
           style={styles.keyMain}
         >
-          <View style={{ flex: 1 }}>
-            <AppText variant="label" color={colors.textMuted}>Tonalidad</AppText>
+          <View style={styles.keyText}>
+            <AppText variant="label" color={colors.textMuted}>{CHORDS_TEXT.key}</AppText>
             <AppText style={[styles.keyName, { color: colors.textPrimary }]}>{keyTitle}</AppText>
             <AppText variant="caption" color={keyState.key ? colors.accentCore : colors.textMuted}>{keySource}</AppText>
             {detection.top ? (
-              <View style={{ marginTop: spacing.sm }}>
+              <View style={styles.score}>
                 <ProgressBar value={detection.top.score} total={100} accent={colors.accentCore} />
               </View>
             ) : null}
           </View>
         </Pressable>
         <View style={styles.keyRight}>
-          <Feather name="chevron-down" size={18} color={colors.textMuted} />
+          <Feather name="chevron-down" size={spacing.md} color={colors.textMuted} />
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Volver a detectar"
-            hitSlop={8}
+            accessibilityLabel={CHORDS_TEXT.redetect}
             onPress={detectNow}
-            style={{ marginTop: spacing.sm }}
+            style={styles.refresh}
           >
-            <Feather name="refresh-cw" size={16} color={colors.textMuted} />
+            <Feather name="refresh-cw" size={spacing.md} color={colors.textMuted} />
           </Pressable>
         </View>
       </View>
 
       <View style={styles.actionRow}>
-        <DiceButton label="Tirar progresión" onPress={() => void roll()} />
-        <View style={{ flex: 1 }} />
+        <DiceButton label={CHORDS_TEXT.rollProgression} onPress={() => void roll()} />
+        <View style={styles.spacer} />
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Explorar tonalidad"
-          onPress={() => setExploreOpen(true)}
+          accessibilityLabel={CHORDS_TEXT.settings}
+          onPress={() => setSettingsOpen(true)}
           style={[styles.smallAction, { borderColor: colors.lineSubtle }]}
         >
-          <Feather name="compass" size={15} color={colors.textSecondary} />
-          <AppText variant="caption" color={colors.textSecondary} style={{ marginLeft: 6 }}>Explorar</AppText>
+          <Feather name="sliders" size={spacing.md} color={colors.textSecondary} />
+          <AppText variant="caption" color={colors.textSecondary} style={styles.actionText}>{CHORDS_TEXT.settings}</AppText>
         </Pressable>
-      </View>
-
-      <View style={styles.options}>
-        <View>
-          <SectionLabel color={colors.textMuted}>Acordes</SectionLabel>
-          <View style={styles.pillRow}>
-            {COUNTS.map((n) => <Pill key={n} label={String(n)} selected={count === n} onPress={() => setCount(n)} />)}
-          </View>
-        </View>
-        <View style={styles.sevenths}>
-          <SectionLabel color={colors.textMuted}>Séptimas</SectionLabel>
-          <Pill label={includeSevenths ? 'Sí' : 'No'} selected={includeSevenths} onPress={() => setSevenths(!includeSevenths)} />
-        </View>
-      </View>
-
-      <View style={styles.meterBlock}>
-        <SectionLabel color={colors.textMuted}>Compás</SectionLabel>
-        <View style={styles.pillRow}>
-          {METERS.map((item) => (
-            <Pill
-              key={item.id}
-              label={item.id}
-              accessibilityLabel={`Compás ${item.id}`}
-              selected={meter.id === item.id}
-              onPress={() => setMeterId(item.id)}
-            />
-          ))}
-        </View>
       </View>
 
       <View style={styles.chordGrid}>
@@ -258,11 +234,11 @@ export default function ChordsScreen() {
               pressed && { opacity: 0.72 },
             ]}
           >
-            <Feather name="plus" size={24} color={colors.accentCore} />
+            <Feather name="plus" size={spacing.xl} color={colors.accentCore} />
           </Pressable>
         ) : (
           <View style={[styles.addCard, { width: cardWidth, borderColor: colors.lineSubtle }]}>
-            <AppText variant="caption" color={colors.textMuted} style={{ textAlign: 'center' }}>
+            <AppText variant="caption" color={colors.textMuted} style={styles.maxText}>
               {CHORDS_TEXT.maxChords}
             </AppText>
           </View>
@@ -271,43 +247,29 @@ export default function ChordsScreen() {
 
       <View style={styles.playRow}>
         <Button
-          label={isPlaying ? 'Parar' : 'Escuchar'}
+          label={isPlaying ? CHORDS_TEXT.stop : CHORDS_TEXT.play}
           onPress={togglePlay}
-          icon={<Feather name={isPlaying ? 'square' : 'play'} size={15} color="#FFFFFF" />}
-          style={{ flex: 1 }}
+          icon={<Feather name={isPlaying ? 'square' : 'play'} size={spacing.sm} color={semanticRoles[mode]['accent.onAccent']} />}
+          style={styles.playButton}
         />
         <Pressable
           accessibilityRole="switch"
-          accessibilityLabel="Repetir progresión"
+          accessibilityLabel={CHORDS_TEXT.loop}
           accessibilityState={{ checked: loop }}
           onPress={() => setLoop((value) => !value)}
-          style={[styles.loop, { borderColor: loop ? colors.accentCore : colors.lineSubtle }]}
+          style={[styles.toggle, { borderColor: loop ? colors.accentCore : colors.lineSubtle }]}
         >
-          <Feather name="repeat" size={17} color={loop ? colors.accentCore : colors.textMuted} />
+          <Feather name="repeat" size={spacing.md + spacing.xxs / 2} color={loop ? colors.accentCore : colors.textMuted} />
         </Pressable>
         <Pressable
           accessibilityRole="switch"
-          accessibilityLabel="Metrónomo"
+          accessibilityLabel={CHORDS_TEXT.metronome}
           accessibilityState={{ checked: metronomeArmed }}
           onPress={toggleMetronome}
-          style={[styles.loop, { borderColor: metronomeArmed ? colors.accentCore : colors.lineSubtle }]}
+          style={[styles.toggle, { borderColor: metronomeArmed ? colors.accentCore : colors.lineSubtle }]}
         >
-          <Feather name="clock" size={17} color={metronomeArmed ? colors.accentCore : colors.textMuted} />
+          <Feather name="clock" size={spacing.md + spacing.xxs / 2} color={metronomeArmed ? colors.accentCore : colors.textMuted} />
         </Pressable>
-      </View>
-
-      <View style={styles.volumeBlock}>
-        <SectionLabel color={colors.textMuted}>{CHORDS_TEXT.volume}</SectionLabel>
-        <VolumeSlider
-          label={CHORDS_TEXT.metronomeVolume}
-          value={metronomeVolume}
-          onValueChange={setMetronomeVolume}
-        />
-        <VolumeSlider
-          label={CHORDS_TEXT.chordsVolume}
-          value={chordsVolume}
-          onValueChange={setChordsVolume}
-        />
       </View>
 
       <View style={styles.beats}>
@@ -327,53 +289,11 @@ export default function ChordsScreen() {
         ))}
       </View>
 
-      <View style={styles.tempoBlock}>
-        <SectionLabel color={colors.textMuted}>{CHORDS_TEXT.tempo}</SectionLabel>
-        <VolumeSlider
-          label={CHORDS_TEXT.bpm}
-          value={bpm}
-          min={MIN_BPM}
-          max={MAX_BPM}
-          step={1}
-          formatValue={(value) => `${value} BPM`}
-          onValueChange={setBpm}
-        />
-      </View>
-
-      <View style={{ marginTop: spacing.lg }}>
-        <SectionLabel color={colors.textMuted}>Aventura armónica</SectionLabel>
-        <View style={styles.pillRow}>
-          {ADVENTURE.map((value) => (
-            <Pill key={value} label={`${value}%`} selected={adventure === value} onPress={() => setAdventure(value)} />
-          ))}
-        </View>
-      </View>
-
-      <View style={styles.footer}>
-        <Button
-          label={CHORDS_TEXT.clearProgression}
-          tone="danger"
-          small
-          icon={<Feather name="trash-2" size={14} color={colors.stateError} />}
-          style={{ borderColor: colors.stateError }}
-          onPress={clear}
-        />
-        <View style={{ flex: 1 }} />
-        {chords.map((chord, index) => (
-          <Pressable
-            key={chord.id}
-            accessibilityRole="button"
-            accessibilityLabel={`Mover ${formatChord(chord)} a la izquierda`}
-            disabled={index === 0}
-            onPress={() => moveChord(index, index - 1)}
-            style={{ opacity: index === 0 ? 0.45 : 0.8, padding: 4 }}
-          >
-            <Feather name="chevron-left" size={14} color={colors.textMuted} />
-          </Pressable>
-        ))}
-      </View>
-
-      <Sheet visible={Boolean(qualityFor)} onClose={() => setQualityFor(null)} title={selectedChord ? formatChord(selectedChord) : 'Calidad'}>
+      <Sheet
+        visible={Boolean(qualityFor)}
+        onClose={() => setQualityFor(null)}
+        title={selectedChord ? formatChord(selectedChord) : CHORDS_TEXT.quality}
+      >
         <View style={styles.qualityGrid}>
           {QUALITY_ORDER.map((quality) => (
             <Pill
@@ -392,100 +312,71 @@ export default function ChordsScreen() {
         </View>
       </Sheet>
 
-      <Sheet visible={keyOpen} onClose={() => setKeyOpen(false)} title="Elegir tonalidad" fullHeight>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => { setKey(null, 'auto'); setKeyOpen(false); }}
-          style={[styles.keyOption, { borderColor: !keyState.key ? colors.accentCore : colors.lineSubtle }]}
-        >
-          <AppText variant="body" color={!keyState.key ? colors.accentCore : colors.textPrimary}>Automática</AppText>
-          <AppText variant="caption" color={colors.textMuted}>Detecta desde los acordes o sortea al tirar</AppText>
-        </Pressable>
-        <View style={styles.keyGrid}>
-          {KEYS.map((key) => (
-            <Pressable
-              key={key.name}
-              accessibilityRole="button"
-              accessibilityLabel={key.name}
-              onPress={() => { setKey(key, 'manual'); setKeyOpen(false); }}
-              style={[styles.keyChip, {
-                borderColor: keyState.key?.name === key.name ? colors.accentCore : colors.lineSubtle,
-                backgroundColor: keyState.key?.name === key.name ? alpha(colors.accentCore, 0.12) : 'transparent',
-              }]}
-            >
-              <AppText variant="caption" color={keyState.key?.name === key.name ? colors.accentCore : colors.textSecondary}>
-                {key.name}
-              </AppText>
-            </Pressable>
-          ))}
-        </View>
-      </Sheet>
+      <ChordsKeySheet
+        visible={keyOpen}
+        onClose={() => setKeyOpen(false)}
+        selectedKeyName={keyState.key?.name ?? null}
+        onAutomatic={() => { setKey(null, 'auto'); setKeyOpen(false); }}
+        onSelect={(key) => { setKey(key, 'manual'); setKeyOpen(false); }}
+      />
 
-      <Sheet visible={exploreOpen} onClose={() => setExploreOpen(false)} title={displayKey ? displayKey.name : 'Explorar'} fullHeight>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-          {displayKey ? <ExploreContent currentKey={displayKey} chords={chords} /> : (
-            <AppText variant="body" color={colors.textSecondary}>Tirá una progresión o elegí una tonalidad para ver relaciones.</AppText>
-          )}
-        </ScrollView>
-      </Sheet>
+      <ChordsSecondarySheet
+        visible={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        count={count}
+        includeSevenths={includeSevenths}
+        meterId={meterId}
+        adventure={adventure}
+        bpm={bpm}
+        metronomeVolume={metronomeVolume}
+        chordsVolume={chordsVolume}
+        chords={chords}
+        displayKey={displayKey}
+        onCount={setCount}
+        onSevenths={setSevenths}
+        onMeter={setMeterId}
+        onAdventure={setAdventure}
+        onBpm={setBpm}
+        onMetronomeVolume={setMetronomeVolume}
+        onChordsVolume={setChordsVolume}
+        onClear={clear}
+        onMoveLeft={(index) => moveChord(index, index - 1)}
+      />
     </Screen>
   );
 }
 
-function ExploreContent({ currentKey, chords }: { currentKey: Key; chords: Chord[] }) {
-  const { colors } = useCoreTheme();
-  const relations = relatedKeys(currentKey);
-  const substitutions = commonSubstitutions(currentKey);
-  const dominants = secondaryDominants(currentKey);
-  return (
-    <View>
-      <AppText variant="caption" color={colors.textMuted} style={{ marginBottom: spacing.sm }}>
-        Acordes en {currentKey.name}: {diatonicChords(currentKey).map((d) => chordName(d.root, d.quality)).join(' · ')}
-      </AppText>
-      <SectionLabel color={colors.textMuted}>Tonalidades vecinas</SectionLabel>
-      <View style={styles.pillRow}>
-        {relations.map((key) => (
-          <Pill key={key.name} label={key.name} />
-        ))}
-      </View>
-      <View style={{ height: spacing.md }} />
-      <SectionLabel color={colors.textMuted}>Sustituciones</SectionLabel>
-      {substitutions.map((item) => (
-        <View key={item.title} style={[styles.relation, { borderColor: colors.lineSubtle }]}>
-          <AppText variant="caption" color={colors.textPrimary} style={{ fontFamily: fonts.sansSemiBold }}>{item.title}</AppText>
-          <AppText variant="caption" color={colors.accentCore}>{item.chords.join('  →  ')}</AppText>
-          <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 2 }}>{item.detail}</AppText>
-        </View>
-      ))}
-      <View style={{ height: spacing.md }} />
-      <SectionLabel color={colors.textMuted}>Dominantes secundarias</SectionLabel>
-      {dominants.map((item) => (
-        <View key={item.title} style={[styles.relation, { borderColor: colors.lineSubtle }]}>
-          <AppText variant="caption" color={colors.textPrimary} style={{ fontFamily: fonts.sansSemiBold }}>{item.title}</AppText>
-          <AppText variant="caption" color={colors.accentCore}>{item.chords.join('  →  ')}</AppText>
-        </View>
-      ))}
-      <View style={{ height: spacing.md }} />
-      <SectionLabel color={colors.textMuted}>Progresión actual</SectionLabel>
-      <AppText variant="body" color={colors.textSecondary}>
-        {chords.map((chord) => formatChord(chord)).join('  ·  ')}
-      </AppText>
-    </View>
-  );
-}
+const beatSize = spacing.xxs + spacing.xxs / 2;
 
 const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'flex-start', marginTop: spacing.md, marginBottom: spacing.md },
-  keyCard: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginBottom: spacing.md },
-  keyMain: { flex: 1, alignItems: 'flex-start' },
-  keyName: { fontFamily: fonts.display, fontSize: 28, lineHeight: 34, marginTop: 2 },
+  headText: { flex: 1 },
+  title: { marginTop: spacing.xxs },
+  keyCard: {
+    flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.card,
+    padding: spacing.md, marginBottom: spacing.md,
+  },
+  keyMain: { flex: 1, alignItems: 'flex-start', justifyContent: 'center', minHeight: minTouch },
+  keyText: { flex: 1 },
+  keyName: {
+    fontFamily: fonts.display,
+    fontSize: fontSizes.title,
+    lineHeight: fontSizes.title * lineHeights.tight,
+    marginTop: spacing.xxs,
+  },
+  score: { marginTop: spacing.sm },
   keyRight: { alignItems: 'center', marginLeft: spacing.sm },
+  refresh: {
+    width: minTouch, height: minTouch, borderRadius: minTouch / 2,
+    alignItems: 'center', justifyContent: 'center', marginTop: spacing.xs,
+  },
   actionRow: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
-  smallAction: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: spacing.sm, minHeight: 38 },
-  options: { gap: spacing.md },
-  sevenths: { marginTop: spacing.md },
-  meterBlock: { marginTop: spacing.md },
-  pillRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  spacer: { flex: 1 },
+  smallAction: {
+    flexDirection: 'row', alignItems: 'center', borderWidth: 1,
+    borderRadius: radii.chip, paddingHorizontal: spacing.sm, minHeight: minTouch,
+  },
+  actionText: { marginLeft: spacing.xs },
   chordGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
   addCard: {
     minHeight: minTouch * 3,
@@ -495,17 +386,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.xs,
   },
+  maxText: { textAlign: 'center' },
   playRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.md },
-  volumeBlock: { marginTop: spacing.md },
-  loop: { width: 44, height: 44, borderRadius: 22, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  beats: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, justifyContent: 'center' },
-  beat: { width: 7, height: 7, borderRadius: 4 },
+  playButton: { flex: 1 },
+  toggle: {
+    width: minTouch, height: minTouch, borderRadius: minTouch / 2,
+    borderWidth: 1, alignItems: 'center', justifyContent: 'center',
+  },
+  beats: { flexDirection: 'row', gap: spacing.xs, marginTop: spacing.sm, justifyContent: 'center' },
+  beat: { width: beatSize, height: beatSize, borderRadius: beatSize / 2 },
   beatAccent: { width: spacing.xs, height: spacing.xs, borderRadius: spacing.xxs },
-  tempoBlock: { marginTop: spacing.md },
-  footer: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.lg },
-  qualityGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  keyOption: { borderWidth: 1, borderRadius: radii.field, padding: spacing.md, marginBottom: spacing.sm },
-  keyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 7 },
-  keyChip: { borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: 12, paddingVertical: 8 },
-  relation: { borderTopWidth: 1, paddingVertical: spacing.sm },
+  qualityGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
 });

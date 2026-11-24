@@ -4,7 +4,8 @@ import { Animated, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCoreTheme } from '../ThemeProvider';
-import { motion, radii, shadows, spacing } from '../tokens';
+import { NAVIGATION_TEXT } from '../../content/app';
+import { minTouch, motion, radii, shadows, spacing } from '../tokens';
 import { AppText } from './Text';
 
 interface SheetProps {
@@ -40,7 +41,7 @@ export function Sheet({ visible, onClose, title, children, fullHeight = false }:
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
       <View style={styles.root}>
-        <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: colors.overlay }]} onPress={onClose} accessibilityLabel="Cerrar" />
+        <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: colors.overlay }]} onPress={onClose} accessibilityLabel={NAVIGATION_TEXT.close} />
         <Animated.View
           style={[
             styles.sheet,
@@ -58,7 +59,7 @@ export function Sheet({ visible, onClose, title, children, fullHeight = false }:
             {title ? (
               <View style={styles.head}>
                 <AppText variant="title" style={{ fontSize: 22, flex: 1 }}>{title}</AppText>
-                <Pressable accessibilityRole="button" accessibilityLabel="Cerrar" onPress={onClose} style={styles.close}>
+                <Pressable accessibilityRole="button" accessibilityLabel={NAVIGATION_TEXT.close} onPress={onClose} style={styles.close}>
                   <Feather name="x" size={20} color={colors.textSecondary} />
                 </Pressable>
               </View>
@@ -83,5 +84,5 @@ const styles = StyleSheet.create({
   full: { height: '88%' },
   grabber: { width: 38, height: 4, borderRadius: 2, alignSelf: 'center', marginTop: spacing.sm, marginBottom: spacing.xs },
   head: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.sm },
-  close: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  close: { width: minTouch, height: minTouch, alignItems: 'center', justifyContent: 'center' },
 });

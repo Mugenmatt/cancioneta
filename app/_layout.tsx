@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import * as Font from 'expo-font';
 import { Fraunces_400Regular } from '@expo-google-fonts/fraunces/400Regular';
 import { Fraunces_400Regular_Italic } from '@expo-google-fonts/fraunces/400Regular_Italic';
@@ -67,22 +68,26 @@ export default function RootLayout() {
 
   if (!onboardingDone) {
     return (
-      <GestureHandlerRootView style={styles.fill}>
-        <View style={[styles.fill, { backgroundColor: colors.bgBase }]}>
-          <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
-          <OnboardingView review={false} onDone={completeOnboarding} />
-        </View>
-      </GestureHandlerRootView>
+      <KeyboardProvider>
+        <GestureHandlerRootView style={styles.fill}>
+          <View style={[styles.fill, { backgroundColor: colors.bgBase }]}>
+            <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+            <OnboardingView review={false} onDone={completeOnboarding} />
+          </View>
+        </GestureHandlerRootView>
+      </KeyboardProvider>
     );
   }
 
   return (
-    <GestureHandlerRootView style={styles.fill}>
-      <View style={[styles.fill, { backgroundColor: colors.bgBase }]}>
-        <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
-        <Stack screenOptions={{ headerShown: false }} />
-      </View>
-    </GestureHandlerRootView>
+    <KeyboardProvider>
+      <GestureHandlerRootView style={styles.fill}>
+        <View style={[styles.fill, { backgroundColor: colors.bgBase }]}>
+          <StatusBar style={mode === 'dark' ? 'light' : 'dark'} />
+          <Stack screenOptions={{ headerShown: false }} />
+        </View>
+      </GestureHandlerRootView>
+    </KeyboardProvider>
   );
 }
 

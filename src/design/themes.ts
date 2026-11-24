@@ -226,6 +226,14 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#12161F', bgAlt: '#1E2532', surface: '#19202B', ink: '#F1F3F7', inkSoft: '#B8C2D0',
     accent: '#F0B86A', accentInk: '#2A1B06', motif: 'wave', entrance: 'drop', displayFont: 'display', label: 'Dos registros',
   },
+  'g46': {
+    bg: '#EEF0F8', bgAlt: '#DDE2F1', surface: '#FAFBFF', ink: '#1E2233', inkSoft: '#5A6076',
+    accent: '#3F51A8', accentInk: '#FFFFFF', motif: 'wave', entrance: 'slide', displayFont: 'display', label: 'Dúo por turnos',
+  },
+  'g47': {
+    bg: '#1D1418', bgAlt: '#2B1E24', surface: '#251A1F', ink: '#FBF0F0', inkSoft: '#D4B9BE',
+    accent: '#FF9079', accentInk: '#2A0E08', motif: 'wave', entrance: 'rise', displayFont: 'display', label: 'Taller de melodía',
+  },
   'g48': {
     bg: '#161B1E', bgAlt: '#242C30', surface: '#1D2529', ink: '#F0F4F3', inkSoft: '#B0BDBE',
     accent: '#67C4B4', accentInk: '#062621', motif: 'window', entrance: 'slide', displayFont: 'sansSemiBold', label: 'Plano a plano',
@@ -237,6 +245,10 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
   'g50': {
     bg: '#F2E9F1', bgAlt: '#E2D3E2', surface: '#FCF8FC', ink: '#2B2230', inkSoft: '#695C70',
     accent: '#6A3E82', accentInk: '#FFF5FF', motif: 'wave', entrance: 'rise', displayFont: 'displayItalic', label: 'Arco emocional',
+  },
+  'g51': {
+    bg: '#EDF3EC', bgAlt: '#DCE8DA', surface: '#FAFCF9', ink: '#1E2B22', inkSoft: '#4C5C50',
+    accent: '#2F6B4A', accentInk: '#FFFFFF', motif: 'grid', entrance: 'rise', displayFont: 'serifSemiBold', label: 'Métrica fija',
   },
   'g52': {
     bg: '#17121C', bgAlt: '#261B2F', surface: '#201827', ink: '#F6F0F8', inkSoft: '#C6B7CF',

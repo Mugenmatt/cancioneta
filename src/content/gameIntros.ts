@@ -481,4 +481,31 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
     ],
     examples: ['Lejos: un colectivo. Cerca: el mate contra la mesa. Falta: la voz de alguien.', 'Escribí: «El colectivo pasa lejos; el mate suena cerca; nadie dice nada».'],
   },
+  'g46': {
+    steps: [
+      'Escribí los nombres de A y B si querés, y un tema (podés tirar uno).',
+      'En cada turno mirá solo el verso anterior y escribí el tuyo.',
+      'Cuando guardes el verso, pasale el celular a la otra persona sin mostrarle lo que escribiste.',
+      'Al terminar los doce turnos se revelan las etiquetas y el reparto 4/2/6; llevá los tres bloques al cuaderno.',
+    ],
+    examples: ['A: «La estación quedó vacía».', 'B: «Quedó el andén y un nombre que nadie dice».'],
+  },
+  'g47': {
+    steps: [
+      'Elegí uno de los tres modos: melodía torcida, otro tiempo o hablar-cantando.',
+      'En melodía torcida grabá un tarareo temporal y elegí reglas para transformarlo.',
+      'En otro tiempo mirá el acento sorteado, prendé el metrónomo y escribí frases que arranquen ahí.',
+      'En hablar-cantando decis la frase neutra, con emoción y cantada con exageración; llevá el resultado al cuaderno.',
+    ],
+    examples: ['Acento en el tiempo 3: «— — — Ahora sí —».', 'Regla invertir: lo que subía en el estribillo ahora baja.'],
+  },
+  'g51': {
+    steps: [
+      'Elegí un molde silábico o el modo libre con tope.',
+      'Escribí los cuatro versos; el contador muestra una sílaba aproximada por verso.',
+      'Si el número no convence, corregilo a mano: el indicador pasa a verde o rojo según coincida con el molde.',
+      'Llevá los cuatro versos al cuaderno con sus conteos finales.',
+    ],
+    examples: ['8 — 8 — 8 — 8: «Bajo el puente canta el río».', 'Corrección manual: 9 (corregido) en vez de 8 aproximado.'],
+  },
 };

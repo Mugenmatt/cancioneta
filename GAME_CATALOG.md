@@ -343,6 +343,31 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 - **Identidad:** círculos concéntricos; paleta oscura con acento verde agua.
 - **Web/PWA:** sin micrófono; aviso claro y preguntas disponibles para escribir a mano sin romper la pantalla.
 
+### G-46 Dúo por turnos
+- **Mecánica:** modo «pasá el celu» para dos personas con nombres opcionales (A y B) y un tema. Se alternan doce versos; en cada turno la persona ve **solo** el verso anterior, escribe el suyo y aparece una pantalla intermedia «pasale el teléfono» antes del siguiente turno. Al terminar se revelan los doce versos con la etiqueta de autor y se reparten, en ese mismo orden, en 4 de verso, 2 de pre-estribillo y 6 de estribillo. El cuaderno recibe esos tres bloques con encabezados y etiquetas; compartir usa el sistema existente de exportación.
+- **Datos:** tema opcional escrito a mano o sorteado del pool existente `themes`; sin banco nuevo. Nombres y versos son entrada del usuario, solo en memoria.
+- **Sorteo:** `RandomService.draw('themes', 1)` para el tema opcional, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** en cada turno, únicamente el verso anterior; al final, los doce versos etiquetados y el reparto 4/2/6 en el panel del cuaderno.
+- **Identidad:** dos manos que se pasan un teléfono; paleta cálida con acento índigo.
+- **Web/PWA:** sin API nativa; funciona igual en web.
+
+### G-47 Taller de melodía
+- **Mecánica:** un solo Juego con tres modos. (a) Melodía torcida: grabar tarareando el estribillo de una canción amada (audio temporal) y aplicar tarjetas de reglas: invertir la dirección, cambiar duraciones, saltar un intervalo y estirar una nota acortando la siguiente. (b) Empezar en otro tiempo: metrónomo con acento en un tiempo sorteado del 1 al 4; modo avanzado agrega el «y» entre tiempos; se escriben frases que arranquen en ese acento. (c) Hablar-cantando: frase corta sorteada, decirla neutra, con emoción y con MÁS emoción cantando exagerada la melodía natural. Cada modo lleva su resultado al cuaderno con el sistema de estímulos existente.
+- **Datos:** sin pool nuevo. La frase de hablar-cantando sale de `mutant_proverbs` (semillas originales); los acentos y las reglas son datos fijos en `src/content/games/g47.ts`.
+- **Sorteo:** `RandomService.int(4)` para el tiempo acentuado y `RandomService.draw('mutant_proverbs', 1)` para la frase; nunca `Math.random()` directo.
+- **Estímulo visible durante la escritura:** reglas elegidas y anotación en el modo a; patrón de compás con el acento resaltado y frase en el modo b; frase y notas en el modo c.
+- **Identidad:** onda y pulseador; paleta oscura con acento coral.
+- **Web/PWA:** sin micrófono en web: aviso claro y transformación escrita a mano. El metrónomo usa el mismo Web Audio de `react-native-audio-api` que el reproductor existente; si el navegador no lo habilita, se muestra aviso y el patrón visual sigue guiando el ejercicio. No se instala ninguna dependencia.
+
+### G-51 Métrica fija
+- **Mecánica:** seis moldes silábicos (8-8-8-8, 8-8-8-6, 7-7-7-7, 11-11-11-11, 10-6-10-6 y libre con tope ajustable). Se escriben cuatro versos y un contador aproximado muestra la sílaba de cada uno en vivo. Cada verso permite corregir el número a mano y el indicador pasa a verde cuando coincide y a rojo cuando no (o cuando supera el tope en el molde libre). El cuaderno recibe los cuatro versos con su conteo final y el sistema de estímulos existente.
+- **Datos:** veinte versos originales de Cancioneta usados como casos de prueba de la heurística; sin pool nuevo ni textos protegidos.
+- **Sorteo:** sin aleatoriedad: la métrica es fija y la corrección la hace la persona.
+- **Estímulo visible durante la escritura:** conteo aproximado por verso, conteo corregido, estado de coincidencia y el molde elegido.
+- **Identidad:** rejilla de sílabas; paleta verde tinta con acento verde profundo.
+- **Web/PWA:** sin API nativa; funciona igual en web.
+- **Contador:** heurística para español que agrupa diptongos y triptongos, separa hiatos, descuenta una por sinalefa, ignora la h muda y aplica la ley del acento final. Es una cuenta probable: la interfaz la marca como aproximada y nunca la impone.
+
 ---
 
 ## Índice de datos por Juego
@@ -384,7 +409,10 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 | G-43 | `situations` |
 | G-44 | `bad_song_prompts` |
 | G-45 | Dos grabaciones temporales; sin pool |
+| G-46 | `themes` (tema opcional) y entrada del usuario |
+| G-47 | `mutant_proverbs`; grabación temporal y metrónomo sin pool |
 | G-48 | seis planos fijos (sin pool) |
+| G-51 | veinte versos originales en tests (sin pool) |
 | G-49 | `mutant_proverbs` |
 | G-50 | `emotion_arc` |
 | G-52 | Grabación temporal y transcripción; sin pool |
@@ -395,6 +423,6 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 | G-57 | `voice_pairs` |
 
 ## Verificación de integridad del catálogo
-- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 + G-38, G-39, G-42, G-43, G-49, G-54, G-55, G-56, G-57 + G-45 + G-52 + G-53 = **53 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado (52 habilitados).
+- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 + G-38, G-39, G-42, G-43, G-49, G-54, G-55, G-56, G-57 + G-45 + G-52 + G-53 + G-46 + G-47 + G-51 = **56 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado (55 habilitados).
 - Test de registro: ids `g01…g44` (sin `g31`) únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

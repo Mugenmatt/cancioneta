@@ -11,6 +11,14 @@ function firstStanza() {
   return { section, stanza: section.stanzas[0] };
 }
 
+function twoSections() {
+  const first = useLyricsStore.getState().sections[0];
+  useLyricsStore.getState().addSection('chorus', 'Estribillo');
+  useLyricsStore.setState({ past: [], future: [], exported: false });
+  const second = useLyricsStore.getState().sections[1];
+  return { first, second };
+}
+
 describe('cuaderno en memoria', () => {
   beforeEach(reset);
 
@@ -38,6 +46,27 @@ describe('cuaderno en memoria', () => {
     expect(useLyricsStore.getState().sections).toHaveLength(before);
     useLyricsStore.getState().undo();
     expect(useLyricsStore.getState().sections.at(-1)?.name).toBe('Final');
+  });
+
+  it('mueve una sección y respeta deshacer y rehacer', () => {
+    const { first, second } = twoSections();
+    useLyricsStore.getState().setActiveSection(second.id);
+    useLyricsStore.getState().moveSection(second.id, -1);
+    expect(useLyricsStore.getState().sections.map((section) => section.id)).toEqual([second.id, first.id]);
+    expect(useLyricsStore.getState().activeSectionId).toBe(second.id);
+    useLyricsStore.getState().undo();
+    expect(useLyricsStore.getState().sections.map((section) => section.id)).toEqual([first.id, second.id]);
+    useLyricsStore.getState().redo();
+    expect(useLyricsStore.getState().sections.map((section) => section.id)).toEqual([second.id, first.id]);
+  });
+
+  it('no mueve una sección fuera de los límites', () => {
+    const { first, second } = twoSections();
+    const steps = useLyricsStore.getState().past.length;
+    useLyricsStore.getState().moveSection(first.id, -1);
+    useLyricsStore.getState().moveSection(second.id, 1);
+    expect(useLyricsStore.getState().sections.map((section) => section.id)).toEqual([first.id, second.id]);
+    expect(useLyricsStore.getState().past).toHaveLength(steps);
   });
 
   it('recupera una sección después de vaciar', () => {

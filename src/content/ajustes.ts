@@ -16,7 +16,7 @@ export const SETTINGS_TEXT = {
   },
   includeStructure: {
     title: 'Incluir nombres de secciones',
-    body: 'Al exportar, agrega Verso, Estribillo, etc.',
+    body: 'Al exportar, agrega Estrofa, Estribillo, etc.',
   },
   dataTitle: 'Paquete de datos',
   dataSummary: (total: number, pools: number) => `${total} piezas cargadas en ${pools} pools.`,

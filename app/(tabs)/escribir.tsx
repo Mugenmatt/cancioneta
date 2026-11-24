@@ -18,7 +18,7 @@ import type { SongSection } from '@/core/types';
 export default function WriteScreen() {
   const { colors } = useCoreTheme();
   const {
-    sections, activeSectionId, setActiveSection, addSection, removeSection, renameSection,
+    sections, activeSectionId, setActiveSection, addSection, removeSection, renameSection, moveSection,
     addStanza, removeStanza, updateStanza, clear, snapshot, words, exportText,
     undo, redo, markExported, past, future, exported,
   } = useLyricsStore();
@@ -148,7 +148,7 @@ export default function WriteScreen() {
         </>
       )}
 
-      {sections.map((section) => {
+      {sections.map((section, index) => {
         const active = activeSectionId === section.id;
         return (
           <View
@@ -178,6 +178,26 @@ export default function WriteScreen() {
                 <>
                   <Pressable
                     accessibilityRole="button"
+                    accessibilityLabel={EDITOR_TEXT.moveSectionUp(section.name)}
+                    accessibilityState={{ disabled: index === 0 }}
+                    disabled={index === 0}
+                    onPress={() => moveSection(section.id, -1)}
+                    style={[styles.mini, { borderColor: colors.lineSubtle }, index === 0 && styles.disabled]}
+                  >
+                    <Feather name="arrow-up" size={fontSizes.small} color={colors.textSecondary} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={EDITOR_TEXT.moveSectionDown(section.name)}
+                    accessibilityState={{ disabled: index === sections.length - 1 }}
+                    disabled={index === sections.length - 1}
+                    onPress={() => moveSection(section.id, 1)}
+                    style={[styles.mini, { borderColor: colors.lineSubtle }, index === sections.length - 1 && styles.disabled]}
+                  >
+                    <Feather name="arrow-down" size={fontSizes.small} color={colors.textSecondary} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityRole="button"
                     accessibilityLabel={EDITOR_TEXT.addStanza(section.name)}
                     onPress={() => addStanza(section.id)}
                     style={[styles.mini, { borderColor: colors.lineSubtle }]}
@@ -188,7 +208,7 @@ export default function WriteScreen() {
                     accessibilityRole="button"
                     accessibilityLabel={EDITOR_TEXT.removeSection(section.name)}
                     onPress={() => removeSection(section.id)}
-                    style={[styles.mini, { borderColor: colors.lineSubtle, marginLeft: spacing.xs }]}
+                    style={[styles.mini, { borderColor: colors.lineSubtle }]}
                   >
                     <Feather name="trash-2" size={fontSizes.small} color={colors.textMuted} />
                   </Pressable>
@@ -315,7 +335,7 @@ const styles = StyleSheet.create({
   disabled: { opacity: 0.55 },
   dock: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md, gap: spacing.xs },
   section: { borderWidth: 1, borderRadius: radii.card, padding: spacing.md, marginBottom: spacing.md },
-  sectionHead: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm },
+  sectionHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs, marginBottom: spacing.sm },
   mini: { width: minTouch, height: minTouch, borderRadius: radii.chip, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   stanza: { position: 'relative', marginTop: spacing.xs },
   stanzaRemove: { position: 'absolute', right: spacing.xxs, top: KNOB_INSET, zIndex: 2, width: minTouch / 2, height: minTouch / 2, alignItems: 'center', justifyContent: 'center' },

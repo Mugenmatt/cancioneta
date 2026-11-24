@@ -6,7 +6,7 @@ let stanzaCounter = 4;
 
 export const SECTION_NAMES: { kind: SongSection['kind']; name: string }[] = [
   { kind: 'intro', name: 'Intro' },
-  { kind: 'verse', name: 'Verso' },
+  { kind: 'verse', name: 'Estrofa' },
   { kind: 'chorus', name: 'Estribillo' },
   { kind: 'bridge', name: 'Puente' },
   { kind: 'outro', name: 'Outro' },
@@ -24,7 +24,7 @@ function makeSection(name: string, kind: SongSection['kind'], text = ''): SongSe
 }
 
 const initialSections: SongSection[] = [
-  { id: 'sec_1', name: 'Verso 1', kind: 'verse', stanzas: [makeStanza()] },
+  { id: 'sec_1', name: 'Estrofa 1', kind: 'verse', stanzas: [makeStanza()] },
   { id: 'sec_2', name: 'Estribillo', kind: 'chorus', stanzas: [makeStanza()] },
 ];
 
@@ -43,6 +43,7 @@ export interface LyricsState {
   addSection: (kind: SongSection['kind'], name?: string) => void;
   removeSection: (id: string) => void;
   renameSection: (id: string, name: string) => void;
+  moveSection: (id: string, direction: -1 | 1) => void;
   addStanza: (sectionId: string) => void;
   removeStanza: (sectionId: string, stanzaId: string) => void;
   updateStanza: (sectionId: string, stanzaId: string, text: string) => void;
@@ -101,6 +102,18 @@ export const useLyricsStore = create<LyricsState>((set, get) => {
     }));
   },
 
+  moveSection: (id, direction) => {
+    const { sections } = get();
+    const from = sections.findIndex((section) => section.id === id);
+    const to = from + direction;
+    if (from < 0 || to < 0 || to >= sections.length) return;
+    commit((state) => {
+      const sections = [...state.sections];
+      [sections[from], sections[to]] = [sections[to], sections[from]];
+      return { sections };
+    });
+  },
+
   addStanza: (sectionId) => commit((state) => ({
     sections: state.sections.map((section) => (
       section.id === sectionId ? { ...section, stanzas: [...section.stanzas, makeStanza()] } : section
@@ -152,7 +165,7 @@ export const useLyricsStore = create<LyricsState>((set, get) => {
   },
 
   clear: () => {
-    const section = makeSection('Verso 1', 'verse');
+    const section = makeSection('Estrofa 1', 'verse');
     commit(() => ({ sections: [section], activeSectionId: section.id }));
   },
 

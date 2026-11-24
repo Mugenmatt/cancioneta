@@ -25,6 +25,8 @@ export const EDITOR_TEXT = {
   renameSection: (name: string) => `Renombrar ${name}`,
   addStanza: (name: string) => `Agregar estrofa a ${name}`,
   removeSection: (name: string) => `Quitar ${name}`,
+  moveSectionUp: (name: string) => `Mover ${name} hacia arriba`,
+  moveSectionDown: (name: string) => `Mover ${name} hacia abajo`,
   removeStanza: 'Quitar estrofa',
   stanzaLabel: (index: number, name: string) => `Estrofa ${index + 1} de ${name}`,
   stanzaPlaceholder: (first: boolean) =>
@@ -42,7 +44,7 @@ export const EDITOR_TEXT = {
   sectionNameLabel: 'Nombre de la sección',
   save: 'Guardar',
   kindLabels: {
-    intro: 'Intro', verse: 'Verso', chorus: 'Estribillo', bridge: 'Puente', outro: 'Outro', custom: 'Libre',
+    intro: 'Intro', verse: 'Estrofa', chorus: 'Estribillo', bridge: 'Puente', outro: 'Outro', custom: 'Libre',
   } satisfies Record<SongSection['kind'], string>,
   stimulusTitle: 'Estímulo del juego',
   stimulusExpand: 'Mostrar estímulo',

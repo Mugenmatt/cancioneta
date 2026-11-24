@@ -10,7 +10,7 @@ import { Sheet } from '@/design/components/Sheet';
 import { EDITOR_TEXT } from '@/content/editor';
 import { EditorSurface } from '@/editor/editorSurface';
 import { StimulusPanel } from '@/editor/StimulusPanel';
-import { alpha, fontSizes, fonts, lineHeights, minTouch, motion, radii, spacing } from '@/design/tokens';
+import { alpha, fontSizes, fonts, hitSlop, lineHeights, minTouch, motion, radii, spacing } from '@/design/tokens';
 import { SECTION_NAMES, useLyricsStore } from '@/stores/lyricsStore';
 import { useSettingsStore } from '@/stores/settingsStore';
 import type { SongSection } from '@/core/types';
@@ -202,6 +202,7 @@ export default function WriteScreen() {
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel={EDITOR_TEXT.removeStanza}
+                    hitSlop={hitSlop}
                     onPress={() => removeStanza(section.id, stanza.id)}
                     style={styles.stanzaRemove}
                   >

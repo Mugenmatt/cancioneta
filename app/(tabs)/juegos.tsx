@@ -8,7 +8,7 @@ import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { EmptyState } from '@/design/components/Feedback';
 import { SectionLabel } from '@/design/components/Primitives';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
 import { GAME_FLOW_TEXT } from '@/content/gameFlow';
 import { GAME_REGISTRY, PHASE_LABEL, type GameMeta, type GamePhase } from '@/games/registry';
@@ -55,7 +55,7 @@ export default function GamesScreen() {
           autoCorrect={false}
         />
         {query ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="Limpiar búsqueda" onPress={() => setQuery('')}>
+          <Pressable accessibilityRole="button" accessibilityLabel="Limpiar búsqueda" onPress={() => setQuery('')} style={styles.searchClear}>
             <Feather name="x-circle" size={17} color={colors.textMuted} />
           </Pressable>
         ) : null}
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   count: { width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   search: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.field, paddingHorizontal: spacing.sm, minHeight: 48 },
   searchInput: { flex: 1, marginLeft: spacing.xs, fontSize: 15, paddingVertical: 10 },
+  searchClear: { width: minTouch, height: minTouch, marginRight: -spacing.sm, alignItems: 'center', justifyContent: 'center' },
   group: { marginTop: spacing.lg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: radii.card, padding: spacing.sm, marginBottom: spacing.xs, minHeight: 78 },
   number: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },

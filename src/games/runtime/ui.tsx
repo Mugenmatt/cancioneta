@@ -6,7 +6,7 @@ import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import type { GameTheme } from '@/design/themes';
 import { useLyricsStore } from '@/stores/lyricsStore';
 import { useStimulusStore } from '@/stores/stimulusStore';
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
   fieldMultiline: { minHeight: 120, paddingTop: spacing.sm },
   mini: {
     flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip,
-    paddingHorizontal: 10, paddingVertical: 6, minHeight: 32,
+    paddingHorizontal: 10, paddingVertical: 6, minHeight: minTouch,
   },
   card: { borderWidth: 1, borderRadius: radii.card, padding: spacing.md },
   note: { lineHeight: 18, marginTop: spacing.sm },

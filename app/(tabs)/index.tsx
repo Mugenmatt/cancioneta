@@ -8,7 +8,7 @@ import { Screen } from '@/design/components/Screen';
 import { Motif } from '@/design/components/Motif';
 import { SectionLabel } from '@/design/components/Primitives';
 import { useCoreTheme } from '@/design/ThemeProvider';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
 import { GAME_REGISTRY, type GameMeta } from '@/games/registry';
 import { randomService } from '@/services/random/RandomService';
@@ -163,7 +163,7 @@ function QuickCard({ icon, title, body, onPress }: {
 
 const styles = StyleSheet.create({
   brandRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg },
-  settings: { width: 42, height: 42, borderRadius: 21, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  settings: { width: minTouch, height: minTouch, borderRadius: minTouch / 2, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   hero: { borderRadius: radii.card, borderWidth: 1, overflow: 'hidden', minHeight: 330 },
   heroInner: { padding: spacing.lg, paddingTop: spacing.xl, flex: 1, justifyContent: 'flex-end' },
   heroTitle: { fontFamily: fonts.display, fontSize: 36, lineHeight: 42, letterSpacing: -0.8, marginTop: spacing.sm },

@@ -423,6 +423,8 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 | G-57 | `voice_pairs` |
 
 ## Verificación de integridad del catálogo
-- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 + G-38, G-39, G-42, G-43, G-49, G-54, G-55, G-56, G-57 + G-45 + G-52 + G-53 + G-46 + G-47 + G-51 = **56 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado (55 habilitados).
-- Test de registro: ids `g01…g44` (sin `g31`) únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
+- 23 originales (G-01…G-23) + 8 de la primera tanda (G-24…G-30 y G-32) + 24 de la tanda actual (G-33…G-39 y G-41…G-57) = **55 Juegos habilitados**. Los 5 ejercicios de Fase 0 van aparte: `GAME_REGISTRY` tiene 60 registros.
+- Reservados: **G-31** (entrada `pending` en la galería visual, sin tema ni Juego) y **G-40** (sin entrada en el registro, la galería ni el service worker). Numeración total: 57; habilitados: 55.
+- Los ids `g01…g57`, excepto `g31` y `g40`, están en el registro, en `RUNTIME_GAME_IDS` y en `public/sw.js`. `tests/registry.test.ts` y `tests/devGallery.test.ts` verifican 60 registros y 61 tarjetas (60 `ready` más `g31` `pending`).
+- Cada Juego habilitado tiene ficha en este catálogo, intro completa (título, objetivo, pasos, ejemplos, «Comenzar») y tema con contraste AA en claro y oscuro. Los Juegos con audio degradan en web con un aviso desde `src/content/`.
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

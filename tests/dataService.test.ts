@@ -43,4 +43,15 @@ describe('DataService', () => {
     expect(credits.length).toBeGreaterThanOrEqual(5);
     expect(credits.every((entry) => entry.source && entry.license && entry.attribution)).toBe(true);
   });
+
+  it('declara la licencia exacta de cada fuente y de los íconos', () => {
+    const credits = dataService.getCredits();
+    const fonts = ['Fraunces (identidad)', 'Literata (escritura)', 'Inter (interfaz)'];
+    for (const source of fonts) {
+      const entry = credits.find((credit) => credit.source === source);
+      expect(entry?.license).toBe('SIL Open Font License 1.1');
+      expect(entry?.attribution).toMatch(/Paquete @expo-google-fonts\//);
+    }
+    expect(credits.find((credit) => credit.source === 'Íconos Feather')?.license).toBe('MIT');
+  });
 });

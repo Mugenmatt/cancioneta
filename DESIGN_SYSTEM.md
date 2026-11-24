@@ -48,7 +48,7 @@ Estos valores concretan «papel, tinta y brasa» (§1.1): papel = `bg.base`/`bg.
 Cada tema de Juego redefine un **juego de 4 colores**: `game.bg`, `game.surface`, `game.ink`, `game.accent` (con variante oscura). El editor usa siempre `bg.base`/`bg.raised` del núcleo para no perder legibilidad.
 
 ### 3.2 Tipografía
-Familias gratuitas (licencias abiertas) **[VERIFICAR licencia exacta de cada una antes de empaquetar]**; Expo ofrece paquetes de Google Fonts. Roles cerrados por la dirección aprobada (§1.1).
+Familias gratuitas con licencia verificada en los paquetes instalados: SIL Open Font License 1.1 (Fraunces, Literata e Inter). El detalle y las atribuciones figuran en «Créditos y licencias». Roles cerrados por la dirección aprobada (§1.1).
 
 | Rol | Fuente (decidida) | Uso |
 |---|---|---|
@@ -59,7 +59,7 @@ Familias gratuitas (licencias abiertas) **[VERIFICAR licencia exacta de cada una
 
 Reglas:
 - Máximo **3 familias por pantalla**.
-- **Base fija de 3 fuentes** (Literata, Inter, Fraunces); los acentos de Juego (§6) completan el total cerrado (≈ 8–10) para controlar el peso de la app. **[VERIFICAR]** licencias antes de empaquetar.
+- **Base fija de 3 fuentes** (Literata, Inter, Fraunces); los acentos de Juego (§6) completan el total cerrado (≈ 8–10) para controlar el peso de la app. Las tres bases están bajo SIL OFL 1.1; los íconos Feather, bajo MIT.
 - Escalas: soportar **Dynamic Type** / tamaño de fuente del sistema (hasta 200 % sin romper).
 - Español completo: tildes, `ñ`, `¿ ¡`, comillas « » y rayas verificados en cada fuente.
 
@@ -161,8 +161,8 @@ Cada fila es la **dirección artística** que luego se concreta en `GameTheme`. 
 |---|---|---|
 | Animaciones y gestos | Reanimated + Gesture Handler | Base de swipe, arrastre, resortes |
 | Lienzos (Mapa Mental, Cut-up, Collage textual) | React Native Skia | Validar rendimiento con 121 nodos |
-| Fuentes | Paquetes de Google Fonts para Expo | **[VERIFICAR]** licencias |
-| Iconos | Familia de iconos de código abierto (p. ej., Lucide o Phosphor) | **[VERIFICAR]** licencia |
+| Fuentes | Paquetes de Google Fonts para Expo | Licencias SIL OFL 1.1 verificadas en `LICENSE_FONT` |
+| Iconos | Feather vía `@expo/vector-icons` | Licencia MIT verificada en el paquete instalado |
 | Háptica | Módulo de háptica de Expo | |
 | Degradados y desenfoque | Módulos de Expo | Usar con moderación |
 | Ilustraciones | Propias o con licencia libre | Sin IA generativa en el producto |
@@ -221,4 +221,4 @@ Decisión de referencia: «El cuaderno de medianoche» (§1.1).
 
 1. **Paleta / referencia estética — CERRADA.** «El cuaderno de medianoche»: papel, tinta y brasa (§3.1). Cálida, oscura y de cuaderno.
 2. **Figma vs. código — CERRADA.** Se trabaja directamente en código y se verifica en `/dev/gallery`; sin Figma (§7).
-3. **Fuentes e íconos — elección CERRADA; licencias [VERIFICAR].** Fuentes: Fraunces (identidad), Literata (escritura), Inter (interfaz). Íconos: familia de código abierto (p. ej., Lucide o Phosphor). **[VERIFICAR]** licencias exactas de fuentes e íconos antes de empaquetar (§3.2, §7).
+3. **Fuentes e íconos — elección CERRADA; licencias verificadas.** Fuentes: Fraunces (identidad), Literata (escritura), Inter (interfaz), las tres bajo SIL OFL 1.1. Íconos: Feather vía `@expo/vector-icons`, bajo MIT. Créditos y atribuciones en «Créditos y licencias» (§3.2, §7).

@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useCoreTheme } from '../ThemeProvider';
-import { alpha, fonts, radii, spacing } from '../tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '../tokens';
 import { AppText } from './Text';
 
 export function ProgressBar({ value, total, accent, label }: { value: number; total: number; accent?: string; label?: string }) {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   track: { height: 6, borderRadius: 3, overflow: 'hidden' },
   fill: { height: '100%', borderRadius: 3 },
   timer: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start' },
-  lock: { width: 34, height: 34, borderRadius: 17, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  lock: { width: minTouch, height: minTouch, borderRadius: minTouch / 2, borderWidth: StyleSheet.hairlineWidth, alignItems: 'center', justifyContent: 'center' },
   empty: { alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.xxl },
   emptyIcon: { width: 56, height: 56, borderRadius: 28, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
 });

@@ -25,7 +25,7 @@ export const MATERIAL_TEXT = {
   copied: 'Copiado',
   copy: 'Copiar',
   creditsTitle: 'Créditos y licencias',
-  creditsNote: 'La revisión legal de citas protegidas sigue pendiente. Hasta entonces, la app solo incluye material original, de dominio público o metadatos.',
+  creditsNote: 'La revisión legal de citas protegidas sigue pendiente. Hasta entonces, la app solo incluye material original, de dominio público o metadatos. Las licencias de fuentes e íconos se verificaron en los paquetes instalados.',
   license: {
     original: 'Original',
     public_domain: 'Dominio público',

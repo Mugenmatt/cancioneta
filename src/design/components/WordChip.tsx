@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useCoreTheme } from '../ThemeProvider';
-import { alpha, fonts, radii, spacing } from '../tokens';
+import { alpha, fonts, hitSlop, minTouch, radii, spacing } from '../tokens';
 import { AppText } from './Text';
 
 interface WordChipProps {
@@ -49,7 +49,7 @@ export function WordChip({ word, accent, accentInk, selected, locked, revealed =
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={locked ? 'Desbloquear palabra' : 'Bloquear palabra'}
-          hitSlop={10}
+          hitSlop={hitSlop}
           onPress={onToggleLock}
           style={styles.lock}
         >
@@ -63,8 +63,8 @@ export function WordChip({ word, accent, accentInk, selected, locked, revealed =
 const styles = StyleSheet.create({
   chip: {
     flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.chip,
-    paddingHorizontal: spacing.sm + 2, paddingVertical: 9, minHeight: 40, marginRight: 8, marginBottom: 8,
+    paddingHorizontal: spacing.sm + 2, paddingVertical: spacing.xs, minHeight: minTouch, marginRight: spacing.xs, marginBottom: spacing.xs,
   },
-  index: { marginRight: 6, minWidth: 14 },
-  lock: { marginLeft: 8, width: 22, height: 22, alignItems: 'center', justifyContent: 'center' },
+  index: { marginRight: spacing.xs - spacing.xxs, minWidth: spacing.md - spacing.xs },
+  lock: { marginLeft: spacing.xs, width: minTouch, height: minTouch, alignItems: 'center', justifyContent: 'center' },
 });

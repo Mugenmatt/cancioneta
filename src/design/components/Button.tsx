@@ -38,7 +38,7 @@ export function Button({
   accessibilityHint,
   testID,
 }: ButtonProps) {
-  const { mode } = useCoreTheme();
+  const { mode, reduceMotion } = useCoreTheme();
   const roles = semanticRoles[mode];
   const accentColor = accent ?? roles['accent.brand'];
   const accentText = accentInk ?? roles['accent.onAccent'];
@@ -68,7 +68,8 @@ export function Button({
         styles.base,
         small ? styles.small : styles.regular,
         { backgroundColor: p.bg, borderColor: p.border },
-        pressed && { opacity: 0.78, transform: [{ scale: 0.985 }] },
+        pressed && styles.pressed,
+        pressed && !reduceMotion && styles.pressedMotion,
         (disabled || loading) && { opacity: 0.62 },
         style,
       ]}
@@ -104,4 +105,6 @@ const styles = StyleSheet.create({
   small: { paddingVertical: 8, paddingHorizontal: spacing.md },
   label: { letterSpacing: letterSpacing.button },
   row: { flexDirection: 'row', alignItems: 'center' },
+  pressed: { opacity: 0.78 },
+  pressedMotion: { transform: [{ scale: 0.985 }] },
 });

@@ -204,8 +204,28 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
       url: 'https://www.datamuse.com/api/',
     },
     {
-      source: 'Tipografías', license: 'SIL Open Font License', attribution: 'Fraunces, Literata e Inter distribuidas por Google Fonts para Expo.',
-      url: 'https://fonts.google.com',
+      source: 'Fraunces (identidad)',
+      license: 'SIL Open Font License 1.1',
+      attribution: 'Copyright 2018 The Fraunces Project Authors. Paquete @expo-google-fonts/fraunces 0.4.1 (v38).',
+      url: 'https://scripts.sil.org/OFL',
+    },
+    {
+      source: 'Literata (escritura)',
+      license: 'SIL Open Font License 1.1',
+      attribution: 'Copyright 2017 The Literata Project Authors. Paquete @expo-google-fonts/literata 0.4.3.',
+      url: 'https://scripts.sil.org/OFL',
+    },
+    {
+      source: 'Inter (interfaz)',
+      license: 'SIL Open Font License 1.1',
+      attribution: 'Copyright 2020 The Inter Project Authors. Paquete @expo-google-fonts/inter 0.4.2.',
+      url: 'https://scripts.sil.org/OFL',
+    },
+    {
+      source: 'Íconos Feather',
+      license: 'MIT',
+      attribution: 'Copyright 2015 Joel Arvidsson. Paquete @expo/vector-icons 15.1.1.',
+      url: 'https://github.com/expo/vector-icons',
     },
     {
       source: 'Piano sintetizado', license: 'Original', attribution: 'Muestras generadas por síntesis aditiva para esta versión.',

@@ -52,6 +52,55 @@ export const coreColors: Record<ColorMode, CoreColors> = {
   },
 };
 
+export type SemanticRole =
+  | 'surface.paper'
+  | 'surface.raised'
+  | 'surface.sunken'
+  | 'ink.primary'
+  | 'ink.secondary'
+  | 'ink.muted'
+  | 'accent.brand'
+  | 'accent.game'
+  | 'accent.onAccent'
+  | 'line.hairline'
+  | 'line.strong'
+  | 'focus.ring'
+  | 'state.error'
+  | 'state.success'
+  | 'state.warning';
+
+export type SemanticRoles = Record<SemanticRole, string>;
+
+function semanticRolesFor(colors: CoreColors, mode: ColorMode): SemanticRoles {
+  return {
+    'surface.paper': colors.bgBase,
+    'surface.raised': colors.bgRaised,
+    'surface.sunken': colors.bgSunken,
+    'ink.primary': colors.textPrimary,
+    'ink.secondary': colors.textSecondary,
+    'ink.muted': colors.textMuted,
+    'accent.brand': colors.accentCore,
+    'accent.game': colors.accentCore,
+    'accent.onAccent': mode === 'light' ? colors.bgRaised : colors.bgBase,
+    'line.hairline': colors.lineSubtle,
+    'line.strong': colors.lineStrong,
+    'focus.ring': colors.accentCore,
+    'state.error': colors.stateError,
+    'state.success': colors.stateSuccess,
+    'state.warning': colors.stateWarning,
+  };
+}
+
+export const semanticRoles: Record<ColorMode, SemanticRoles> = {
+  light: semanticRolesFor(coreColors.light, 'light'),
+  dark: semanticRolesFor(coreColors.dark, 'dark'),
+};
+
+export const contentWidth = {
+  reading: 640,
+  grid: 1200,
+} as const;
+
 export const spacing = {
   xxs: 4,
   xs: 8,
@@ -92,6 +141,11 @@ export const motion = {
   fast: 120,
   base: 240,
   slow: 480,
+  easing: {
+    enter: [0.215, 0.61, 0.355, 1],
+    exit: [0.55, 0.055, 0.675, 0.19],
+    emphasis: [0.645, 0.045, 0.355, 1],
+  },
 } as const;
 
 export const fonts = {

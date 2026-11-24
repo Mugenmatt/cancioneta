@@ -81,6 +81,20 @@ Escala de tamaños (pt): 12 / 14 / 16 / 18 / 22 / 28 / 36 / 48. Interlineado 1,3
 - Todo movimiento no esencial se desactiva con **Reducir movimiento**.
 - Háptica ligera en: tirar dados, bloquear, revelar palabra, completar un objetivo.
 
+#### 3.4.1 Auditoría de movimiento residual (S15)
+
+Inventario de `app/` y `src/`: dos `Modal` con fundido, un `Animated.loop`, componentes con Reanimated y las entradas de tema. Estado final:
+
+| Punto | Movimiento | Con Reducir movimiento | Decisión |
+|---|---|---|---|
+| `Sheet.tsx` | Deslizamiento/fundido de la hoja + fundido del `Modal` | Estado final sin animar; `modalAnimation()` devuelve `'none'` | Cerrado |
+| `ImagesGame.tsx` | Fundido del `Modal` del visor de imágenes | `modalAnimation()` devuelve `'none'`; el visor no anima su contenido | Cerrado |
+| `VoiceWave.tsx` | Onda que respira (`Animated.loop`) | Se detiene y muestra altura fija | **Conservado**: es feedback del estado de grabación activa, no decoración (§2.4 y §6, F0-1). Cumple el criterio 5 de §12 al desactivarse con la preferencia. |
+| `DiceButton.tsx` | Giro y rebote al tirar | Se omiten; además usa `ReduceMotion.System` | Ya conforme |
+| Entradas de tema, `Button`, `useEntranceStyle` | Desplazamiento/rotación/fundido | Solo fundido (`motion.fast`) | Ya conforme |
+
+No quedan animaciones espaciales sin guardia. El `Animated.loop` se justifica y conserva; ningún otro movimiento se eliminó.
+
 ## 4. Componentes base (compartidos)
 
 | Componente | Descripción | Estados |

@@ -10,6 +10,8 @@ import { SectionLabel } from '@/design/components/Primitives';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
+import { APP_META } from '@/content/app';
+import { HOME_TEXT } from '@/content/home';
 import { GAME_REGISTRY, type GameMeta } from '@/games/registry';
 import { randomService } from '@/services/random/RandomService';
 
@@ -46,12 +48,12 @@ export default function HomeScreen() {
     <Screen scroll contentStyle={{ paddingTop: spacing.md }}>
       <View style={styles.brandRow}>
         <View>
-          <AppText variant="label" color={colors.accentCore}>Cancioneta</AppText>
-          <AppText variant="caption" color={colors.textMuted}>Cuaderno de canciones</AppText>
+          <AppText variant="label" color={colors.accentCore}>{APP_META.name}</AppText>
+          <AppText variant="caption" color={colors.textMuted}>{HOME_TEXT.tagline}</AppText>
         </View>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="Ajustes"
+          accessibilityLabel={HOME_TEXT.settings}
           onPress={() => router.push('/ajustes')}
           style={[styles.settings, { borderColor: colors.lineSubtle }]}
         >
@@ -62,23 +64,23 @@ export default function HomeScreen() {
       <View style={[styles.hero, { backgroundColor: theme.bg, borderColor: alpha(theme.accent, 0.3) }]}>
         <Motif theme={theme} />
         <View style={styles.heroInner}>
-          <AppText variant="label" color={theme.accentText}>Primero la voz</AppText>
+          <AppText variant="label" color={theme.accentText}>{HOME_TEXT.heroLabel}</AppText>
           <AppText style={[styles.heroTitle, { color: theme.ink }]}>
-            Una canción empieza con una palabra mal elegida.
+            {HOME_TEXT.heroTitle}
           </AppText>
           <AppText style={[styles.heroBody, { color: theme.inkSoft }]}>
-            Jugá, escribí, escuchá. Sin cuenta, sin nube, sin deberes.
+            {HOME_TEXT.heroBody}
           </AppText>
           <View style={styles.heroActions}>
             <Button
-              label="Abrir cuaderno"
+              label={HOME_TEXT.openNotebook}
               onPress={() => router.push('/escribir')}
               accent={theme.accent}
               accentInk={theme.accentInk}
             />
             <View style={{ width: spacing.sm }} />
             <Button
-              label="Tirar acordes"
+              label={HOME_TEXT.rollChords}
               tone="secondary"
               onPress={() => router.push('/acordes')}
               accent={theme.accentText}
@@ -91,28 +93,28 @@ export default function HomeScreen() {
       <View style={styles.quickRow}>
         <QuickCard
           icon="mic"
-          title="Calentar"
-          body="Fase 0"
+          title={HOME_TEXT.quick.warmup.title}
+          body={HOME_TEXT.quick.warmup.body}
           onPress={() => router.push('/juegos')}
         />
         <QuickCard
           icon="music"
-          title="Probar"
-          body="Acordes"
+          title={HOME_TEXT.quick.chords.title}
+          body={HOME_TEXT.quick.chords.body}
           onPress={() => router.push('/acordes')}
         />
         <QuickCard
           icon="search"
-          title="Buscar"
-          body="Rimas"
+          title={HOME_TEXT.quick.rhymes.title}
+          body={HOME_TEXT.quick.rhymes.body}
           onPress={() => router.push('/rimas')}
         />
       </View>
 
       <View style={styles.section}>
-        <SectionLabel color={colors.textMuted}>Un juego para hoy</SectionLabel>
+        <SectionLabel color={colors.textMuted}>{HOME_TEXT.dailySection}</SectionLabel>
         <Button
-          label="A escribir"
+          label={HOME_TEXT.dailyAction}
           onPress={openRandomGame}
           accent={theme.accent}
           accentInk={theme.accentInk}
@@ -123,10 +125,10 @@ export default function HomeScreen() {
         <Feather name="shield" size={18} color={colors.accentCore} />
         <View style={{ flex: 1, marginLeft: spacing.sm }}>
           <AppText variant="caption" color={colors.textPrimary} style={{ fontFamily: fonts.sansSemiBold }}>
-            Tu letra no se guarda al salir
+            {HOME_TEXT.privacyTitle}
           </AppText>
           <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 2 }}>
-            Cancioneta funciona offline. Exportá lo que quieras conservar.
+            {HOME_TEXT.privacyBody}
           </AppText>
         </View>
       </View>

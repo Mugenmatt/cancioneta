@@ -29,3 +29,7 @@ export function entrancePose(entrance: Entrance, reduceMotion: boolean): Entranc
 export function entranceDuration(reduceMotion: boolean): number {
   return reduceMotion ? motion.fast : motion.slow;
 }
+
+export function modalAnimation(reduceMotion: boolean): 'none' | 'fade' {
+  return reduceMotion ? 'none' : 'fade';
+}

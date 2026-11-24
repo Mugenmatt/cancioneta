@@ -11,7 +11,7 @@ import { SectionLabel } from '@/design/components/Primitives';
 import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
 import { GAME_FLOW_TEXT } from '@/content/gameFlow';
-import { GAME_REGISTRY, PHASE_LABEL, type GameMeta, type GamePhase } from '@/games/registry';
+import { GAME_REGISTRY, PHASE_LABEL, gameCounts, type GameMeta, type GamePhase } from '@/games/registry';
 
 const PHASES: GamePhase[] = ['fase0', 'original', 'nuevo'];
 
@@ -19,6 +19,7 @@ export default function GamesScreen() {
   const router = useRouter();
   const { colors } = useCoreTheme();
   const [query, setQuery] = useState('');
+  const counts = gameCounts();
 
   const games = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -32,14 +33,14 @@ export default function GamesScreen() {
     <Screen scroll contentStyle={{ paddingTop: spacing.md }}>
       <View style={styles.head}>
         <View style={{ flex: 1 }}>
-          <AppText variant="label" color={colors.accentCore}>Juegos</AppText>
-          <AppText variant="title" style={{ marginTop: 4 }}>Formas de empezar</AppText>
+          <AppText variant="label" color={colors.accentCore}>{GAME_FLOW_TEXT.games}</AppText>
+          <AppText variant="title" style={{ marginTop: 4 }}>{GAME_FLOW_TEXT.gamesSubtitle}</AppText>
           <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 4 }}>
-            31 juegos, 5 ejercicios de calentamiento.
+            {GAME_FLOW_TEXT.overview(counts.games, counts.fase0)}
           </AppText>
         </View>
         <View style={[styles.count, { backgroundColor: colors.accentSoft }]}>
-          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>36</AppText>
+          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>{counts.total}</AppText>
         </View>
       </View>
 
@@ -48,14 +49,14 @@ export default function GamesScreen() {
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Buscar por nombre, tema o consigna…"
+          placeholder={GAME_FLOW_TEXT.searchPlaceholder}
           placeholderTextColor={colors.textMuted}
-          accessibilityLabel="Buscar juegos"
+          accessibilityLabel={GAME_FLOW_TEXT.searchLabel}
           style={[styles.searchInput, { color: colors.textPrimary, fontFamily: fonts.sans }]}
           autoCorrect={false}
         />
         {query ? (
-          <Pressable accessibilityRole="button" accessibilityLabel="Limpiar búsqueda" onPress={() => setQuery('')} style={styles.searchClear}>
+          <Pressable accessibilityRole="button" accessibilityLabel={GAME_FLOW_TEXT.clearSearch} onPress={() => setQuery('')} style={styles.searchClear}>
             <Feather name="x-circle" size={17} color={colors.textMuted} />
           </Pressable>
         ) : null}

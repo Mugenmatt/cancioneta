@@ -51,6 +51,21 @@ export const GAME_REGISTRY: GameMeta[] = [
   { id: 'g32', number: 32, name: 'Acróstico de azar', phase: 'nuevo', summary: 'Una letra por verso, una palabra escondida.', tags: ['acróstico', 'verso'], status: 'ready', themeId: 'g32' },
 ];
 
+export interface GameCounts {
+  games: number;
+  fase0: number;
+  total: number;
+}
+
+export function gameCounts(): GameCounts {
+  const fase0 = GAME_REGISTRY.filter((game) => game.phase === 'fase0').length;
+  return {
+    games: GAME_REGISTRY.length - fase0,
+    fase0,
+    total: GAME_REGISTRY.length,
+  };
+}
+
 export const PHASE_LABEL: Record<GamePhase, string> = {
   fase0: 'Fase 0 · Calentar',
   original: 'Los originales',

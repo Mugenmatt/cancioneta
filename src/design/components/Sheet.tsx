@@ -5,6 +5,7 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from '
 import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCoreTheme } from '../ThemeProvider';
+import { modalAnimation } from '../entrance';
 import { NAVIGATION_TEXT } from '../../content/app';
 import { minTouch, motion, radii, shadows, spacing } from '../tokens';
 import { AppText } from './Text';
@@ -49,7 +50,7 @@ export function Sheet({ visible, onClose, title, children, fullHeight = false }:
   }));
 
   return (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
+    <Modal visible={visible} transparent animationType={modalAnimation(reduceMotion)} onRequestClose={onClose} statusBarTranslucent>
       <View style={styles.root}>
         <Pressable style={[StyleSheet.absoluteFill, { backgroundColor: colors.overlay }]} onPress={onClose} accessibilityLabel={NAVIGATION_TEXT.close} />
         <Animated.View

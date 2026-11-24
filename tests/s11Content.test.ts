@@ -1,3 +1,5 @@
+import { GAME_FLOW_TEXT } from '@/content/gameFlow';
+import { HOME_TEXT } from '@/content/home';
 import { MATERIAL_TEXT } from '@/content/material';
 import { SETTINGS_TEXT } from '@/content/ajustes';
 import { ONBOARDING_PAGES, ONBOARDING_UI_TEXT } from '@/content/onboarding';
@@ -32,5 +34,22 @@ describe('textos de la dirección El cuaderno de medianoche', () => {
   it('ofrece un estado vacío para rimas', () => {
     expect(RIMAS_TEXT.idleTitle).toBe('Todavía no buscaste rimas');
     expect(RIMAS_TEXT.idle).toBe('Acá van a aparecer las rimas.');
+  });
+});
+
+describe('textos de inicio y listado de juegos', () => {
+  it('mueve el inicio a contenido en voseo es-AR', () => {
+    expect(HOME_TEXT.tagline).toBe('Cuaderno de canciones');
+    expect(HOME_TEXT.heroBody).toBe('Jugá, escribí, escuchá. Sin cuenta, sin nube, sin deberes.');
+    expect(HOME_TEXT.quick.warmup).toEqual({ title: 'Calentar', body: 'Fase 0' });
+    expect(HOME_TEXT.privacyTitle).toBe('Tu letra no se guarda al salir');
+  });
+
+  it('compone el resumen y la búsqueda del listado', () => {
+    expect(GAME_FLOW_TEXT.gamesSubtitle).toBe('Formas de empezar');
+    expect(GAME_FLOW_TEXT.overview(31, 5)).toBe('31 juegos, 5 ejercicios de calentamiento.');
+    expect(GAME_FLOW_TEXT.searchLabel).toBe('Buscar juegos');
+    expect(GAME_FLOW_TEXT.searchPlaceholder).toContain('consigna');
+    expect(GAME_FLOW_TEXT.clearSearch).toBe('Limpiar búsqueda');
   });
 });

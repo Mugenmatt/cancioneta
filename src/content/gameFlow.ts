@@ -1,5 +1,9 @@
 export const GAME_FLOW_TEXT = {
   games: 'Juegos',
+  gamesSubtitle: 'Formas de empezar',
+  overview: (games: number, fase0: number) => `${games} juegos, ${fase0} ejercicios de calentamiento.`,
+  searchPlaceholder: 'Buscar por nombre, tema o consigna…',
+  searchLabel: 'Buscar juegos',
   notFoundTitle: 'No encontramos ese juego',
   seeAll: 'Ver todos',
   emptySearchTitle: 'No hay juegos con esa búsqueda.',

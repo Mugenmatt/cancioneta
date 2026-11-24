@@ -5,22 +5,20 @@ import { Feather } from '@expo/vector-icons';
 import { AppText } from '@/design/components/Text';
 import { Pill } from '@/design/components/Primitives';
 import { ActionBar, Note } from './ui';
-import { useGameTheme } from '@/design/ThemeProvider';
+import { useCoreTheme, useGameTheme } from '@/design/ThemeProvider';
+import { modalAnimation } from '@/design/entrance';
 import { randomService } from '@/services/random/RandomService';
 import type { PoolItem } from '@/core/types';
 import { licenseLabel } from '@/content/games/common';
 import { IMAGES_TEXT } from '@/content/games/g19';
+import { PHOTO_INK, PHOTO_MODAL_BACKDROP, PHOTO_SCRIM, photoGradient } from '@/design/photoTokens';
 import { alpha, fonts, spacing } from '@/design/tokens';
 
 const IMAGE_HEADERS = { 'User-Agent': 'Cancioneta/1.0' };
 
-const PALETTES: [string, string][] = [
-  ['#7C8FA3', '#27384A'], ['#C66A4A', '#4A1D14'], ['#8A9B91', '#27352D'],
-  ['#9BA66D', '#38421F'], ['#7A6A9A', '#2A2038'], ['#D6B36A', '#5A3E12'],
-];
-
 export function ImagesGame() {
   const theme = useGameTheme('g19');
+  const { reduceMotion } = useCoreTheme();
   const [mode, setMode] = useState<'random' | 'thematic'>('random');
   const [images, setImages] = useState<(PoolItem | null)[]>([null, null, null]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -73,7 +71,7 @@ export function ImagesGame() {
       </View>
       <View style={styles.grid}>
         {images.map((item, index) => {
-          const palette = PALETTES[Number(item?.extra?.palette ?? index) % PALETTES.length];
+          const palette = photoGradient(item?.extra?.palette ?? index);
           return (
             <View key={index} style={styles.slot}>
               <Pressable accessibilityRole="button" accessibilityLabel={IMAGES_TEXT.open(item?.text ?? IMAGES_TEXT.titleFallback)} onPress={() => item && setOpenIndex(index)} style={styles.imageButton}>
@@ -86,10 +84,11 @@ export function ImagesGame() {
                       onError={() => item && setFailed((current) => ({ ...current, [item.fingerprint]: true }))}
                     />
                   ) : (
-                    <View style={[styles.form, { borderColor: alpha('#FFFFFF', 0.5) }]} />
+                    <View style={[styles.form, { borderColor: alpha(PHOTO_INK, 0.5) }]} />
                   )}
+                  <View style={styles.photoScrim} />
                   <AppText style={styles.number}>{String(Number(item?.extra?.seed ?? index + 1)).padStart(2, '0')}</AppText>
-                  <AppText variant="caption" color="#FFFFFF" style={{ fontFamily: fonts.sansSemiBold }}>
+                  <AppText variant="caption" color={PHOTO_INK} style={{ fontFamily: fonts.sansSemiBold }}>
                     {item?.text ?? IMAGES_TEXT.loading}
                   </AppText>
                 </LinearGradient>
@@ -110,13 +109,13 @@ export function ImagesGame() {
       </View>
       <ActionBar text={body} theme={theme} />
 
-      <Modal visible={openIndex !== null} transparent animationType="fade" onRequestClose={() => setOpenIndex(null)}>
+      <Modal visible={openIndex !== null} transparent animationType={modalAnimation(reduceMotion)} onRequestClose={() => setOpenIndex(null)}>
         <View style={styles.modal}>
           <Pressable accessibilityRole="button" accessibilityLabel={IMAGES_TEXT.close} onPress={() => setOpenIndex(null)} style={styles.close}>
-            <Feather name="x" size={26} color="#FFFFFF" />
+            <Feather name="x" size={26} color={PHOTO_INK} />
           </Pressable>
           {openIndex !== null ? (
-            <LinearGradient colors={PALETTES[Number(images[openIndex]?.extra?.palette ?? openIndex) % PALETTES.length]} style={styles.fullImage}>
+            <LinearGradient colors={photoGradient(images[openIndex]?.extra?.palette ?? openIndex)} style={styles.fullImage}>
               {images[openIndex]?.externalLink && !failed[images[openIndex]!.fingerprint] ? (
                 <Image
                   source={{ uri: images[openIndex]?.externalLink, headers: IMAGE_HEADERS }}
@@ -128,11 +127,12 @@ export function ImagesGame() {
                   }}
                 />
               ) : (
-                <View style={[styles.bigForm, { borderColor: alpha('#FFFFFF', 0.45) }]} />
+                <View style={[styles.bigForm, { borderColor: alpha(PHOTO_INK, 0.45) }]} />
               )}
+              <View style={styles.photoScrim} />
               <AppText style={styles.bigNumber}>{String(Number(images[openIndex]?.extra?.seed ?? openIndex + 1)).padStart(2, '0')}</AppText>
-              <AppText variant="label" color="#FFFFFF">{images[openIndex]?.text}</AppText>
-                <AppText variant="caption" color="#FFFFFF" style={{ marginTop: 6 }}>
+              <AppText variant="label" color={PHOTO_INK}>{images[openIndex]?.text}</AppText>
+                <AppText variant="caption" color={PHOTO_INK} style={{ marginTop: 6 }}>
                 {IMAGES_TEXT.bodyLine(images[openIndex]!, licenseLabel(images[openIndex]!.license))}
               </AppText>
             </LinearGradient>
@@ -150,12 +150,13 @@ const styles = StyleSheet.create({
   imageButton: { borderRadius: 14, overflow: 'hidden' },
   image: { aspectRatio: 0.72, padding: spacing.sm, justifyContent: 'flex-end' },
   form: { position: 'absolute', top: '18%', left: '18%', width: '55%', height: '42%', borderRadius: 999, borderWidth: 1 },
-  number: { position: 'absolute', top: 8, right: 9, fontFamily: fonts.sansBold, color: '#FFFFFF', fontSize: 11 },
+  number: { position: 'absolute', top: 8, right: 9, fontFamily: fonts.sansBold, color: PHOTO_INK, fontSize: 11 },
   replace: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 32, marginTop: 4 },
   source: { flexDirection: 'row', alignItems: 'flex-start', marginTop: spacing.md },
-  modal: { flex: 1, backgroundColor: 'rgba(0,0,0,0.9)', padding: spacing.lg, justifyContent: 'center' },
+  photoScrim: { ...StyleSheet.absoluteFill, backgroundColor: PHOTO_SCRIM },
+  modal: { flex: 1, backgroundColor: PHOTO_MODAL_BACKDROP, padding: spacing.lg, justifyContent: 'center' },
   close: { position: 'absolute', top: 48, right: 24, width: 44, height: 44, alignItems: 'center', justifyContent: 'center', zIndex: 2 },
   fullImage: { width: '100%', aspectRatio: 0.78, borderRadius: 22, padding: spacing.xl, justifyContent: 'flex-end', overflow: 'hidden' },
   bigForm: { position: 'absolute', top: '12%', left: '16%', width: '58%', height: '48%', borderRadius: 999, borderWidth: 1 },
-  bigNumber: { position: 'absolute', top: 18, right: 22, fontFamily: fonts.sansBold, color: '#FFFFFF', fontSize: 14 },
+  bigNumber: { position: 'absolute', top: 18, right: 22, fontFamily: fonts.sansBold, color: PHOTO_INK, fontSize: 14 },
 });

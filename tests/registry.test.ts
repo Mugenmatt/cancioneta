@@ -1,4 +1,4 @@
-import { GAME_REGISTRY, gameById, gameIds } from '@/games/registry';
+import { GAME_REGISTRY, gameById, gameCounts, gameIds } from '@/games/registry';
 import { ONBOARDING_PAGES } from '@/content/onboarding';
 
 describe('catálogo de juegos', () => {
@@ -22,6 +22,10 @@ describe('catálogo de juegos', () => {
   it('expone los juegos numerados habilitados', () => {
     const numbered = GAME_REGISTRY.filter((game) => game.phase !== 'fase0');
     expect(numbered.every((game) => game.status === 'ready')).toBe(true);
+  });
+
+  it('deriva los contadores del registro', () => {
+    expect(gameCounts()).toEqual({ games: 31, fase0: 5, total: 36 });
   });
 });
 

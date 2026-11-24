@@ -1,4 +1,4 @@
-import { entranceDuration, entrancePose } from '@/design/entrance';
+import { entranceDuration, entrancePose, modalAnimation } from '@/design/entrance';
 import type { Entrance } from '@/design/themes';
 import { motion, spacing } from '@/design/tokens';
 
@@ -26,5 +26,10 @@ describe('pose de entrada de los temas', () => {
   it('usa las duraciones de movimiento del sistema', () => {
     expect(entranceDuration(false)).toBe(motion.slow);
     expect(entranceDuration(true)).toBe(motion.fast);
+  });
+
+  it('desactiva el fundido del modal con reducir movimiento', () => {
+    expect(modalAnimation(false)).toBe('fade');
+    expect(modalAnimation(true)).toBe('none');
   });
 });

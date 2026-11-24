@@ -137,6 +137,14 @@ export const lineHeights = {
   reading: 1.55,
 } as const;
 
+export const letterSpacing = {
+  hero: -1.2,
+  display: -0.8,
+  title: -0.4,
+  label: 1.4,
+  button: 1.1,
+} as const;
+
 export const motion = {
   fast: 120,
   base: 240,

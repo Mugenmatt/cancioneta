@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useCoreTheme } from '../ThemeProvider';
-import { alpha, minTouch, radii, spacing } from '../tokens';
+import { alpha, fontSizes, letterSpacing, minTouch, radii, semanticRoles, spacing } from '../tokens';
 import { AppText } from './Text';
 
 type Tone = 'primary' | 'secondary' | 'ghost' | 'danger' | 'onAccent';
@@ -38,16 +38,17 @@ export function Button({
   accessibilityHint,
   testID,
 }: ButtonProps) {
-  const { colors } = useCoreTheme();
-  const accentColor = accent ?? colors.accentCore;
-  const accentText = accentInk ?? '#FFFFFF';
+  const { mode } = useCoreTheme();
+  const roles = semanticRoles[mode];
+  const accentColor = accent ?? roles['accent.brand'];
+  const accentText = accentInk ?? roles['accent.onAccent'];
 
   const palette: Record<Tone, { bg: string; fg: string; border: string }> = {
     primary: { bg: accentColor, fg: accentText, border: accentColor },
     onAccent: { bg: accentText, fg: accentColor, border: accentText },
     secondary: { bg: 'transparent', fg: accentColor, border: accentColor },
-    ghost: { bg: 'transparent', fg: colors.textSecondary, border: 'transparent' },
-    danger: { bg: 'transparent', fg: colors.stateError, border: alpha(colors.stateError, 0.35) },
+    ghost: { bg: 'transparent', fg: roles['ink.secondary'], border: 'transparent' },
+    danger: { bg: 'transparent', fg: roles['state.error'], border: alpha(roles['state.error'], 0.35) },
   };
   const p = palette[tone];
 
@@ -80,7 +81,7 @@ export function Button({
           <AppText
             variant="label"
             color={p.fg}
-            style={[styles.label, small && { fontSize: 11 }, icon ? { marginLeft: spacing.xs } : null]}
+            style={[styles.label, small && { fontSize: fontSizes.caption }, icon ? { marginLeft: spacing.xs } : null]}
           >
             {label}
           </AppText>
@@ -101,6 +102,6 @@ const styles = StyleSheet.create({
   },
   regular: { paddingVertical: 14 },
   small: { paddingVertical: 8, paddingHorizontal: spacing.md },
-  label: { letterSpacing: 1.1 },
+  label: { letterSpacing: letterSpacing.button },
   row: { flexDirection: 'row', alignItems: 'center' },
 });

@@ -1,8 +1,12 @@
 import { type PropsWithChildren } from 'react';
 import { ScrollViewStyleReset, useServerDocumentContext } from 'expo-router/html';
 import { APP_META } from '@/content/app';
+import { spacing } from '@/design/tokens';
 
 const SW_REGISTRATION = "if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}";
+
+const FOCUS_RING_WIDTH = spacing.xxs / 2;
+const FOCUS_VISIBLE_CSS = `[role="tab"]:focus-visible{outline-color:var(--focus-ring);outline-style:solid;outline-width:${FOCUS_RING_WIDTH}px;outline-offset:-${FOCUS_RING_WIDTH}px;}`;
 
 const WEB_FONTS = [
   ['Fraunces_400Regular', 'Fraunces_400Regular.ttf'],
@@ -37,6 +41,7 @@ export default function Root({ children }: PropsWithChildren) {
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="preload" href="/fonts/Feather.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <style id="expo-generated-fonts" dangerouslySetInnerHTML={{ __html: WEB_FONTS }} />
+        <style id="tab-focus-visible" dangerouslySetInnerHTML={{ __html: FOCUS_VISIBLE_CSS }} />
         <ScrollViewStyleReset />
         {headNodes}
       </head>

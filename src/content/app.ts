@@ -11,6 +11,14 @@ export const NAVIGATION_TEXT = {
   back: 'Volver',
 } as const;
 
+export const TAB_LABELS = {
+  home: 'Inicio',
+  rhymes: 'Rimas',
+  chords: 'Acordes',
+  games: 'Juegos',
+  write: 'Escribir',
+} as const;
+
 export const CHORDS_TEXT = {
   volume: 'Volumen',
   metronomeVolume: 'Volumen del metrónomo',

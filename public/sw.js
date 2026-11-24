@@ -8,6 +8,17 @@ const GAME_IDS = [
   'g32',
 ];
 const STATIC_FILES = [
+  '/fonts/Fraunces_400Regular.ttf',
+  '/fonts/Fraunces_400Regular_Italic.ttf',
+  '/fonts/Fraunces_700Bold.ttf',
+  '/fonts/Literata_400Regular.ttf',
+  '/fonts/Literata_400Regular_Italic.ttf',
+  '/fonts/Literata_600SemiBold.ttf',
+  '/fonts/Inter_400Regular.ttf',
+  '/fonts/Inter_500Medium.ttf',
+  '/fonts/Inter_600SemiBold.ttf',
+  '/fonts/Inter_700Bold.ttf',
+  '/fonts/Feather.ttf',
   '/manifest.webmanifest',
   '/apple-touch-icon.png',
   '/icon-192.png',

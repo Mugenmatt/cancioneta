@@ -2,6 +2,26 @@
 
 Convenciones en `README.md`. Cada módulo ya define sus criterios en su documento; acá se consolidan, se ordenan y se agregan las pruebas transversales.
 
+## 0. Estado del cierre (S17/S18) — 24 de noviembre de 2026
+
+Estado: **verificaciones automáticas al día; QA en dispositivo pendiente**. Nada de lo que sigue reemplaza una prueba manual en teléfono.
+
+| Ítem | Estado real | Evidencia |
+|---|---|---|
+| Temas | 36 implementados: 5 de Fase 0 y 31 Juegos (g01–g30 y g32) | `src/design/themes.ts`, `src/games/registry.ts:60-67` |
+| G-31 | Pendiente: sin tema, ruta ni lógica. Aparece como entrada `pending` en `/dev/gallery`, con 37 tarjetas en total | `src/design/galleryAudit.ts:50-56`, `tests/devGallery.test.ts:6-14` |
+| Contraste AA claro/oscuro | Auditoría de tokens: 36 temas × 2 modos × 3 roles de texto × 3 fondos = 648 comparaciones, 0 fuera de AA (piso 4,5:1) | `src/design/galleryAudit.ts:63-83`, `tests/devGallery.test.ts:30-35`, `tests/semanticRolesContrast.test.ts` |
+| Texto al 200 % | `AppText` habilita escalado hasta 2×; el layout de acordes pasa a una columna a 2× y tiene prueba. La revisión global de cortes y solapes sigue siendo manual | `src/design/components/Text.tsx:44-49`, `src/music/components/chordCardLayout.ts`, `tests/chordCardLayout.test.ts` |
+| Reduce Motion | Preferencia en Ajustes persistida en el store; elimina traslaciones, giros y deslizamientos en entradas, hojas, botones y dados. Hay pruebas de las funciones puras; falta probar el toggle y su persistencia | `app/ajustes.tsx`, `src/design/entrance.ts`, `tests/designEntrance.test.ts` |
+| Offline web | `/sw.js` precachea el shell, el manifiesto, los iconos y las 11 fuentes `.ttf` desde la primera visita; navegación network-first con fallback y assets cache-first | `public/sw.js`, `app/+html.tsx`, `WEB_PWA_AUDIT_REPORT.md` |
+| Verificación automática | `npm test`: 46 suites y 196 pruebas; `npm run lint` y `npm run typecheck`: sin errores; export web estático correcto | Resultado real de esta sesión |
+
+G-31 no se cuenta como implementado: `/juego/g31` no existe (`WEB_PWA_AUDIT_REPORT.md:14`). La plantilla del §6 se aplica a las 36 entradas con tema registrado (31 Juegos y 5 de Fase 0); para G-31 queda en suspenso hasta que haya una decisión y una implementación.
+
+En Safari iOS la transcripción usa Web Speech API con soporte parcial: no se puede afirmar que sea on-device ni que el audio no salga del dispositivo en web. La alternativa manual sigue siendo la opción segura (`WEB_PWA_AUDIT_REPORT.md:29`).
+
+Pendiente explícito: QA físico en iPhone (ver `QA_IPHONE.md`), instalación PWA y arranque offline reales, deploy en Vercel y la aclaración de `IMPLEMENTATION_STATUS.md`, que todavía describe G-31 como implementado.
+
 ## 1. Estrategia
 
 | Nivel | Qué prueba | Herramienta [REC] | Cuándo corre |
@@ -18,7 +38,7 @@ Regla: **lógica pura = prueba automática obligatoria.** Interfaz y sensaciones
 
 ## 2. Dispositivos de prueba
 - **Android:** al menos un teléfono físico de gama media y uno de gama baja, o el emulador para flujos no sensibles al rendimiento o al audio. El audio y los gestos se prueban **siempre en teléfono físico**.
-- **iOS:** diferido (D-01). Cuando exista, repetir las pruebas manuales en un iPhone de gama media y en uno compacto.
+- **iOS:** diferido (D-01). Cuando exista, repetir las pruebas manuales en un iPhone de gama media y en uno compacto. Estado al cierre en `QA_IPHONE.md`: **pendiente, no aprobado**.
 - Tamaños de pantalla: compacta, estándar y grande; texto del sistema al 100 % y al 200 %; modo claro y oscuro; modo avión.
 
 ## 3. Trazabilidad con las reglas fundamentales del encargo
@@ -134,6 +154,8 @@ Regla: **lógica pura = prueba automática obligatoria.** Interfaz y sensaciones
 6. Alternativa en botones para cada gesto de deslizar.
 7. No se transmite información solo con color.
 
+Estado del cierre: los controles 2 a 4 tienen auditoría automática de tokens y layout (§0); los controles 1 y 5 a 7 requieren revisión manual y siguen pendientes en iPhone.
+
 ### 5.2 Rendimiento
 | Métrica | Objetivo [REC] |
 |---|---|
@@ -157,7 +179,9 @@ Regla: **lógica pura = prueba automática obligatoria.** Interfaz y sensaciones
 - Resultado de la consulta legal aplicado: sin citas de obras protegidas en los paquetes salvo las autorizadas.
 - Atribuciones completas: piano, fuentes, íconos, imágenes y léxico.
 
-## 6. Plantilla de aceptación por Juego (aplicar a los 32 + 5 de Fase 0)
+## 6. Plantilla de aceptación por Juego (aplicar a los 36 implementados: 31 Juegos + 5 de Fase 0)
+
+G-31 queda fuera de esta plantilla hasta que deje de estar pendiente en `/dev/gallery` (§0).
 
 | # | Control | Aprobado |
 |---|---|---|

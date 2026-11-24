@@ -1,6 +1,17 @@
 # QA en iPhone — instrucciones y checklist
 
-Estado: **preparado, NO ejecutado**. Esta app todavía no fue instalada ni probada en un iPhone real.
+Estado: **pendiente, NO aprobado**. Esta app todavía no fue instalada ni probada en un iPhone real.
+
+## Estado documental del cierre (S18)
+
+Verificado por código, tests y export, **no en dispositivo**:
+
+- 36 temas implementados: 5 de Fase 0 y 31 Juegos (g01–g30 y g32). G-31 sigue pendiente, sin tema, ruta ni lógica; en `/dev/gallery` aparece como tarjeta «Pendiente» junto a las 36 reales (`src/design/galleryAudit.ts:40-61`, `tests/devGallery.test.ts`).
+- Contraste AA en claro y oscuro: 648 comparaciones de tokens (36 temas × 2 modos × 3 roles de texto × 3 fondos), sin fallas bajo el piso de 4,5:1 (`src/design/galleryAudit.ts:63-83`). No reemplaza la observación visual en pantalla real.
+- Texto al 200 %: `AppText` habilita escalado hasta 2× y el layout de acordes tiene prueba a 2× (`tests/chordCardLayout.test.ts`). Falta revisar cortes y solapes en todas las pantallas.
+- Reduce Motion: preferencia en Ajustes, persistida y aplicada a entradas, hojas, botones y dados, con pruebas de funciones puras (`tests/designEntrance.test.ts`). Falta probar el toggle y su persistencia en el dispositivo.
+- Offline: `/sw.js` precachea el shell, el manifiesto, los iconos y las 11 fuentes `.ttf` desde la primera visita. No se verificó el offline real ni la instalación «Agregar a pantalla de inicio».
+- Comandos de esta sesión: `npm test` (46 suites y 196 pruebas), `npm run lint` y `npm run typecheck` sin errores; export web estático correcto.
 
 ## Restricción actual
 
@@ -11,6 +22,7 @@ Configuración ya revisada en `app.json`:
 - Permisos iOS: micrófono y reconocimiento de voz con texto en español.
 - `LSApplicationQueriesSchemes: ["whatsapp"]` para abrir WhatsApp desde G-23.
 - Plugins: `expo-router`, `expo-splash-screen`, `expo-audio`, `expo-sharing`, `expo-speech-recognition`. `expo-document-picker` no necesita plugin para importar desde Archivos.
+- `react-native-keyboard-controller` (KeyboardProvider en `app/_layout.tsx:7,71-78`) no requiere plugin en `app.json`: el paquete 1.22.7 no incluye config plugin y se vincula por autolinking. En web usa las implementaciones no nativas de `bindings.ts`, y el export web compila sin errores.
 - `eas.json`: `cli.appVersionSource: "remote"` y perfil `preview` con `distribution: "internal"`.
 - Estado verificado en archivos: los tres valores pedidos ya están presentes. No se lanzó ningún build ni se instaló la app en un iPhone.
 
@@ -90,6 +102,8 @@ Marcar solo después de ejecutar la prueba en el iPhone.
 
 ### Juegos auditados
 
+Solo G-01, G-14 y G-23 están implementados y pendientes de prueba en dispositivo.
+
 - [ ] G-01: aparecen 3 columnas de 10; ninguna palabra se repite; regenerar una columna no cambia las otras; regenerar todo respeta la no repetición.
 - [ ] G-01: las fichas se leen cómodamente en pantalla de iPhone y los botones son tocables.
 - [ ] G-14: se muestra solo el sustantivo; «Sin categoría» y las cinco categorías funcionan; «Otro sustantivo» no repite el anterior inmediato.
@@ -100,6 +114,11 @@ Marcar solo después de ejecutar la prueba en el iPhone.
 - [ ] G-23: guardar `.mapa.json`, compartirlo, importarlo desde Archivos con el selector y también pegando el JSON; volver a abrirlo y comprobar que no queda una copia temporal. El JSON incluye `schema`, `version`, `connections` y `positions`.
 - [ ] G-23: exportar imagen y PDF; compartir por WhatsApp con la app instalada y sin ella.
 - [ ] G-23: rendimiento del lienzo con 121 nodos sin congelamiento.
+
+### G-31 — pendiente, no auditable todavía
+
+G-31 no está implementado: no tiene tema, ruta ni lógica. Estos ítems se conservan como requisito a futuro y **no se pueden tachar** hasta que exista una build que los incluya; `/dev/gallery` lo muestra como «Pendiente».
+
 - [ ] G-31: tablero 8×8; selección en 8 direcciones; no repetir casilla; tocar una casilla ya usada recorta el camino.
 - [ ] G-31: validar palabras con el léxico real; `ñ` se conserva (`año`), tildes se comparan sin acento y `qu` cuenta como una ficha.
 - [ ] G-31: la grilla muestra el mensaje de garantía solo cuando realmente se genera el mínimo de 20 palabras; «Nueva grilla» reinicia la lista.
@@ -116,10 +135,31 @@ Marcar solo después de ejecutar la prueba en el iPhone.
 ### Accesibilidad y layout
 
 - [ ] VoiceOver lee botones y estímulos; no hay controles sin etiqueta.
-- [ ] Texto dinámico grande no rompe G-01, G-23 ni G-31.
+- [ ] Texto dinámico grande no rompe G-01 ni G-23 (G-31 está pendiente).
 - [ ] Rotación y notch: nada se corta; la app está fijada a portrait.
-- [ ] Modo claro y oscuro mantienen contraste.
+- [ ] Modo claro y oscuro mantienen contraste (la auditoría automática de tokens no reemplaza la revisión visual).
+- [ ] Reducir movimiento: activar en Ajustes, verificar que no haya animaciones espaciales en entradas, hojas, botones ni dados, y comprobar que la preferencia persiste al reabrir.
+
+### PWA en iPhone Safari (no ejecutado)
+
+- [ ] Instalar con «Compartir → Agregar a pantalla de inicio» y comprobar que abre a pantalla completa.
+- [ ] Visitar con red y después activar modo avión: navegar por Juegos y verificar que carguen el shell, los estilos y las 11 fuentes `.ttf` desde el service worker.
+- [ ] Recargar en modo avión: sin contenido en blanco ni fuentes de reemplazo.
+- [ ] Comprobar que `/juego/g31` no existe y que `/dev/gallery` muestra G-31 como pendiente.
+- [ ] Transcripción: confirmar el soporte parcial de Web Speech en Safari iOS; no afirmar que es on-device ni usarlo como garantía de privacidad.
 
 ## Registro de QA
 
 No tachar ningún ítem por inferencia. Cada ítem requiere fecha, iPhone/modelo, iOS version y observación real. Mientras no exista ese registro, el estado del QA físico es **pendiente**.
+
+| Ítems | Fecha | iPhone / modelo | iOS | Observación |
+|---|---|---|---|---|
+| Todos los de este documento | — | — | — | Sin dispositivo real; ningún ítem aprobado |
+
+## Queda pendiente
+
+1. Ejecutar el paso 1 (`npx expo-doctor`, `npm test`, `npm run lint`, `npm run typecheck`) y los pasos 2 a 7: login de EAS, registro del UDID, build `preview`, instalación interna y nueva build después de cada cambio.
+2. Completar en dispositivo real todas las casillas de permisos, Fase 0, G-01, G-14, G-23, editor/audio/exportación y accesibilidad, incluidos contraste visual, texto al 200 %, VoiceOver y Reduce Motion persistido.
+3. Probar en iPhone Safari la instalación PWA, el arranque offline con las 11 fuentes precacheadas y el comportamiento real de la transcripción Web Speech.
+4. Implementar G-31 antes de poder auditar sus cuatro ítems; hoy solo figura como pendiente en `/dev/gallery`.
+5. Verificar el deploy real en Vercel y aclarar `IMPLEMENTATION_STATUS.md`, que todavía describe G-31 como implementado.

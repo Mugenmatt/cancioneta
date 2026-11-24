@@ -1,12 +1,12 @@
 # AGENTS.md — App de composición de canciones
 
 ## Qué es este proyecto
-App mobile (Android primero, iOS-ready) para componer canciones con 32 Juegos creativos, acordes con piano y estructuras poéticas. La documentación completa está en `docs/`. NO inventes decisiones: si algo no está en `docs/`, preguntá.
+App mobile (Android primero, iOS-ready) para componer canciones con 32 Juegos creativos, acordes con piano y estructuras poéticas. La documentación completa está en la raíz del repositorio (`docs/` está vacío). NO inventes decisiones: si algo no está en la documentación, preguntá.
 
 ## Reglas absolutas
-1. No cambies la esencia de ningún Juego (G-01 a G-32). Reglas literales en `docs/GAME_CATALOG.md`.
+1. No cambies la esencia de ningún Juego (G-01 a G-32). Reglas literales en `GAME_CATALOG.md`.
 2. No agregues IA generativa, cuentas de usuario, analíticas ni anuncios.
-3. No guardes letras, grabaciones ni textos del usuario de forma permanente. Todo vive en memoria o en carpeta temporal. Ver `docs/PRIVACY_AND_OFFLINE.md`.
+3. No guardes letras, grabaciones ni textos del usuario de forma permanente. Todo vive en memoria o en carpeta temporal. Ver `PRIVACY_AND_OFFLINE.md`.
 4. Prohibido `Math.random()` fuera de `src/services/random`. Toda aleatoriedad pasa por `RandomService`.
 5. Los Juegos NO se importan entre sí y NO tocan SQLite directamente. Usan servicios por interfaz.
 6. Ningún Juego modifica ni borra texto existente del editor sin acción explícita del usuario.
@@ -31,19 +31,19 @@ App mobile (Android primero, iOS-ready) para componer canciones con 32 Juegos cr
 - Un archivo de más de ~400 líneas se divide.
 
 ## Estructura
-`app/` rutas · `src/core` · `src/services` · `src/stores` · `src/design` · `src/editor` · `src/music` · `src/poetry` · `src/games/gNN-nombre` · `data/` · `scripts/` · `tests/` · `docs/`.
+`app/` rutas · `src/core` · `src/services` · `src/stores` · `src/design` · `src/editor` · `src/music` · `src/poetry` · `src/games/gNN-nombre` · `data/` · `scripts/` · `tests/`. La documentación está en la raíz; `docs/` existe pero está vacío.
 
 ## Comandos
 (Completar con los que detecte /init y los de la Etapa E0: `npm install`, `npx expo start`, `npm test`, `npm run lint`.)
 
-## Mapa de documentos (leer solo el que corresponda)
-- Producto: docs/PRODUCT_SPEC.md · Decisiones: docs/DECISIONS_AND_OPEN_QUESTIONS.md
-- Flujos: docs/USER_FLOWS.md · Juegos: docs/GAME_CATALOG.md, docs/GAME_ARCHITECTURE.md
-- Aleatoriedad: docs/RANDOMIZATION_SYSTEM.md · Datos: docs/LEXICAL_DATABASE_AND_APIS.md, docs/CONTENT_DATABASE.md
-- Música: docs/MUSIC_ENGINE.md · Editor: docs/LYRIC_EDITOR_AND_EXPORT.md
-- Poesía: docs/POETIC_STRUCTURES.md, docs/POETIC_RESOURCES.md
-- Diseño: docs/DESIGN_SYSTEM.md · Técnica: docs/TECHNICAL_ARCHITECTURE.md · Privacidad: docs/PRIVACY_AND_OFFLINE.md
-- Plan: docs/IMPLEMENTATION_ROADMAP.md · Pruebas: docs/QA_AND_ACCEPTANCE_TESTS.md
+## Mapa de documentos (en la raíz; leer solo el que corresponda)
+- Producto: PRODUCT_SPEC.md · Decisiones: DECISIONS_AND_OPEN_QUESTIONS.md
+- Flujos: USER_FLOWS.md · Juegos: GAME_CATALOG.md, GAME_ARCHITECTURE.md
+- Aleatoriedad: RANDOMIZATION_SYSTEM.md · Datos: LEXICAL_DATABASE_AND_APIS.md, CONTENT_DATABASE.md
+- Música: MUSIC_ENGINE.md · Editor: LYRIC_EDITOR_AND_EXPORT.md
+- Poesía: POETIC_STRUCTURES.md, POETIC_RESOURCES.md
+- Diseño: DESIGN_SYSTEM.md · Técnica: TECHNICAL_ARCHITECTURE.md · Privacidad: PRIVACY_AND_OFFLINE.md
+- Plan: IMPLEMENTATION_ROADMAP.md · Pruebas: QA_AND_ACCEPTANCE_TESTS.md
 
 ## Marcas en los documentos
 [REC] = recomendación · [VERIFICAR] = dato no confirmado: verificalo antes de usarlo · [BLOQUEANTE] = requiere decisión del usuario: preguntá.

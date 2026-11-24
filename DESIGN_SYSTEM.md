@@ -10,6 +10,16 @@ Estrategia [REC]: **sistema + temas, no 32 interfaces desde cero.**
 - Capa 2 — *Tema de Juego* (datos): paleta, tipografía de acento, fondo, textura, animación de entrada, iconografía.
 - Capa 3 — *Escena específica* (código): solo donde el Juego lo necesita (Mapa Mental, Dados, Cut-up, Collage textual, Cadena de letras, Canción Collage).
 
+### 1.1 Dirección aprobada: «El cuaderno de medianoche»
+
+Decisión cerrada en S0. Es la identidad del **núcleo** (Capa 1): los temas de Juego de §6 siguen vigentes, pero se leen dentro de esta paleta y esta voz tipográfica.
+
+- **Papel, tinta y brasa.** El papel cálido y la tinta son la base (§3.1); la brasa (`accent.core`) es el único acento de acción. Cálida, oscura y de cuaderno, no de oficina.
+- **Tres tipografías con roles fijos:** Fraunces solo en momentos de identidad, Literata para la escritura, Inter para la interfaz (§3.2).
+- **Wordmark:** «Cancioneta», resuelto en Fraunces como momento de identidad.
+- **Navegación:** «Material» permanece oculta de la tab bar; no es un destino visible (§4, §5).
+- **Proceso:** se trabaja directamente en código y se verifica en `/dev/gallery`; **sin Figma** (§7).
+
 ## 2. Principios
 1. **Escribir primero:** la zona de escritura es siempre legible, calma y sin ruido, aun en Juegos con estética fuerte.
 2. **Identidad en el estímulo, calma en el editor:** el color y la textura del Juego viven en la zona de estímulo y en el marco; el texto del usuario usa la tipografía de escritura común.
@@ -33,21 +43,23 @@ Modo **claro y oscuro** desde el inicio. Valores propuestos [REC], ajustables; t
 | `state.error` | #B42318 | #F97066 | Errores |
 | `state.success` | #2E7D32 | #66BB6A | Confirmaciones |
 
+Estos valores concretan «papel, tinta y brasa» (§1.1): papel = `bg.base`/`bg.raised`, tinta = `text.primary`/`text.secondary`, brasa = `accent.core`.
+
 Cada tema de Juego redefine un **juego de 4 colores**: `game.bg`, `game.surface`, `game.ink`, `game.accent` (con variante oscura). El editor usa siempre `bg.base`/`bg.raised` del núcleo para no perder legibilidad.
 
 ### 3.2 Tipografía
-Familias gratuitas (licencias abiertas) **[VERIFICAR licencia exacta de cada una antes de empaquetar]**; Expo ofrece paquetes de Google Fonts.
+Familias gratuitas (licencias abiertas) **[VERIFICAR licencia exacta de cada una antes de empaquetar]**; Expo ofrece paquetes de Google Fonts. Roles cerrados por la dirección aprobada (§1.1).
 
-| Rol | Propuesta | Uso |
+| Rol | Fuente (decidida) | Uso |
 |---|---|---|
-| Escritura (editor) | Una serif de lectura cómoda (p. ej., Source Serif, Literata) | Texto del usuario; tamaño base 18 pt |
-| Interfaz | Una sans humanista (p. ej., Inter, Figtree) | Botones, etiquetas, navegación |
-| Título editorial | Una serif de display (p. ej., Fraunces, DM Serif Display) | Pantallas de intro de Juego |
+| Escritura (editor) | **Literata** | Texto del usuario; tamaño base 18 pt |
+| Interfaz | **Inter** | Botones, etiquetas, navegación |
+| Momentos de identidad | **Fraunces** | Wordmark «Cancioneta» e intros de Juego; no se usa en el editor ni en la UI cotidiana |
 | Acento por Juego | Del conjunto cerrado de §6 | Solo en la zona de estímulo |
 
 Reglas:
 - Máximo **3 familias por pantalla**.
-- **Cerrar la lista de fuentes** (≈ 8–10 en total) para controlar el peso de la app.
+- **Base fija de 3 fuentes** (Literata, Inter, Fraunces); los acentos de Juego (§6) completan el total cerrado (≈ 8–10) para controlar el peso de la app. **[VERIFICAR]** licencias antes de empaquetar.
 - Escalas: soportar **Dynamic Type** / tamaño de fuente del sistema (hasta 200 % sin romper).
 - Español completo: tildes, `ñ`, `¿ ¡`, comillas « » y rayas verificados en cada fuente.
 
@@ -73,7 +85,7 @@ Escala de tamaños (pt): 12 / 14 / 16 / 18 / 22 / 28 / 36 / 48. Interlineado 1,3
 
 | Componente | Descripción | Estados |
 |---|---|---|
-| `AppTabBar` | Barra inferior: Inicio, Material, Acordes, Juegos, Escribir | activo, inactivo, insignia |
+| `AppTabBar` | Barra inferior: Inicio, Acordes, Juegos, Escribir. «Material» permanece oculta (§1.1) | activo, inactivo, insignia |
 | `GameIntro` | Plantilla de intro: título, objetivo, pasos, ejemplos, «Comenzar» | scroll largo, ejemplos desplegables |
 | `StimulusCard` | Tarjeta del estímulo con tipografía de acento | normal, cargando, agotado |
 | `SwipeableCard` | Deslizar izquierda/derecha + botones | arrastrando, cambiando |
@@ -92,7 +104,7 @@ Escala de tamaños (pt): 12 / 14 / 16 / 18 / 22 / 28 / 36 / 48. Interlineado 1,3
 Cada componente: variantes por tema, estados vacío/cargando/error, etiqueta de accesibilidad y objetivo táctil ≥ 44 pt.
 
 ## 5. Navegación y estructura
-- Barra inferior de 5 destinos (ver `USER_FLOWS.md` §1).
+- Barra inferior de 4 destinos: Inicio, Acordes, Juegos, Escribir; «Material» permanece oculta (§1.1). El detalle de flujos está en `USER_FLOWS.md` §1.
 - Botón flotante de nota musical para el reproductor, visible en todas las pantallas excepto en la propia Fase 1.
 - Hojas modales para selector de acordes, estructuras y ayuda.
 - Gestos: deslizar para cambiar estímulo; deslizar hacia abajo para cerrar hojas; pellizcar y arrastrar en lienzos.
@@ -154,8 +166,8 @@ Cada fila es la **dirección artística** que luego se concreta en `GameTheme`. 
 | Háptica | Módulo de háptica de Expo | |
 | Degradados y desenfoque | Módulos de Expo | Usar con moderación |
 | Ilustraciones | Propias o con licencia libre | Sin IA generativa en el producto |
-| Galería de componentes | Pantalla interna `/dev/gallery` que muestra cada componente en cada tema/estado | Para que OpenCode verifique visualmente |
-| Prototipado visual | Figma (plan gratuito) o bocetos en papel [REC] | El usuario decide; la implementación sigue los tokens |
+| Galería de componentes | Pantalla interna `/dev/gallery` que muestra cada componente en cada tema/estado | Fuente de verdad de la verificación visual; se trabaja directamente en código |
+| Prototipado visual | Sin Figma: se implementa en código y se revisa en `/dev/gallery` (decisión S0, §1.1) | La implementación sigue los tokens |
 
 ### Skills y guías para OpenCode
 OpenCode puede cargar **skills** (carpetas con `SKILL.md`) desde `.opencode/skills/<nombre>/`, y también reconoce `.claude/skills/` y `.agents/skills/`, además de leer `AGENTS.md`. Propuesta de skills propias (a crear en la Etapa 0 del roadmap):
@@ -203,7 +215,10 @@ Cercano, claro y respetuoso; voseo rioplatense («tocá», «elegí»); sin tecn
 8. La atribución de fuentes, íconos, imágenes y piano figura en «Créditos y licencias».
 Más pruebas en `QA_AND_ACCEPTANCE_TESTS.md` (tanda 5).
 
-## 13. Preguntas abiertas
-1. ¿Hay preferencia por una paleta o referencia estética general (más oscura, más cálida, más lúdica)?
-2. ¿Querés mockups en Figma antes de implementar, o se trabaja directamente en código con la galería?
-3. Elección final y verificación de licencias de fuentes e íconos.
+## 13. Preguntas abiertas — cerradas en S0
+
+Decisión de referencia: «El cuaderno de medianoche» (§1.1).
+
+1. **Paleta / referencia estética — CERRADA.** «El cuaderno de medianoche»: papel, tinta y brasa (§3.1). Cálida, oscura y de cuaderno.
+2. **Figma vs. código — CERRADA.** Se trabaja directamente en código y se verifica en `/dev/gallery`; sin Figma (§7).
+3. **Fuentes e íconos — elección CERRADA; licencias [VERIFICAR].** Fuentes: Fraunces (identidad), Literata (escritura), Inter (interfaz). Íconos: familia de código abierto (p. ej., Lucide o Phosphor). **[VERIFICAR]** licencias exactas de fuentes e íconos antes de empaquetar (§3.2, §7).

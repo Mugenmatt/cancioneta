@@ -119,6 +119,18 @@ export const radii = {
   chip: 999,
 } as const;
 
+export const shadows = {
+  color: '#000000',
+  sheet: {
+    shadowOpacity: 0.2, shadowRadius: spacing.lg,
+    shadowOffset: { width: 0, height: -spacing.xs }, elevation: 20,
+  },
+  raised: {
+    shadowOpacity: 0.18, shadowRadius: 10,
+    shadowOffset: { width: 0, height: spacing.xxs }, elevation: 4,
+  },
+} as const;
+
 export const fontSizes = {
   caption: 12,
   small: 14,

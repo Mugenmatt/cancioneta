@@ -4,7 +4,7 @@ import { Animated, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCoreTheme } from '../ThemeProvider';
-import { radii, spacing } from '../tokens';
+import { motion, radii, shadows, spacing } from '../tokens';
 import { AppText } from './Text';
 
 interface SheetProps {
@@ -16,20 +16,26 @@ interface SheetProps {
 }
 
 export function Sheet({ visible, onClose, title, children, fullHeight = false }: SheetProps) {
-  const { colors } = useCoreTheme();
-  const [translate] = useState(() => new Animated.Value(40));
+  const { colors, reduceMotion } = useCoreTheme();
+  const offset = spacing.xl + spacing.xs;
+  const [translate] = useState(() => new Animated.Value(offset));
   const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     if (visible) {
-      translate.setValue(40);
+      translate.setValue(offset);
       opacity.setValue(0);
+      if (reduceMotion) {
+        translate.setValue(0);
+        opacity.setValue(1);
+        return;
+      }
       Animated.parallel([
         Animated.spring(translate, { toValue: 0, useNativeDriver: true, friction: 12 }),
-        Animated.timing(opacity, { toValue: 1, duration: 180, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 1, duration: motion.base, useNativeDriver: true }),
       ]).start();
     }
-  }, [visible, translate, opacity]);
+  }, [visible, reduceMotion, offset, translate, opacity]);
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
@@ -39,7 +45,12 @@ export function Sheet({ visible, onClose, title, children, fullHeight = false }:
           style={[
             styles.sheet,
             fullHeight ? styles.full : styles.auto,
-            { backgroundColor: colors.bgRaised, transform: [{ translateY: translate }], opacity },
+            {
+              backgroundColor: colors.bgRaised,
+              shadowColor: shadows.color,
+              transform: [{ translateY: translate }],
+              opacity,
+            },
           ]}
         >
           <SafeAreaView edges={['bottom']} style={{ flex: fullHeight ? 1 : undefined }}>
@@ -66,8 +77,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, justifyContent: 'flex-end' },
   sheet: {
     borderTopLeftRadius: radii.sheet, borderTopRightRadius: radii.sheet,
-    maxHeight: '92%', shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 24,
-    shadowOffset: { width: 0, height: -8 }, elevation: 20,
+    maxHeight: '92%', ...shadows.sheet,
   },
   auto: { paddingBottom: spacing.xs },
   full: { height: '88%' },

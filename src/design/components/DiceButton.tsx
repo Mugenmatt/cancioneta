@@ -3,6 +3,7 @@ import { Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useCoreTheme } from '../ThemeProvider';
+import { motion, semanticRoles, shadows } from '../tokens';
 import { AppText } from './Text';
 
 interface DiceButtonProps {
@@ -15,7 +16,7 @@ interface DiceButtonProps {
 }
 
 export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabled, compact = false }: DiceButtonProps) {
-  const { colors, reduceMotion } = useCoreTheme();
+  const { mode, colors, reduceMotion } = useCoreTheme();
   const [rotate] = useState(() => new Animated.Value(0));
   const [scale] = useState(() => new Animated.Value(1));
   const color = accent ?? colors.accentCore;
@@ -26,9 +27,9 @@ export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabl
       rotate.setValue(0);
       scale.setValue(1);
       Animated.parallel([
-        Animated.timing(rotate, { toValue: 1, duration: 520, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
+        Animated.timing(rotate, { toValue: 1, duration: motion.slow, easing: Easing.out(Easing.cubic), useNativeDriver: true }),
         Animated.sequence([
-          Animated.timing(scale, { toValue: 1.12, duration: 140, useNativeDriver: true }),
+          Animated.timing(scale, { toValue: 1.12, duration: motion.fast, useNativeDriver: true }),
           Animated.spring(scale, { toValue: 1, friction: 4, useNativeDriver: true }),
         ]),
       ]).start();
@@ -47,8 +48,13 @@ export function DiceButton({ onPress, label = 'Tirar', accent, accentInk, disabl
       onPress={press}
       style={({ pressed }) => [styles.wrap, compact && styles.compact, pressed && { opacity: 0.8 }, disabled && { opacity: 0.6 }]}
     >
-      <Animated.View style={[styles.square, { backgroundColor: color, transform: [{ rotate: spin }, { scale }] }]}>
-        <Feather name="shuffle" size={compact ? 20 : 26} color={accentInk ?? '#241407'} />
+      <Animated.View
+        style={[
+          styles.square,
+          { backgroundColor: color, shadowColor: shadows.color, transform: [{ rotate: spin }, { scale }] },
+        ]}
+      >
+        <Feather name="shuffle" size={compact ? 20 : 26} color={accentInk ?? semanticRoles[mode]['accent.onAccent']} />
       </Animated.View>
       {compact ? null : (
         <View style={{ marginLeft: 10 }}>
@@ -65,6 +71,6 @@ const styles = StyleSheet.create({
   compact: { minHeight: 40 },
   square: {
     width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOpacity: 0.18, shadowRadius: 10, shadowOffset: { width: 0, height: 4 }, elevation: 4,
+    ...shadows.raised,
   },
 });

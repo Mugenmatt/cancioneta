@@ -1,0 +1,22 @@
+export const G36_TEXT = {
+  intro: 'Tres ruedas: estilo, compás y estructura. Bloqueá la que quieras conservar y volvé a tirar las demás. Es solo una consigna: no se reproduce audio.',
+  wheels: {
+    style: 'Estilo o género',
+    meter: 'Compás',
+    structure: 'Estructura',
+  },
+  rollAll: 'Tirar las tres',
+  rollOne: (wheel: string) => `Tirar ${wheel.toLowerCase()}`,
+  lock: (wheel: string) => `Bloquear ${wheel.toLowerCase()}`,
+  unlock: (wheel: string) => `Desbloquear ${wheel.toLowerCase()}`,
+  lockedHint: 'Bloqueada',
+  loading: 'Tirando ruedas…',
+  consigna: (summary: string) => `Escribí una canción con esta forma: ${summary}.`,
+  editorTitle: (summary: string) => `Ruleta de forma: ${summary}`,
+  groupStyle: 'Estilo o género',
+  groupMeter: 'Compás',
+  groupStructure: 'Estructura',
+  editorNote: 'Es una consigna de forma, sin audio ni reproducción. Respetá las tres ruedas elegidas.',
+  send: 'Llevar al cuaderno',
+  privacy: 'Las ruedas y la letra viven solo en memoria. Si cerrás la app, se pierden.',
+} as const;

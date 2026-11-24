@@ -301,6 +301,42 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
     ],
     examples: ['Palabra: "llave" → "Llevo la llave equivocada y abro igual".', 'Palabra inventada: "ventolera" → "Ventolera de papel en el bolsillo".'],
   },
+  'g34': {
+    steps: [
+      'Mirá los tres ejes: persona gramatical, distancia y fiabilidad.',
+      'Tocá «Otra…» en el eje que quieras cambiar; los otros dos quedan quietos.',
+      'Si querés, sumá un tema del banco como ayuda opcional.',
+      'Escribí la canción sosteniendo los tres ejes y llevá el texto al cuaderno.',
+    ],
+    examples: ['Primera persona · otro lugar · mentiroso → «Vine a contar otra cosa».', 'Tercera persona · otra época · cínico → «Decía que sí, pero esperaba el golpe».'],
+  },
+  'g35': {
+    steps: [
+      'Mirá los ocho moldes: cada uno muestra sus letras y un ejemplo original de cuatro versos.',
+      'Tocá una tarjeta para elegirlo o tocá «Sortear molde» para cambiarlo por azar.',
+      'El esquema elegido queda fijo arriba del cuaderno mientras escribís.',
+      'No hay detección automática de rimas: la consigna es una guía.',
+    ],
+    examples: ['ABAB: «Cayó la lluvia… / se apagó la luz…»', 'XXXR: tres versos sin rima y un último verso que vuelve igual.'],
+  },
+  'g36': {
+    steps: [
+      'Mirá las tres ruedas: estilo o género, compás y estructura.',
+      'Bloqueá una rueda si ya te sirve; las demás se pueden tirar de a una o todas juntas.',
+      'Los compases son 4/4, 3/4, 6/8 y 12/8; las estructuras van de la balada al estribillo primero.',
+      'Llevá la consigna al cuaderno y escribí: es solo una guía de forma, sin audio.',
+    ],
+    examples: ['Rock de garaje · 6/8 · con puente instrumental.', 'Milonga · 4/4 · sin estribillo.'],
+  },
+  'g37': {
+    steps: [
+      'Mirá el protagonista (animal u objeto) y el conflicto sorteados.',
+      'Podés cambiar uno por separado con «Otro protagonista» o «Otro conflicto».',
+      'Escribí entre 8 y 12 versos de fábula y cerrá con una moraleja de 2 versos.',
+      'El bloque de la moraleja queda marcado arriba del cuaderno mientras escribís.',
+    ],
+    examples: ['Protagonista: «Un reloj que siempre se adelanta».', 'Moraleja: «Llegar antes no es estar / donde uno quería estar».'],
+  },
   'g41': {
     steps: [
       'Leé el título breve que aparece y dejá que te despierte preguntas.',
@@ -318,5 +354,23 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
       'Después tocá «Ahora la buena»: el cuaderno abre vacío con la misma consigna.',
     ],
     examples: ['Consigna: "Escribí sobre un ascensor que se negaba a subir".', 'Primero cualquier cosa; después, la canción que sí querés escribir.'],
+  },
+  'g48': {
+    steps: [
+      'Elegí entre 4 y 6 versos para la escena.',
+      'Elegí si los planos van en orden (de panorámica a mirada subjetiva) o al azar.',
+      'Si querés, escribí un lugar o escena inicial como disparador.',
+      'Cada verso queda etiquetado con su plano en el panel del cuaderno.',
+    ],
+    examples: ['4 versos en orden: panorámica, plano general, plano medio, primer plano.', '6 versos al azar con escena inicial: «una estación vacía».'],
+  },
+  'g50': {
+    steps: [
+      'Mirá las tres emociones: verso, pre-estribillo y estribillo.',
+      'Tocá «Tirar las tres» para cambiar el arco completo.',
+      'Tocá «Otra emoción en…» en un bloque para cambiar solo ese; las otras dos quedan quietas.',
+      'Los tres bloques etiquetados quedan visibles arriba del cuaderno mientras escribís.',
+    ],
+    examples: ['Verso: nostalgia · Pre-estribillo: inquietud · Estribillo: esperanza.', 'Cambiar solo el estribillo por «alivio» deja los otros dos igual.'],
   },
 };

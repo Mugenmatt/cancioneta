@@ -3,11 +3,11 @@ import { gameThemes } from '@/design/themes';
 import { GAME_REGISTRY, gameIds } from '@/games/registry';
 
 describe('galería visual', () => {
-  it('muestra 40 tarjetas: 39 temas reales y G-31 pendiente', () => {
+  it('muestra 46 tarjetas: 45 temas reales y G-31 pendiente', () => {
     const entries = galleryEntries();
-    expect(entries).toHaveLength(40);
-    expect(new Set(entries.map((entry) => entry.id)).size).toBe(40);
-    expect(entries.filter((entry) => entry.status === 'ready')).toHaveLength(39);
+    expect(entries).toHaveLength(46);
+    expect(new Set(entries.map((entry) => entry.id)).size).toBe(46);
+    expect(entries.filter((entry) => entry.status === 'ready')).toHaveLength(45);
     expect(entries.filter((entry) => entry.status === 'pending').map((entry) => entry.id)).toEqual(['g31']);
     expect(entries.map((entry) => entry.id)).toEqual(expect.arrayContaining(gameIds()));
     expect(entries.find((entry) => entry.id === 'g31')?.theme).toBeUndefined();
@@ -27,7 +27,7 @@ describe('galería visual', () => {
     expect(ids.indexOf('g31')).toBeLessThan(ids.indexOf('g32'));
   });
 
-  it('cubre claro y oscuro con contraste AA en los 39 temas', () => {
+  it('cubre claro y oscuro con contraste AA en los 45 temas', () => {
     expect(GALLERY_MODES).toEqual(['light', 'dark']);
     const audit = auditGalleryContrast();
     expect(audit.checked).toBe(GAME_REGISTRY.length * GALLERY_MODES.length * 3 * 3);

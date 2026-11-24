@@ -208,6 +208,54 @@ Se registran con sus códigos acordados. `g31` sigue reservado y no aparece en e
 
 ---
 
+## Juegos ampliados (G-34, G-35, G-36, G-37, G-48, G-50)
+
+Se registran con los códigos acordados. No modifican la esencia ni la implementación de G-01 a G-32; `g31` sigue reservado. Todos los bancos nuevos son semillas originales de Cancioneta, sin letras ni textos protegidos.
+
+### G-34 Narrador
+- **Mecánica:** tres ejes independientes (persona gramatical, distancia y fiabilidad) que se pueden volver a tirar de a uno, sin alterar los otros dos. Tema opcional sorteado del banco existente `themes`.
+- **Datos:** pools `narrator_person` (3), `narrator_distance` (4) y `narrator_reliability` (4); tema opcional de `themes`.
+- **Sorteo:** `RandomService.draw(pool, 1)` por eje, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel con los tres ejes y, si se activó, el tema.
+- **Identidad:** ventanas y tres dados; paleta cálida con acento marrón.
+
+### G-35 Molde de rima
+- **Mecánica:** ocho tarjetas con esquemas (ABAB, AABB, ABBA, XAXA, AAA con última palabra repetida, AACBBC, rimas internas a mitad de verso y sin rima con último verso fijo). Cada tarjeta muestra el esquema con letras y un ejemplo original de cuatro versos. El usuario elige o sortea; el esquema queda fijo arriba del cuaderno. No se detectan rimas automáticamente.
+- **Datos:** pool `rhyme_schemes` con 8 semillas originales; ejemplos de cuatro versos escritos para esta app.
+- **Sorteo:** `RandomService.draw('rhyme_schemes', 1)`, excluyendo el esquema actual, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** esquema elegido arriba del cuaderno, con su explicación y el ejemplo original.
+- **Identidad:** cuadrícula de moldes; paleta fría con acento azul.
+
+### G-36 Ruleta de forma
+- **Mecánica:** tres ruedas independientes (estilo o género, compás y estructura) que se pueden bloquear y volver a tirar de a una o todas juntas. Compases: 4/4, 3/4, 6/8 y 12/8. Estructuras: solo estrofas tipo balada, verso-estribillo, con puente instrumental, estribillo primero y sin estribillo. Es solo una consigna, sin audio.
+- **Datos:** pools `form_styles` (24), `form_meters` (4) y `form_structures` (5), semillas originales.
+- **Sorteo:** `RandomService.draw(pool, 1)` por rueda; las ruedas bloqueadas conservan su valor.
+- **Estímulo visible durante la escritura:** panel con las tres ruedas elegidas y la aclaración de que no hay audio.
+- **Identidad:** tres ruedas con candado; paleta oscura con acento dorado.
+
+### G-37 Fábula
+- **Mecánica:** se sortean un protagonista (animal u objeto) y un conflicto, que se pueden cambiar por separado. El usuario escribe 8 a 12 versos de fábula y cierra con una moraleja de 2 versos.
+- **Datos:** pools `fable_protagonists` (24) y `fable_conflicts` (24), semillas originales.
+- **Sorteo:** `RandomService.draw(pool, 1)` por semilla, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel con protagonista y conflicto, y un bloque final marcado como «Moraleja (últimos 2 versos)».
+- **Identidad:** hoja de fábula y moraleja subrayada; paleta de papel con acento verde.
+
+### G-48 Plano a plano
+- **Mecánica:** el usuario elige entre 4 y 6 versos; la app asigna un plano (panorámica, plano general, plano medio, primer plano, plano detalle o mirada subjetiva) a cada verso, en orden o al azar. Lugar o escena inicial opcional. El editor etiqueta cada verso con su plano en el panel del estímulo.
+- **Datos:** seis planos fijos y originales en `src/content/games/g48.ts`; sin banco nuevo.
+- **Sorteo:** `RandomService.shuffle` para el modo al azar; sin `Math.random()` directo.
+- **Estímulo visible durante la escritura:** escena opcional y un grupo por verso con su etiqueta de plano.
+- **Identidad:** encuadre y lentes; paleta oscura con acento verde agua.
+
+### G-50 Arco emocional
+- **Mecánica:** se sortean tres emociones distintas asignadas a verso, pre-estribillo y estribillo. Se puede tirar el arco completo o cambiar una emoción por separado sin tocar las otras dos. El editor muestra tres bloques etiquetados.
+- **Datos:** pool `emotion_arc` con 40 emociones originales.
+- **Sorteo:** `RandomService.draw('emotion_arc', 3)` para el arco completo; `draw(..., 1, { excludeFingerprints })` para cambiar una sola emoción sin repetir las otras dos.
+- **Estímulo visible durante la escritura:** tres grupos con la emoción asignada a cada bloque.
+- **Identidad:** onda de tres colores; paleta clara con acento violeta.
+
+---
+
 ## Índice de datos por Juego
 
 | Juego | Pools |
@@ -236,10 +284,16 @@ Se registran con sus códigos acordados. `g31` sigue reservado y no aparece en e
 | G-30, 32 | Entrada del usuario / `words.*` |
 | G-31 | Diccionario de formas |
 | G-33 | `deadline_words` |
+| G-34 | `narrator_person`, `narrator_distance`, `narrator_reliability`, `themes` |
+| G-35 | `rhyme_schemes` |
+| G-36 | `form_styles`, `form_meters`, `form_structures` |
+| G-37 | `fable_protagonists`, `fable_conflicts` |
 | G-41 | `question_titles` |
 | G-44 | `bad_song_prompts` |
+| G-48 | seis planos fijos (sin pool) |
+| G-50 | `emotion_arc` |
 
 ## Verificación de integridad del catálogo
-- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) = **35 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado.
+- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 = **41 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado.
 - Test de registro: ids `g01…g44` (sin `g31`) únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

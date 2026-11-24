@@ -8,6 +8,11 @@ import {
   sensoryQuestions, cutupTexts, portalSeeds, themes, universes, dice, deadlineWords,
   questionTitles, badSongPrompts,
 } from '@/data/prompts';
+import { narratorPersons, narratorDistances, narratorReliabilities } from '@/data/narrator';
+import { rhymeSchemeIds } from '@/data/rhymeSchemes';
+import { formStyles, formMeters, formStructures } from '@/data/formWheels';
+import { fableProtagonists, fableConflicts } from '@/data/fable';
+import { arcEmotions } from '@/data/emotions';
 import { titles, characters, songs, poemsSongsRef, quotes, scriptPhrases, images, type RawCultural } from '@/data/cultural';
 import {
   culturalSource, realImages, realPrompts, realSongs, realTitles,
@@ -168,6 +173,16 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
   pools.deadline_words = deadlineWords.map((text) => makeItem('deadline_words', text));
   pools.question_titles = questionTitles.map((text) => makeItem('question_titles', text));
   pools.bad_song_prompts = badSongPrompts.map((text) => makeItem('bad_song_prompts', text));
+  pools.narrator_person = narratorPersons.map((text) => makeItem('narrator_person', text));
+  pools.narrator_distance = narratorDistances.map((text) => makeItem('narrator_distance', text));
+  pools.narrator_reliability = narratorReliabilities.map((text) => makeItem('narrator_reliability', text));
+  pools.rhyme_schemes = rhymeSchemeIds.map((text) => makeItem('rhyme_schemes', text));
+  pools.form_styles = formStyles.map((text) => makeItem('form_styles', text));
+  pools.form_meters = formMeters.map((text) => makeItem('form_meters', text));
+  pools.form_structures = formStructures.map((text) => makeItem('form_structures', text));
+  pools.fable_protagonists = fableProtagonists.map((text) => makeItem('fable_protagonists', text));
+  pools.fable_conflicts = fableConflicts.map((text) => makeItem('fable_conflicts', text));
+  pools.emotion_arc = arcEmotions.map((text) => makeItem('emotion_arc', text));
   pools.games = [];
 
   const byPool: Record<string, number> = {};

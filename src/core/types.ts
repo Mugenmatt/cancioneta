@@ -29,6 +29,16 @@ export type PoolId =
   | 'deadline_words'
   | 'question_titles'
   | 'bad_song_prompts'
+  | 'narrator_person'
+  | 'narrator_distance'
+  | 'narrator_reliability'
+  | 'rhyme_schemes'
+  | 'form_styles'
+  | 'form_meters'
+  | 'form_structures'
+  | 'fable_protagonists'
+  | 'fable_conflicts'
+  | 'emotion_arc'
   | 'games';
 
 export interface PoolItem {

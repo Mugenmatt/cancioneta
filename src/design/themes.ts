@@ -182,6 +182,22 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#F3EADC', bgAlt: '#E5D6BF', surface: '#FBF6ED', ink: '#2A241B', inkSoft: '#6E6253',
     accent: '#C05621', accentInk: '#FFF7F0', motif: 'beam', entrance: 'drop', displayFont: 'sansBold', label: 'Palabra con plazo',
   },
+  'g34': {
+    bg: '#F1ECE2', bgAlt: '#E3DACB', surface: '#FBF8F2', ink: '#2A241D', inkSoft: '#6A5F52',
+    accent: '#7A4B2A', accentInk: '#FFF7F0', motif: 'window', entrance: 'flip', displayFont: 'displayItalic', label: 'Narrador',
+  },
+  'g35': {
+    bg: '#E9EDF0', bgAlt: '#D7DFE4', surface: '#F8FAFB', ink: '#202A30', inkSoft: '#586871',
+    accent: '#265F74', accentInk: '#F2FBFF', motif: 'grid', entrance: 'rise', displayFont: 'serifSemiBold', label: 'Molde de rima',
+  },
+  'g36': {
+    bg: '#1E1B24', bgAlt: '#302B39', surface: '#282432', ink: '#F4EFF6', inkSoft: '#BDB2C6',
+    accent: '#E7B04A', accentInk: '#2A1E05', motif: 'orbit', entrance: 'drop', displayFont: 'sansBold', label: 'Ruleta de forma',
+  },
+  'g37': {
+    bg: '#EDF0E4', bgAlt: '#DBE1CD', surface: '#FAFCF4', ink: '#25301F', inkSoft: '#5E6A52',
+    accent: '#557A34', accentInk: '#F7FFF0', motif: 'paper', entrance: 'slide', displayFont: 'display', label: 'Fábula',
+  },
   'g41': {
     bg: '#E8EEF2', bgAlt: '#D5E1E8', surface: '#F7FAFC', ink: '#1F2B33', inkSoft: '#5E6E78',
     accent: '#1D6B87', accentInk: '#F2FBFF', motif: 'window', entrance: 'rise', displayFont: 'displayItalic', label: 'Título interrogante',
@@ -189,6 +205,14 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
   'g44': {
     bg: '#EFEDE7', bgAlt: '#DEDAD0', surface: '#FBFAF6', ink: '#242019', inkSoft: '#565046',
     accent: '#8E3B2F', accentInk: '#FFF4EE', motif: 'paper', entrance: 'flip', displayFont: 'sansBold', label: 'Canción mala',
+  },
+  'g48': {
+    bg: '#161B1E', bgAlt: '#242C30', surface: '#1D2529', ink: '#F0F4F3', inkSoft: '#B0BDBE',
+    accent: '#67C4B4', accentInk: '#062621', motif: 'window', entrance: 'slide', displayFont: 'sansSemiBold', label: 'Plano a plano',
+  },
+  'g50': {
+    bg: '#F2E9F1', bgAlt: '#E2D3E2', surface: '#FCF8FC', ink: '#2B2230', inkSoft: '#695C70',
+    accent: '#6A3E82', accentInk: '#FFF5FF', motif: 'wave', entrance: 'rise', displayFont: 'displayItalic', label: 'Arco emocional',
   },
 };
 

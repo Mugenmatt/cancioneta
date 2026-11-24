@@ -50,8 +50,14 @@ export const GAME_REGISTRY: GameMeta[] = [
   { id: 'g30', number: 30, name: 'Trenza de palabras', phase: 'nuevo', summary: 'Tres frases que se entrelazan.', tags: ['frases', 'experimental'], status: 'ready', themeId: 'g30' },
   { id: 'g32', number: 32, name: 'Acróstico de azar', phase: 'nuevo', summary: 'Una letra por verso, una palabra escondida.', tags: ['acróstico', 'verso'], status: 'ready', themeId: 'g32' },
   { id: 'g33', number: 33, name: 'Palabra con plazo', phase: 'nuevo', summary: 'Una palabra, un plazo y la canción antes que venza.', tags: ['palabra', 'temporizador'], status: 'ready', themeId: 'g33' },
+  { id: 'g34', number: 34, name: 'Narrador', phase: 'nuevo', summary: 'Persona, distancia y fiabilidad tiradas por separado.', tags: ['narrador', 'azar'], status: 'ready', themeId: 'g34' },
+  { id: 'g35', number: 35, name: 'Molde de rima', phase: 'nuevo', summary: 'Ocho esquemas con ejemplos originales de cuatro versos.', tags: ['rima', 'estructura'], status: 'ready', themeId: 'g35' },
+  { id: 'g36', number: 36, name: 'Ruleta de forma', phase: 'nuevo', summary: 'Estilo, compás y estructura en ruedas bloqueables.', tags: ['forma', 'azar'], status: 'ready', themeId: 'g36' },
+  { id: 'g37', number: 37, name: 'Fábula', phase: 'nuevo', summary: 'Protagonista, conflicto y moraleja de dos versos.', tags: ['fábula', 'moraleja'], status: 'ready', themeId: 'g37' },
   { id: 'g41', number: 41, name: 'Título interrogante', phase: 'nuevo', summary: 'Preguntas que nacen de un título y vuelven respondidas en la canción.', tags: ['preguntas', 'título'], status: 'ready', themeId: 'g41' },
   { id: 'g44', number: 44, name: 'Canción mala', phase: 'nuevo', summary: 'Diez minutos para escribirla mal a propósito, tirarla y escribir la buena.', tags: ['consigna', 'temporizador'], status: 'ready', themeId: 'g44' },
+  { id: 'g48', number: 48, name: 'Plano a plano', phase: 'nuevo', summary: 'Un plano cinematográfico por verso, en orden o al azar.', tags: ['planos', 'estructura'], status: 'ready', themeId: 'g48' },
+  { id: 'g50', number: 50, name: 'Arco emocional', phase: 'nuevo', summary: 'Tres emociones distintas para verso, pre-estribillo y estribillo.', tags: ['emociones', 'estructura'], status: 'ready', themeId: 'g50' },
 ];
 
 export interface GameCounts {

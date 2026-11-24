@@ -13,15 +13,21 @@ import { MapGame } from './MapGame';
 import { CollageGame } from './CollageGame';
 import { CutupGame } from './CutupGame';
 import { DeadlineGame } from './DeadlineGame';
+import { NarratorGame } from './NarratorGame';
+import { RhymeMoldGame } from './RhymeMoldGame';
+import { FormWheelGame } from './FormWheelGame';
+import { FableGame } from './FableGame';
 import { TitleQuestionGame } from './TitleQuestionGame';
 import { BadSongGame } from './BadSongGame';
+import { ShotPlanGame } from './ShotPlanGame';
+import { EmotionArcGame } from './EmotionArcGame';
 import { MorningPagesGame, PromptGame, SpyGame, VoiceGame, WhyGame } from '../phase0';
 
 export const RUNTIME_GAME_IDS = new Set([
   'f0-1', 'f0-2', 'f0-3', 'f0-4', 'f0-5',
   'g01', 'g03', 'g04', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11', 'g12', 'g13',
   'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20', 'g21', 'g22', 'g23', 'g25',
-  'g26', 'g27', 'g28', 'g29', 'g30', 'g32', 'g33', 'g41', 'g44',
+  'g26', 'g27', 'g28', 'g29', 'g30', 'g32', 'g33', 'g34', 'g35', 'g36', 'g37', 'g41', 'g44', 'g48', 'g50',
 ]);
 
 export function RuntimeGame({ id }: { id: string }): ReactElement | null {
@@ -79,10 +85,22 @@ export function RuntimeGame({ id }: { id: string }): ReactElement | null {
       return <CutupGame />;
     case 'g33':
       return <DeadlineGame />;
+    case 'g34':
+      return <NarratorGame />;
+    case 'g35':
+      return <RhymeMoldGame />;
+    case 'g36':
+      return <FormWheelGame />;
+    case 'g37':
+      return <FableGame />;
     case 'g41':
       return <TitleQuestionGame />;
     case 'g44':
       return <BadSongGame />;
+    case 'g48':
+      return <ShotPlanGame />;
+    case 'g50':
+      return <EmotionArcGame />;
     default:
       return null;
   }

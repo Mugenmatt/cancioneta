@@ -1,3 +1,5 @@
+import type { GamePhase } from '@/games/registry';
+
 export const GAME_FLOW_TEXT = {
   games: 'Juegos',
   gamesSubtitle: 'Formas de empezar',
@@ -27,3 +29,9 @@ export const GAME_FLOW_TEXT = {
     ...tags.map((tag) => `Si aparece «${tag}», probá usarlo como punto de partida.`),
   ],
 } as const;
+
+export const PHASE_LABEL: Record<GamePhase, string> = {
+  fase0: 'Fase 0 · Calentar',
+  original: 'Los originales',
+  nuevo: 'Nuevos juegos',
+};

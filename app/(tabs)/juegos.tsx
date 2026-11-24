@@ -8,10 +8,10 @@ import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { EmptyState } from '@/design/components/Feedback';
 import { SectionLabel } from '@/design/components/Primitives';
-import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
+import { alpha, fontSizes, fonts, lineHeights, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
-import { GAME_FLOW_TEXT } from '@/content/gameFlow';
-import { GAME_REGISTRY, PHASE_LABEL, gameCounts, type GameMeta, type GamePhase } from '@/games/registry';
+import { GAME_FLOW_TEXT, PHASE_LABEL } from '@/content/gameFlow';
+import { GAME_REGISTRY, gameCounts, type GameMeta, type GamePhase } from '@/games/registry';
 
 const PHASES: GamePhase[] = ['fase0', 'original', 'nuevo'];
 
@@ -40,7 +40,7 @@ export default function GamesScreen() {
           </AppText>
         </View>
         <View style={[styles.count, { backgroundColor: colors.accentSoft }]}>
-          <AppText style={{ fontFamily: fonts.display, fontSize: 25, color: colors.accentCore }}>{counts.total}</AppText>
+          <AppText style={{ fontFamily: fonts.display, fontSize: fontSizes.title, color: colors.accentCore }}>{counts.total}</AppText>
         </View>
       </View>
 
@@ -100,12 +100,12 @@ function GameRow({ game, onPress }: { game: GameMeta; onPress: () => void }) {
       ]}
     >
       <View style={[styles.number, { backgroundColor: alpha(theme.accent, 0.16) }]}>
-        <AppText variant="caption" color={theme.accentText} style={{ fontFamily: fonts.sansBold, fontSize: 11 }}>
-          {game.phase === 'fase0' ? 'F0' : String(game.number).padStart(2, '0')}
+        <AppText variant="caption" color={theme.accentText} style={{ fontFamily: fonts.sansBold, fontSize: fontSizes.caption }}>
+          {game.phase === 'fase0' ? GAME_FLOW_TEXT.fase0Number : GAME_FLOW_TEXT.number(game.number)}
         </AppText>
       </View>
       <View style={{ flex: 1 }}>
-        <AppText style={{ fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: theme.ink }}>
+        <AppText style={{ fontFamily: fonts.display, fontSize: fontSizes.lead, lineHeight: fontSizes.lead * lineHeights.tight, color: theme.ink }}>
           {game.name}
         </AppText>
         <AppText variant="caption" color={theme.inkSoft} numberOfLines={2} style={{ marginTop: 3 }}>
@@ -119,9 +119,9 @@ function GameRow({ game, onPress }: { game: GameMeta; onPress: () => void }) {
 
 const styles = StyleSheet.create({
   head: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: spacing.lg },
-  count: { width: 54, height: 54, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
+  count: { width: minTouch + spacing.xs, height: minTouch + spacing.xs, borderRadius: radii.card, alignItems: 'center', justifyContent: 'center' },
   search: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderRadius: radii.field, paddingHorizontal: spacing.sm, minHeight: 48 },
-  searchInput: { flex: 1, marginLeft: spacing.xs, fontSize: 15, paddingVertical: 10 },
+  searchInput: { flex: 1, marginLeft: spacing.xs, fontSize: fontSizes.body, paddingVertical: spacing.xs + spacing.xxs / 2 },
   searchClear: { width: minTouch, height: minTouch, marginRight: -spacing.sm, alignItems: 'center', justifyContent: 'center' },
   group: { marginTop: spacing.lg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: radii.card, padding: spacing.sm, marginBottom: spacing.xs, minHeight: 78 },

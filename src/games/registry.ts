@@ -66,12 +66,6 @@ export function gameCounts(): GameCounts {
   };
 }
 
-export const PHASE_LABEL: Record<GamePhase, string> = {
-  fase0: 'Fase 0 · Calentar',
-  original: 'Los originales',
-  nuevo: 'Nuevos juegos',
-};
-
 export function gameById(id: string): GameMeta | undefined {
   return GAME_REGISTRY.find((game) => game.id === id);
 }

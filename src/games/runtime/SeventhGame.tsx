@@ -11,7 +11,7 @@ import { readonlyLyricsBridge } from './lyricsBridge';
 import { COMMON_TEXT } from '@/content/games/common';
 import { SEVENTH_TEXT } from '@/content/games/g21';
 import type { LyricsSnapshotLine, PoolItem } from '@/core/types';
-import { alpha, fonts, radii, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
 
 export function SeventhGame() {
   const theme = useGameTheme('g21');
@@ -101,7 +101,7 @@ function keyOf(line: LyricsSnapshotLine): string {
 const styles = StyleSheet.create({
   reference: { fontFamily: fonts.display, fontSize: 28, lineHeight: 34 },
   pills: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.sm, marginTop: spacing.sm },
-  link: { flexDirection: 'row', alignItems: 'center', minHeight: 36 },
+  link: { flexDirection: 'row', alignItems: 'center', minHeight: minTouch },
   line: { borderWidth: 1, borderRadius: radii.card, padding: spacing.sm },
   lineText: { fontFamily: fonts.serif, fontSize: 16, lineHeight: 23 },
   wordRow: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6, marginTop: 6 },

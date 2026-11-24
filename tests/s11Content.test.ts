@@ -1,4 +1,4 @@
-import { GAME_FLOW_TEXT } from '@/content/gameFlow';
+import { GAME_FLOW_TEXT, PHASE_LABEL } from '@/content/gameFlow';
 import { HOME_TEXT } from '@/content/home';
 import { MATERIAL_TEXT } from '@/content/material';
 import { SETTINGS_TEXT } from '@/content/ajustes';
@@ -51,5 +51,12 @@ describe('textos de inicio y listado de juegos', () => {
     expect(GAME_FLOW_TEXT.searchLabel).toBe('Buscar juegos');
     expect(GAME_FLOW_TEXT.searchPlaceholder).toContain('consigna');
     expect(GAME_FLOW_TEXT.clearSearch).toBe('Limpiar búsqueda');
+    expect(GAME_FLOW_TEXT.fase0Number).toBe('F0');
+    expect(GAME_FLOW_TEXT.number(7)).toBe('07');
+    expect(PHASE_LABEL).toEqual({
+      fase0: 'Fase 0 · Calentar',
+      original: 'Los originales',
+      nuevo: 'Nuevos juegos',
+    });
   });
 });

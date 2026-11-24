@@ -9,7 +9,7 @@ import { randomService } from '@/services/random/RandomService';
 import type { PoolItem } from '@/core/types';
 import { COMMON_TEXT } from '@/content/games/common';
 import { SONGS_TEXT, SONGS_UI_TEXT, type SongsGameId } from '@/content/games/g08-g10';
-import { alpha, fonts, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, spacing } from '@/design/tokens';
 
 export function SongsGame({ id }: { id: string }) {
   const theme = useGameTheme(id);
@@ -97,7 +97,7 @@ export function SongsGame({ id }: { id: string }) {
 const styles = StyleSheet.create({
   title: { fontFamily: fonts.display, fontSize: 31, lineHeight: 37 },
   artist: { fontFamily: fonts.serifItalic, fontSize: 17, marginTop: 4 },
-  link: { flexDirection: 'row', alignItems: 'center', minHeight: 40, marginTop: spacing.sm },
+  link: { flexDirection: 'row', alignItems: 'center', minHeight: minTouch, marginTop: spacing.sm },
   steps: { gap: 7, marginTop: spacing.md },
   step: { flexDirection: 'row', alignItems: 'flex-start' },
   dot: { width: 5, height: 5, borderRadius: 3, marginTop: 6, marginRight: 8 },

@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { StimulusCard } from '@/design/components/StimulusCard';
-import { alpha, fonts, spacing } from '@/design/tokens';
+import { alpha, fonts, minTouch, spacing } from '@/design/tokens';
 import { useGameTheme } from '@/design/ThemeProvider';
 import { randomService } from '@/services/random/RandomService';
 import { useLyricsStore } from '@/stores/lyricsStore';
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   work: { fontFamily: fonts.serifItalic, fontSize: 17, lineHeight: 23, marginTop: 2 },
   descriptionBox: { borderTopWidth: 1, paddingTop: spacing.md, marginTop: spacing.lg },
   description: { fontFamily: fonts.serif, fontSize: 17, lineHeight: 25, marginTop: spacing.xs },
-  link: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', minHeight: 40, marginTop: spacing.md },
+  link: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', minHeight: minTouch, marginTop: spacing.md },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.md },
   note: { lineHeight: 18, marginTop: spacing.sm },
 });

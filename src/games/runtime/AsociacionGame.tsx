@@ -8,7 +8,7 @@ import { useGameTheme } from '@/design/ThemeProvider';
 import { randomService } from '@/services/random/RandomService';
 import { dataService } from '@/services/data/DataService';
 import type { PoolItem } from '@/core/types';
-import { alpha, fontSizes, fonts, lineHeights, radii, spacing } from '@/design/tokens';
+import { alpha, fontSizes, fonts, lineHeights, minTouch, radii, spacing } from '@/design/tokens';
 import {
   ASSOCIATION_DEFAULT_KINDS,
   ASSOCIATION_KINDS,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     gap: 4,
     borderWidth: 1,
     borderRadius: radii.chip,
-    minHeight: 32,
+    minHeight: minTouch,
     paddingHorizontal: 6,
     paddingVertical: 6,
   },

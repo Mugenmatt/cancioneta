@@ -8,7 +8,7 @@ import { Screen } from '@/design/components/Screen';
 import { Motif } from '@/design/components/Motif';
 import { SectionLabel } from '@/design/components/Primitives';
 import { useCoreTheme } from '@/design/ThemeProvider';
-import { alpha, fonts, minTouch, radii, spacing } from '@/design/tokens';
+import { alpha, contentWidth, fontSizes, fonts, letterSpacing, lineHeights, minTouch, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
 import { APP_META } from '@/content/app';
 import { HOME_TEXT } from '@/content/home';
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
   settings: { width: minTouch, height: minTouch, borderRadius: minTouch / 2, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
   hero: { borderRadius: radii.card, borderWidth: 1, overflow: 'hidden', minHeight: 330 },
   heroInner: { padding: spacing.lg, paddingTop: spacing.xl, flex: 1, justifyContent: 'flex-end' },
-  heroTitle: { fontFamily: fonts.display, fontSize: 36, lineHeight: 42, letterSpacing: -0.8, marginTop: spacing.sm },
-  heroBody: { fontFamily: fonts.serif, fontSize: 16, lineHeight: 24, marginTop: spacing.sm, maxWidth: 320 },
+  heroTitle: { fontFamily: fonts.display, fontSize: fontSizes.display, lineHeight: fontSizes.display * lineHeights.tight, letterSpacing: letterSpacing.display, marginTop: spacing.sm },
+  heroBody: { fontFamily: fonts.serif, fontSize: fontSizes.body, lineHeight: fontSizes.body * lineHeights.reading, marginTop: spacing.sm, maxWidth: contentWidth.reading / 2 },
   heroActions: { flexDirection: 'row', marginTop: spacing.lg, flexWrap: 'wrap', gap: spacing.sm },
   quickRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
   quick: { flex: 1, borderWidth: 1, borderRadius: radii.card, padding: spacing.md, minHeight: 100 },

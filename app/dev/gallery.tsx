@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { DEV_GALLERY_TEXT } from '@/content/devGallery';
+import { GAME_REGISTRY } from '@/games/registry';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { auditGalleryContrast, galleryEntries, GALLERY_MODES, type GalleryEntry } from '@/design/galleryAudit';
 import { themeFor, type GameTheme } from '@/design/themes';
@@ -33,7 +34,7 @@ export default function GalleryScreen() {
         <AuditRow
           label={DEV_GALLERY_TEXT.sections.themes}
           detail={DEV_GALLERY_TEXT.count(entries.length)}
-          ok={entries.length === 37}
+          ok={entries.length === GAME_REGISTRY.length}
         />
         <AuditRow label={DEV_GALLERY_TEXT.audit.contrastLabel} detail={DEV_GALLERY_TEXT.audit.contrast(audit.checked, audit.findings.length)} ok={contrastOk} />
         <AuditRow
@@ -99,19 +100,12 @@ function ThemeCard({ entry }: { entry: GalleryEntry }) {
       <View style={styles.themeHeader}>
         <AppText variant="title" color={colors.textPrimary} style={styles.themeName}>{entry.name}</AppText>
         <Pill label={DEV_GALLERY_TEXT.numberLabel(entry.number, entry.id)} />
-        {entry.status === 'pending' ? (
-          <Pill label={DEV_GALLERY_TEXT.pending.badge} color={colors.stateWarning} />
-        ) : null}
       </View>
-      {entry.theme ? (
-        <View style={styles.panels}>
-          {GALLERY_MODES.map((mode) => (
-            <ThemePanel key={mode} theme={themeFor(entry.id, mode)} modeLabel={DEV_GALLERY_TEXT.mode[mode]} />
-          ))}
-        </View>
-      ) : (
-        <AppText variant="body" color={colors.textSecondary}>{DEV_GALLERY_TEXT.pending.note}</AppText>
-      )}
+      <View style={styles.panels}>
+        {GALLERY_MODES.map((mode) => (
+          <ThemePanel key={mode} theme={themeFor(entry.id, mode)} modeLabel={DEV_GALLERY_TEXT.mode[mode]} />
+        ))}
+      </View>
     </Surface>
   );
 }

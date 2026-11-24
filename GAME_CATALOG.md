@@ -214,7 +214,7 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 
 ### G-34 Narrador
 - **Mecánica:** tres ejes independientes (persona gramatical, distancia y fiabilidad) que se pueden volver a tirar de a uno, sin alterar los otros dos. Tema opcional sorteado del banco existente `themes`.
-- **Datos:** pools `narrator_person` (3), `narrator_distance` (4) y `narrator_reliability` (4); tema opcional de `themes`.
+- **Datos:** pools `narrator_person` (6), `narrator_distance` (12) y `narrator_reliability` (12); tema opcional de `themes`.
 - **Sorteo:** `RandomService.draw(pool, 1)` por eje, sin repetición hasta agotar el ciclo.
 - **Estímulo visible durante la escritura:** panel con los tres ejes y, si se activó, el tema.
 - **Identidad:** ventanas y tres dados; paleta cálida con acento marrón.
@@ -424,7 +424,7 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 
 ## Verificación de integridad del catálogo
 - 23 originales (G-01…G-23) + 8 de la primera tanda (G-24…G-30 y G-32) + 24 de la tanda actual (G-33…G-39 y G-41…G-57) = **55 Juegos habilitados**. Los 5 ejercicios de Fase 0 van aparte: `GAME_REGISTRY` tiene 60 registros.
-- Reservados: **G-31** (entrada `pending` en la galería visual, sin tema ni Juego) y **G-40** (sin entrada en el registro, la galería ni el service worker). Numeración total: 57; habilitados: 55.
-- Los ids `g01…g57`, excepto `g31` y `g40`, están en el registro, en `RUNTIME_GAME_IDS` y en `public/sw.js`. `tests/registry.test.ts` y `tests/devGallery.test.ts` verifican 60 registros y 61 tarjetas (60 `ready` más `g31` `pending`).
+- Reservados: **G-31** y **G-40**, sin tema ni Juego. Se ocultan de la galería visual porque todavía no se pueden jugar. Numeración total: 57; habilitados: 55.
+- Los ids `g01…g57`, excepto `g31` y `g40`, están en el registro, en `RUNTIME_GAME_IDS` y en `public/sw.js`. `tests/registry.test.ts` y `tests/devGallery.test.ts` verifican 60 registros y 60 tarjetas de galería, todas habilitadas.
 - Cada Juego habilitado tiene ficha en este catálogo, intro completa (título, objetivo, pasos, ejemplos, «Comenzar») y tema con contraste AA en claro y oscuro. Los Juegos con audio degradan en web con un aviso desde `src/content/`.
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

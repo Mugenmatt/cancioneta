@@ -2,23 +2,18 @@ export const DEV_GALLERY_TEXT = {
   back: 'Atrás',
   eyebrow: 'Desarrollo',
   title: 'Galería visual',
-  subtitle: 'Revisá los 37 temas, los estados de los componentes y los chequeos de accesibilidad.',
+  subtitle: 'Revisá los temas de juego, los estados de los componentes y los chequeos de accesibilidad.',
   sections: {
     checks: 'Chequeos de accesibilidad',
     themes: 'Temas de juego',
     components: 'Componentes y estados',
     fonts: 'Tipografías empaquetadas',
   },
-  count: (total: number) => `${total} tarjetas · 36 temas implementados y 1 pendiente`,
+  count: (total: number) => `${total} tarjetas · ${total} temas implementados`,
   numberLabel: (number: number, id: string) => (number > 0 ? `G-${String(number).padStart(2, '0')}` : id.toUpperCase()),
   mode: {
     light: 'Claro',
     dark: 'Oscuro',
-  },
-  pending: {
-    badge: 'Pendiente',
-    name: 'Cadena de letras',
-    note: 'G-31 no está implementado: no tiene tema, ruta ni lógica. Se muestra para completar el recuento sin inventar una decisión.',
   },
   audit: {
     pass: 'Pasa',

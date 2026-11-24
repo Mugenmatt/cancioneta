@@ -47,6 +47,13 @@ export default function RootLayout() {
   }, []);
 
   useEffect(() => {
+    if (Platform.OS === 'web') return;
+    void import('@/services/audio/recording')
+      .then(({ cleanupTemporaryAudio }) => cleanupTemporaryAudio())
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
     void hydrate();
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'background' || state === 'inactive') {

@@ -12,9 +12,11 @@ describe('G-34 Narrador', () => {
       expect(new Set(items.map((item) => item.fingerprint)).size).toBe(items.length);
       return items.length;
     });
-    expect(sizes).toEqual([3, 4, 4]);
+    expect(sizes).toEqual([6, 12, 12]);
     expect(dataService.getPool('narrator_reliability').map((item) => item.text)).toEqual([
       'Sincero', 'Mentiroso', 'Se engaña a sí mismo', 'Cínico',
+      'Exagerado', 'Evasivo', 'Intenso', 'Distante',
+      'Irónico', 'Ingenuo', 'Arrepentido', 'Orgulloso',
     ]);
   });
 

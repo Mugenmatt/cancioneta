@@ -3,14 +3,19 @@ import { gameThemes } from '@/design/themes';
 import { GAME_REGISTRY, gameIds } from '@/games/registry';
 
 describe('galería visual', () => {
-  it('muestra 61 tarjetas: 60 temas reales y G-31 pendiente', () => {
+  it('muestra una tarjeta por juego habilitado', () => {
     const entries = galleryEntries();
-    expect(entries).toHaveLength(61);
-    expect(new Set(entries.map((entry) => entry.id)).size).toBe(61);
-    expect(entries.filter((entry) => entry.status === 'ready')).toHaveLength(60);
-    expect(entries.filter((entry) => entry.status === 'pending').map((entry) => entry.id)).toEqual(['g31']);
+    expect(entries).toHaveLength(GAME_REGISTRY.length);
+    expect(new Set(entries.map((entry) => entry.id)).size).toBe(GAME_REGISTRY.length);
     expect(entries.map((entry) => entry.id)).toEqual(expect.arrayContaining(gameIds()));
-    expect(entries.find((entry) => entry.id === 'g31')?.theme).toBeUndefined();
+    expect(entries.every((entry) => entry.status === 'ready')).toBe(true);
+    expect(entries.every((entry) => entry.theme !== undefined)).toBe(true);
+  });
+
+  it('oculta los juegos que no están listos para jugarse', () => {
+    const ids = galleryEntries().map((entry) => entry.id);
+    expect(ids).not.toContain('g31');
+    expect(ids).not.toContain('g40');
   });
 
   it('usa el tema correcto de cada juego habilitado', () => {
@@ -19,12 +24,6 @@ describe('galería visual', () => {
       expect(entry.theme?.id).toBe(entry.id);
       expect(gameThemes[entry.id]).toBeDefined();
     }
-  });
-
-  it('ordena G-31 antes de G-32 dentro de los nuevos juegos', () => {
-    const ids = galleryEntries().map((entry) => entry.id);
-    expect(ids.indexOf('g31')).toBeGreaterThan(ids.indexOf('g30'));
-    expect(ids.indexOf('g31')).toBeLessThan(ids.indexOf('g32'));
   });
 
   it('cubre claro y oscuro con contraste AA en los 60 temas', () => {

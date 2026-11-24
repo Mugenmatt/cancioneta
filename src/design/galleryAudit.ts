@@ -1,4 +1,3 @@
-import { DEV_GALLERY_TEXT } from '../content/devGallery';
 import { GAME_REGISTRY, type GamePhase } from '../games/registry';
 import { gameThemes, themeFor, type GameTheme } from './themes';
 import { contrastRatio, type ColorMode } from './tokens';
@@ -46,14 +45,6 @@ export function galleryEntries(): GalleryEntry[] {
     status: 'ready',
     theme: gameThemes[game.themeId],
   }));
-
-  entries.push({
-    id: 'g31',
-    number: 31,
-    name: DEV_GALLERY_TEXT.pending.name,
-    phase: 'nuevo',
-    status: 'pending',
-  });
 
   return entries.sort(
     (a, b) => phaseRank(a.phase) - phaseRank(b.phase) || a.number - b.number || a.id.localeCompare(b.id),

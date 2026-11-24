@@ -1,7 +1,8 @@
-import { File } from 'expo-file-system';
+import { File, Paths } from 'expo-file-system';
 import { RecordingPresets, type RecordingOptions } from 'expo-audio';
 import { randomService } from '@/services/random/RandomService';
 import { isWebPlatform } from '@/services/export/TextFileService';
+import { isTemporaryAudioName } from './temporaryAudioName';
 
 /**
  * Opciones de grabación temporal usadas por los Juegos con audio.
@@ -40,6 +41,25 @@ export function removeTemporaryAudio(uri: string | null): void {
     if (file.exists) file.delete();
   } catch {
     return;
+  }
+}
+
+/** Al iniciar la app: borra grabaciones huérfanas de una sesión anterior. */
+export function cleanupTemporaryAudio(): number {
+  if (isWebPlatform()) return 0;
+  try {
+    const cache = Paths.cache;
+    if (!cache.exists) return 0;
+    let removed = 0;
+    for (const entry of cache.list()) {
+      if (entry instanceof File && isTemporaryAudioName(entry.name)) {
+        entry.delete();
+        removed += 1;
+      }
+    }
+    return removed;
+  } catch {
+    return 0;
   }
 }
 

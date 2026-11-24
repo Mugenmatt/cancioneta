@@ -1,0 +1,32 @@
+export const G33_DURATIONS = [
+  { minutes: 20, label: '20 min' },
+  { minutes: 60, label: '1 h' },
+  { minutes: 1440, label: '24 h' },
+] as const;
+
+export const G33_TEXT = {
+  intro: 'Mirá la palabra, elegí el plazo y escribí antes de que venza. Sin notificaciones.',
+  poolOption: 'Palabra del banco',
+  inventedOption: 'Palabra inventada',
+  inventedLabel: 'Tu palabra inventada',
+  inventedPlaceholder: 'Escribí una palabra inventada…',
+  wordLabel: 'Palabra del plazo',
+  targetFallback: 'Todavía no hay palabra.',
+  anotherWord: 'Otra palabra',
+  deadlineTitle: 'Elegí el plazo',
+  start: 'Empezar plazo',
+  restart: 'Reiniciar plazo',
+  running: 'Plazo en curso',
+  notStarted: 'Tocá «Empezar plazo» para iniciar el tiempo.',
+  reached: 'Plazo cumplido',
+  timeLabel: 'Tiempo restante',
+  checkDone: 'La palabra ya aparece en el cuaderno.',
+  checkPending: 'La palabra todavía no aparece en el cuaderno.',
+  bannerDone: '¡Apareció!',
+  bannerPending: 'Todavía no aparece.',
+  editorTitle: (word: string) => `Palabra: ${word}`,
+  editorGroup: 'Palabra del plazo',
+  editorNote: 'La palabra puede aparecer en cualquier parte de la letra, no hace falta que sea el título.',
+  send: 'Llevar al cuaderno',
+  privacy: 'El plazo y la letra viven solo en memoria. No hay notificaciones: mirá el banner cuando quieras.',
+} as const;

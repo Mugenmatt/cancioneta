@@ -178,6 +178,18 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#26262B', bgAlt: '#3A3A42', surface: '#303037', ink: '#F0EFE9', inkSoft: '#B3B1A9',
     accent: '#C9C4B4', accentInk: '#1F1F1C', motif: 'stairs', entrance: 'drop', displayFont: 'displayRegular', label: 'Acróstico de azar',
   },
+  'g33': {
+    bg: '#F3EADC', bgAlt: '#E5D6BF', surface: '#FBF6ED', ink: '#2A241B', inkSoft: '#6E6253',
+    accent: '#C05621', accentInk: '#FFF7F0', motif: 'beam', entrance: 'drop', displayFont: 'sansBold', label: 'Palabra con plazo',
+  },
+  'g41': {
+    bg: '#E8EEF2', bgAlt: '#D5E1E8', surface: '#F7FAFC', ink: '#1F2B33', inkSoft: '#5E6E78',
+    accent: '#1D6B87', accentInk: '#F2FBFF', motif: 'window', entrance: 'rise', displayFont: 'displayItalic', label: 'Título interrogante',
+  },
+  'g44': {
+    bg: '#EFEDE7', bgAlt: '#DEDAD0', surface: '#FBFAF6', ink: '#242019', inkSoft: '#565046',
+    accent: '#8E3B2F', accentInk: '#FFF4EE', motif: 'paper', entrance: 'flip', displayFont: 'sansBold', label: 'Canción mala',
+  },
 };
 
 export const gameThemes: Record<string, GameTheme> = Object.fromEntries(

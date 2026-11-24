@@ -181,6 +181,33 @@ Todos pueden llevar texto al editor central por acción explícita.
 
 ---
 
+## Juegos de prueba (G-33, G-41, G-44)
+
+Se registran con sus códigos acordados. `g31` sigue reservado y no aparece en el registro ni en la galería como Juego habilitado. No modifican la esencia ni la implementación de G-01 a G-32.
+
+### G-33 Palabra con plazo
+- **Mecánica:** aparece una palabra concreta de objeto físico, idealmente con doble sentido (o una frase corta), sorteada de un banco local; también se puede elegir «palabra inventada» y escribirla. El usuario elige el plazo: 20 minutos, 1 hora o 24 horas. Un banner con la palabra y el tiempo restante queda visible en el Juego y arriba del editor; una tilde verde informa si la palabra ya aparece en la letra. Temporizador interno, sin notificaciones.
+- **Datos:** pool `deadline_words` con 60 palabras y frases breves originales.
+- **Sorteo:** `RandomService.draw('deadline_words', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** banner con la palabra, cuenta regresiva y estado de aparición en el cuaderno.
+- **Identidad:** cartel de plazo, reloj y tilde de confirmación; paleta cálida con acento terracota.
+
+### G-41 Título interrogante
+- **Mecánica:** se sortea una frase breve como título. Paso 1: escribir al menos tres preguntas que despierta. Paso 2: marcar al menos dos para responder. Paso 3: ir al editor con las preguntas elegidas visibles arriba; la meta es un verso y un estribillo que las respondan.
+- **Datos:** pool `question_titles` con 60 frases breves originales.
+- **Sorteo:** `RandomService.draw('question_titles', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel con el título y las preguntas marcadas arriba del cuaderno.
+- **Identidad:** ventana y signos de interrogación; paleta fría con acento azul.
+
+### G-44 Canción mala
+- **Mecánica:** se sortea una consigna y hay diez minutos para escribir una canción mala a propósito en el cuaderno. Desde la pantalla del Juego, «Tirar» arruga el papel y borra todo el texto escrito; después «Ahora la buena» abre el cuaderno vacío con la misma consigna visible arriba. Sin notificaciones y sin guardar nada.
+- **Datos:** pool `bad_song_prompts` con 40 consignas originales.
+- **Sorteo:** `RandomService.draw('bad_song_prompts', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** la consigna queda arriba del cuaderno en las dos etapas.
+- **Identidad:** papel arrugado y tachaduras; paleta de papel con acento rojo.
+
+---
+
 ## Índice de datos por Juego
 
 | Juego | Pools |
@@ -208,8 +235,11 @@ Todos pueden llevar texto al editor central por acción explícita.
 | G-29 | `cutup_texts` |
 | G-30, 32 | Entrada del usuario / `words.*` |
 | G-31 | Diccionario de formas |
+| G-33 | `deadline_words` |
+| G-41 | `question_titles` |
+| G-44 | `bad_song_prompts` |
 
 ## Verificación de integridad del catálogo
-- 23 originales + 9 nuevos = **32**; 5 ejercicios de Fase 0 aparte.
-- Test de registro: ids `g01…g32` únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
+- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) = **35 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado.
+- Test de registro: ids `g01…g44` (sin `g31`) únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

@@ -21,11 +21,12 @@ export function GameIntro({ theme, children }: { theme: GameTheme; children: Rea
   );
 }
 
-export function ActionBar({ text, theme, sendLabel = COMMON_TEXT.sendToNotebook, stimulus }: {
+export function ActionBar({ text, theme, sendLabel = COMMON_TEXT.sendToNotebook, stimulus, disabled = false }: {
   text: string;
   theme: GameTheme;
   sendLabel?: string;
   stimulus?: StimulusSummary;
+  disabled?: boolean;
 }) {
   const router = useRouter();
   const insertStimulus = useLyricsStore((state) => state.insertStimulus);
@@ -40,7 +41,7 @@ export function ActionBar({ text, theme, sendLabel = COMMON_TEXT.sendToNotebook,
   };
 
   const send = () => {
-    if (!text.trim()) return;
+    if (!text.trim() || disabled) return;
     if (stimulus) setStimulusPanel(stimulus);
     else insertStimulus(text);
     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -61,7 +62,7 @@ export function ActionBar({ text, theme, sendLabel = COMMON_TEXT.sendToNotebook,
       <Button
         label={sendLabel}
         small
-        disabled={!text.trim()}
+        disabled={disabled || !text.trim()}
         onPress={send}
         accent={theme.accent}
         accentInk={theme.accentInk}

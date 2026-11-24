@@ -292,4 +292,31 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
     ],
     examples: ['SOMBRA → S: "Solo queda...", O: "otra luz...", M: "mientras...".', 'Cada letra abre un verso nuevo.'],
   },
+  'g33': {
+    steps: [
+      'Mirá la palabra del banco o elegí «palabra inventada» y escribí la tuya.',
+      'Elegí el plazo: 20 minutos, 1 hora o 24 horas, y tocá «Empezar plazo».',
+      'El banner con la palabra y el tiempo queda visible en el Juego y arriba del cuaderno.',
+      'Escribí la canción incluyendo la palabra en cualquier parte; la tilde verde se enciende cuando aparece.',
+    ],
+    examples: ['Palabra: "llave" → "Llevo la llave equivocada y abro igual".', 'Palabra inventada: "ventolera" → "Ventolera de papel en el bolsillo".'],
+  },
+  'g41': {
+    steps: [
+      'Leé el título breve que aparece y dejá que te despierte preguntas.',
+      'Escribí al menos tres preguntas en la lista; marcá al menos dos para responder.',
+      'Llevá las preguntas elegidas al cuaderno: quedan visibles arriba mientras escribís.',
+      'La meta es un verso y un estribillo que respondan esas preguntas.',
+    ],
+    examples: ['Título: "La casa que se quedó despierta" → "¿Quién se quedó esperando?"', 'Estribillo: "La casa sigue despierta, pero ya nadie vuelve".'],
+  },
+  'g44': {
+    steps: [
+      'Leé la consigna: son diez minutos para escribir una canción mala a propósito.',
+      'Pasá al cuaderno y escribí sin cuidar la rima, el sentido ni el pudor.',
+      'Volvé al Juego y tocá «Tirar»: el papel se arruga y se borra todo lo que escribiste.',
+      'Después tocá «Ahora la buena»: el cuaderno abre vacío con la misma consigna.',
+    ],
+    examples: ['Consigna: "Escribí sobre un ascensor que se negaba a subir".', 'Primero cualquier cosa; después, la canción que sí querés escribir.'],
+  },
 };

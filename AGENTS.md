@@ -17,6 +17,25 @@ App mobile (Android primero, iOS-ready) para componer canciones con 32 Juegos cr
 - Trabajar de a un Juego por vez. Después de cada Juego, correr typecheck/lint/build o los tests existentes y reportar qué archivos se tocaron.
 - Ante la duda, preguntar en vez de inventar.
 
+## Cómo agregar un Juego
+
+Estado real del código (verificado 2026-11-24): el catálogo es `GameMeta[]` en `src/games/registry.ts`. **No existe `GameModule` ni `GameRegistry` como clase en el código**: ese contrato solo está en `GAME_ARCHITECTURE.md`. Los Juegos son componentes React de `src/games/runtime/` despachados por `RuntimeGame()` dentro de la ruta dinámica `app/juego/[id].tsx`. La navegación NO se toca para un Juego simple.
+
+Antes de empezar: elegí el id con el usuario y verificá `src/games/registry.ts` antes de usarlo. `g31` está reservado como entrada `pending` en `src/design/galleryAudit.ts` y excluido por `tests/registry.test.ts`; no lo reutilices sin una decisión explícita. Los `g33` de los pasos de abajo son ejemplos: si `g33` ya está ocupado por otro Juego en curso, reemplazalo por el id acordado (`g34`, etc.) en todas las apariciones. `number` debe ser igual al número del id y `phase: 'nuevo'`.
+
+1. **Regla del Juego:** escribí su ficha nueva en `GAME_CATALOG.md` (sección nueva; no toques G-01 a G-32).
+2. **Catálogo:** agregá un `GameMeta` a `GAME_REGISTRY` en `src/games/registry.ts` con `id`, `number`, `name`, `phase: 'nuevo'`, `summary`, `tags`, `status: 'ready'` y `themeId` igual al `id`. No reordenes ni edites las entradas existentes. `gameIds()`, `gameCounts()` y el pool `games` se derivan solos de ahí.
+3. **Tema:** agregá la entrada `'g33'` en `raw` de `src/design/themes.ts` con `bg`, `bgAlt`, `surface`, `ink`, `inkSoft`, `accent`, `accentInk`, `motif`, `entrance`, `displayFont` y `label`. Debe pasar contraste AA en claro y oscuro (`auditGalleryContrast`) y tener `theme.id === game.id` (`tests/devGallery.test.ts`).
+4. **Intro:** agregá `GAME_INTROS['g33'] = { steps: string[], examples: string[] }` en `src/content/gameIntros.ts`. Sin esa entrada, la pantalla usa pasos y ejemplos genéricos de `GAME_FLOW_TEXT`.
+5. **Textos del Juego:** creá `src/content/games/<id>.ts` con las constantes en español argentino (voseo: «elegí», «tocá»). Ningún texto de interfaz dentro del componente.
+6. **Componente:** implementá el Juego en `src/games/runtime/` (archivo propio para uno nuevo, o función nueva en un archivo hermano del tipo, sin tocar los Juegos existentes). Usá `useGameTheme(id)` y los compartidos de `./ui`: `GameIntro`, `Note`, `PromptCard`, `GameField`, `MiniButton`, `ActionBar`, `runtimeStyles`. Poné la lógica pura en `./logic.ts` con su prueba. Para enviar al editor usá `ActionBar` con `text` y, si hace falta, `stimulus`: internamente llama a `insertStimulus()` o `setStimulusPanel()` y navega a `/escribir`. No crear editor, store ni bridge nuevos.
+7. **Datos y azar:** si usás pools existentes, `dataService.getPool(pool)` y `randomService.draw(pool, n, { excludeFingerprints, filter })`. Si necesitás un pool nuevo: agregá su literal a `PoolId` en `src/core/types.ts` y construilo en `buildPools()` de `src/services/data/DataService.ts` desde un archivo de `src/data/` con `makeItem`/`fingerprint`/`makeId`, con licencia original o de dominio público. Prohibido `Math.random()`, SQLite directo y textos protegidos.
+8. **Conexión:** en `src/games/runtime/index.tsx`, importá el componente, agregá `'g33'` a `RUNTIME_GAME_IDS` y un `case 'g33'` en `RuntimeGame()`. NO agregues ruta ni modifiques `app/juego/[id].tsx`: `generateStaticParams()` ya sale de `gameIds()`. Solo se toca ese contenedor si el usuario decide explícitamente un Juego con pantalla propia (como g02, g05 o g24).
+9. **Web/PWA:** en `public/sw.js`, agregá `'g33'` a `GAME_IDS` y subí `CACHE_NAME` a la versión siguiente (`cancioneta-shell-v3`). Si el Juego usa micrófono u otra API nativa, detectá web con `isWebPlatform()` de `src/services/export/TextFileService.ts` (o `Platform.OS === 'web'`) y mostrá un mensaje claro desde `src/content/`, sin romper la pantalla.
+10. **Pruebas y cierre:** actualizá la lista de ids y los contadores esperados en `tests/registry.test.ts` y los esperados de `tests/devGallery.test.ts` (una tarjeta `ready` más por Juego nuevo, con `g31` siempre `pending`). La base antes de agregar es 36 registros = 5 de Fase 0 + 31 Juegos; sumá 1 por cada Juego nuevo. Agregá `tests/<id>Game.test.ts` para la lógica pura. Corré `npm run typecheck`, `npm test` y `npm run lint`; si cambiaste rutas o PWA, también `npx expo export -p web`. Reportá los archivos tocados y los resultados reales.
+
+Modelos simples para copiar la estructura: G-18 (`src/games/runtime/CardsGame.tsx` → `InsistentVerse`) y G-22 (`src/games/runtime/PromptToolsExtra.tsx` → `RestriccionesGame`).
+
 ## Reglas absolutas
 1. No cambies la esencia de ningún Juego (G-01 a G-32). Reglas literales en `GAME_CATALOG.md`.
 2. No agregues IA generativa, cuentas de usuario, analíticas ni anuncios.

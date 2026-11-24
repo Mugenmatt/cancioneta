@@ -52,4 +52,5 @@ export const EDITOR_TEXT = {
   stimulusClear: 'Quitar estímulo',
   stimulusGroupFallback: 'Palabras',
   stimulusHidden: (count: number) => `${count} palabras plegadas`,
+  stimulusDeadlineReached: 'Plazo cumplido',
 } as const;

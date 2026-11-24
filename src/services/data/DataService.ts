@@ -5,7 +5,8 @@ import { verbs } from '@/data/verbs';
 import { adjectives } from '@/data/adjectives';
 import {
   prompts, spyQuestions, letterTriggers, confessionTopics, situations, restrictions,
-  sensoryQuestions, cutupTexts, portalSeeds, themes, universes, dice,
+  sensoryQuestions, cutupTexts, portalSeeds, themes, universes, dice, deadlineWords,
+  questionTitles, badSongPrompts,
 } from '@/data/prompts';
 import { titles, characters, songs, poemsSongsRef, quotes, scriptPhrases, images, type RawCultural } from '@/data/cultural';
 import {
@@ -164,6 +165,9 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
   pools.dice_accion = dice.accion.map((text) => makeItem('dice_accion', text));
   pools.dice_emocion = dice.emocion.map((text) => makeItem('dice_emocion', text));
   pools.dice_cualidad = dice.cualidad.map((text) => makeItem('dice_cualidad', text));
+  pools.deadline_words = deadlineWords.map((text) => makeItem('deadline_words', text));
+  pools.question_titles = questionTitles.map((text) => makeItem('question_titles', text));
+  pools.bad_song_prompts = badSongPrompts.map((text) => makeItem('bad_song_prompts', text));
   pools.games = [];
 
   const byPool: Record<string, number> = {};

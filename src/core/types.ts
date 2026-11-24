@@ -26,6 +26,9 @@ export type PoolId =
   | 'confession_topics'
   | 'letter_triggers'
   | 'spy_questions'
+  | 'deadline_words'
+  | 'question_titles'
+  | 'bad_song_prompts'
   | 'games';
 
 export interface PoolItem {
@@ -102,6 +105,9 @@ export interface StimulusSummary {
   items: string[];
   groups?: StimulusGroup[];
   note?: string;
+  deadlineAt?: number;
+  deadlineLabel?: string;
+  check?: { target: string; doneLabel: string; pendingLabel: string };
 }
 
 export interface PoolStats {

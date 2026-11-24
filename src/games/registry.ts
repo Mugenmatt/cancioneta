@@ -49,6 +49,9 @@ export const GAME_REGISTRY: GameMeta[] = [
   { id: 'g29', number: 29, name: 'Cut-up', phase: 'nuevo', summary: 'Recortar, mezclar y volver a mirar.', tags: ['cut-up', 'azar'], status: 'ready', themeId: 'g29' },
   { id: 'g30', number: 30, name: 'Trenza de palabras', phase: 'nuevo', summary: 'Tres frases que se entrelazan.', tags: ['frases', 'experimental'], status: 'ready', themeId: 'g30' },
   { id: 'g32', number: 32, name: 'Acróstico de azar', phase: 'nuevo', summary: 'Una letra por verso, una palabra escondida.', tags: ['acróstico', 'verso'], status: 'ready', themeId: 'g32' },
+  { id: 'g33', number: 33, name: 'Palabra con plazo', phase: 'nuevo', summary: 'Una palabra, un plazo y la canción antes que venza.', tags: ['palabra', 'temporizador'], status: 'ready', themeId: 'g33' },
+  { id: 'g41', number: 41, name: 'Título interrogante', phase: 'nuevo', summary: 'Preguntas que nacen de un título y vuelven respondidas en la canción.', tags: ['preguntas', 'título'], status: 'ready', themeId: 'g41' },
+  { id: 'g44', number: 44, name: 'Canción mala', phase: 'nuevo', summary: 'Diez minutos para escribirla mal a propósito, tirarla y escribir la buena.', tags: ['consigna', 'temporizador'], status: 'ready', themeId: 'g44' },
 ];
 
 export interface GameCounts {

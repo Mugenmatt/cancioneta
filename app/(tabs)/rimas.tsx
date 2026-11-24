@@ -8,7 +8,7 @@ import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { EmptyState } from '@/design/components/Feedback';
 import { Pill, SectionLabel } from '@/design/components/Primitives';
-import { fonts, minTouch, radii, spacing } from '@/design/tokens';
+import { fontSizes, fonts, hitSlop, minTouch, radii, spacing } from '@/design/tokens';
 import { RIMAS_TEXT } from '@/content/rimas';
 import { filterRhymes, rhymeService, type RhymeFilter, type RhymeResults } from '@/services/rhyme/RhymeService';
 
@@ -50,14 +50,14 @@ export default function RimasScreen() {
     <Screen scroll>
       <View style={styles.head}>
         <AppText variant="label" color={colors.accentCore}>{RIMAS_TEXT.eyebrow}</AppText>
-        <AppText variant="title" style={{ marginTop: 4 }}>{RIMAS_TEXT.title}</AppText>
-        <AppText variant="caption" color={colors.textMuted} style={{ marginTop: 4 }}>
+        <AppText variant="title" style={{ marginTop: spacing.xxs }}>{RIMAS_TEXT.title}</AppText>
+        <AppText variant="serif" color={colors.textSecondary} style={{ marginTop: spacing.xxs }}>
           {RIMAS_TEXT.subtitle}
         </AppText>
       </View>
 
       <View style={[styles.search, { backgroundColor: colors.bgRaised, borderColor: colors.lineSubtle }]}>
-        <Feather name="search" size={17} color={colors.textMuted} />
+        <Feather name="search" size={fontSizes.body} color={colors.textMuted} />
         <TextInput
           value={query}
           onChangeText={setQuery}
@@ -74,10 +74,11 @@ export default function RimasScreen() {
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={RIMAS_TEXT.clear}
+            hitSlop={hitSlop}
             onPress={() => setQuery('')}
             style={styles.clear}
           >
-            <Feather name="x-circle" size={17} color={colors.textMuted} />
+            <Feather name="x-circle" size={fontSizes.body} color={colors.textMuted} />
           </Pressable>
         ) : null}
         <Button label={RIMAS_TEXT.search} onPress={() => void search()} loading={loading} disabled={!query.trim()} small />
@@ -135,7 +136,7 @@ export default function RimasScreen() {
                   </AppText>
                   <Feather
                     name={copied === word ? 'check' : 'copy'}
-                    size={16}
+                    size={fontSizes.body}
                     color={copied === word ? colors.stateSuccess : colors.textMuted}
                   />
                 </Pressable>
@@ -151,7 +152,7 @@ export default function RimasScreen() {
           ) : null}
         </View>
       ) : (
-        <AppText variant="caption" color={colors.textMuted}>{RIMAS_TEXT.idle}</AppText>
+        <EmptyState title={RIMAS_TEXT.idleTitle} body={RIMAS_TEXT.idle} />
       )}
     </Screen>
   );
@@ -168,9 +169,9 @@ const styles = StyleSheet.create({
     minHeight: minTouch,
     gap: spacing.xs,
   },
-  searchInput: { flex: 1, fontSize: 15, paddingVertical: spacing.sm },
-  clear: { padding: spacing.xxs },
-  filters: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: spacing.md, marginBottom: spacing.md },
+  searchInput: { flex: 1, fontSize: fontSizes.body, paddingVertical: spacing.sm },
+  clear: { minWidth: minTouch, minHeight: minTouch, alignItems: 'center', justifyContent: 'center' },
+  filters: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.md, marginBottom: spacing.md },
   list: { gap: spacing.xs },
   row: {
     flexDirection: 'row',
@@ -182,6 +183,6 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     minHeight: minTouch,
   },
-  word: { flex: 1, fontFamily: fonts.serif, fontSize: 18 },
-  note: { marginTop: spacing.lg, lineHeight: 20 },
+  word: { flex: 1, fontFamily: fonts.serif, fontSize: fontSizes.reading },
+  note: { marginTop: spacing.lg },
 });

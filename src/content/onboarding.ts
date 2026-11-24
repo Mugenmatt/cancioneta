@@ -1,4 +1,18 @@
 import { Feather } from '@expo/vector-icons';
+import { APP_META, NAVIGATION_TEXT } from './app';
+
+export const ONBOARDING_UI_TEXT = {
+  wordmark: APP_META.name,
+  skip: 'Saltear',
+  skipLabel: 'Saltear introducción',
+  close: 'Cerrar',
+  closeLabel: 'Cerrar introducción',
+  back: 'Atrás',
+  next: 'Siguiente',
+  start: 'Empezar',
+  reviewDone: NAVIGATION_TEXT.back,
+  progress: (current: number, total: number) => `Pantalla ${current} de ${total}`,
+} as const;
 
 export interface OnboardingPage {
   id: string;

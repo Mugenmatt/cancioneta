@@ -15,6 +15,7 @@ export const RIMAS_TEXT = {
   emptyTitle: 'No encontramos rimas',
   empty: 'No encontramos rimas para esa palabra. Probá con otra.',
   idle: 'Acá van a aparecer las rimas.',
+  idleTitle: 'Todavía no buscaste rimas',
   onlineNote: 'Buscamos también en Datamuse: tu palabra viaja solo cuando tocás Buscar.',
   offlineNote: 'Sin conexión: mostramos solo las rimas del léxico incluido.',
   credit: 'Rimas online: Datamuse API',

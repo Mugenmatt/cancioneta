@@ -17,6 +17,7 @@ interface ScreenProps {
   contentStyle?: StyleProp<ViewStyle>;
   bottomInset?: boolean;
   maxWidth?: ScreenMaxWidth;
+  backgroundColors?: readonly [string, string];
 }
 
 export function Screen({
@@ -29,11 +30,12 @@ export function Screen({
   contentStyle,
   bottomInset = false,
   maxWidth = 'reading',
+  backgroundColors,
 }: ScreenProps) {
   const { colors } = useCoreTheme();
   const { width } = useWindowDimensions();
-  const bg = gameTheme?.bg ?? colors.bgBase;
-  const bgAlt = gameTheme?.bgAlt ?? colors.bgSunken;
+  const bg = backgroundColors?.[0] ?? gameTheme?.bg ?? colors.bgBase;
+  const bgAlt = backgroundColors?.[1] ?? gameTheme?.bgAlt ?? colors.bgSunken;
   const allEdges: Edge[] = bottomInset ? [...edges, 'bottom'] : edges;
   const layout = getScreenLayout(width, maxWidth);
   const maxWidthStyle = { maxWidth: layout.maxWidth };

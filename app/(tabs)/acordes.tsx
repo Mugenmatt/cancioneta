@@ -90,10 +90,7 @@ export default function ChordsScreen() {
         setBeat(-1);
       },
       onStep: (step) => setStep(step),
-      onPulse: (pulse, accent) => {
-        setBeat(pulse);
-        if (accent === 'strong') void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      },
+      onPulse: (pulse) => setBeat(pulse),
       onFinish: () => {
         setPlaying(false);
         setStep(-1);

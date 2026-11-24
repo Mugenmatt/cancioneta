@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Animated, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useCoreTheme } from '../ThemeProvider';
-import { alpha, fonts, motion, radii, spacing } from '../tokens';
+import { alpha, fonts, radii, spacing } from '../tokens';
 import { AppText } from './Text';
 
 export function ProgressBar({ value, total, accent, label }: { value: number; total: number; accent?: string; label?: string }) {
@@ -23,36 +22,23 @@ export function ProgressBar({ value, total, accent, label }: { value: number; to
 }
 
 export function TimerBadge({ seconds, running, accent, accentText }: { seconds: number; running: boolean; accent?: string; accentText?: string }) {
-  const { colors, reduceMotion } = useCoreTheme();
-  const [pulse] = useState(() => new Animated.Value(1));
-  useEffect(() => {
-    if (!running || reduceMotion) return;
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 0.72, duration: motion.slow, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 1, duration: motion.slow, useNativeDriver: true }),
-      ]),
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [running, reduceMotion, pulse]);
+  const { colors } = useCoreTheme();
   const mins = Math.floor(Math.max(0, seconds) / 60);
   const secs = Math.max(0, seconds) % 60;
   return (
-    <Animated.View
+    <View
       accessibilityRole="timer"
       accessibilityLabel={`Temporizador: ${mins} minutos ${secs} segundos`}
       style={[
         styles.timer,
-        { borderColor: alpha(accent ?? colors.accentCore, 0.4), backgroundColor: alpha(accent ?? colors.accentCore, 0.12) },
-        { opacity: running && !reduceMotion ? pulse : 1 },
+        { borderColor: alpha(accent ?? colors.accentCore, 0.4), backgroundColor: alpha(accent ?? colors.accentCore, running ? 0.12 : 0.06) },
       ]}
     >
       <Feather name="clock" size={14} color={accentText ?? accent ?? colors.accentCore} />
       <AppText variant="caption" color={accentText ?? accent ?? colors.accentCore} style={{ marginLeft: 6, fontFamily: fonts.sansSemiBold }}>
         {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
       </AppText>
-    </Animated.View>
+    </View>
   );
 }
 

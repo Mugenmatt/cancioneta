@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { Animated, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useEffect } from 'react';
+import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCoreTheme } from '../ThemeProvider';
@@ -16,27 +17,36 @@ interface SheetProps {
   fullHeight?: boolean;
 }
 
+const enterEasing = Easing.bezier(
+  motion.easing.enter[0],
+  motion.easing.enter[1],
+  motion.easing.enter[2],
+  motion.easing.enter[3],
+);
+
 export function Sheet({ visible, onClose, title, children, fullHeight = false }: SheetProps) {
   const { colors, reduceMotion } = useCoreTheme();
   const offset = spacing.xl + spacing.xs;
-  const [translate] = useState(() => new Animated.Value(offset));
-  const [opacity] = useState(() => new Animated.Value(0));
+  const translate = useSharedValue(offset);
+  const opacity = useSharedValue(0);
 
   useEffect(() => {
-    if (visible) {
-      translate.setValue(offset);
-      opacity.setValue(0);
-      if (reduceMotion) {
-        translate.setValue(0);
-        opacity.setValue(1);
-        return;
-      }
-      Animated.parallel([
-        Animated.spring(translate, { toValue: 0, useNativeDriver: true, friction: 12 }),
-        Animated.timing(opacity, { toValue: 1, duration: motion.base, useNativeDriver: true }),
-      ]).start();
+    if (!visible) return;
+    if (reduceMotion) {
+      translate.set(0);
+      opacity.set(1);
+      return;
     }
+    translate.set(offset);
+    opacity.set(0);
+    translate.set(withTiming(0, { duration: motion.base, easing: enterEasing }));
+    opacity.set(withTiming(1, { duration: motion.base, easing: enterEasing }));
   }, [visible, reduceMotion, offset, translate, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translate.get() }],
+    opacity: opacity.get(),
+  }));
 
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose} statusBarTranslucent>
@@ -49,9 +59,8 @@ export function Sheet({ visible, onClose, title, children, fullHeight = false }:
             {
               backgroundColor: colors.bgRaised,
               shadowColor: shadows.color,
-              transform: [{ translateY: translate }],
-              opacity,
             },
+            animatedStyle,
           ]}
         >
           <SafeAreaView edges={['bottom']} style={{ flex: fullHeight ? 1 : undefined }}>

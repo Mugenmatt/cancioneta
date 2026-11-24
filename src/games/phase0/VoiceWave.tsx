@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 import { useCoreTheme, useGameTheme } from '@/design/ThemeProvider';
 import { alpha, minTouch, motion, spacing } from '@/design/tokens';
 
@@ -15,8 +15,8 @@ export function VoiceWave({ active }: { active: boolean }) {
     if (!active || reduceMotion) return;
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(progress, { toValue: 1, duration: motion.base, useNativeDriver: true }),
-        Animated.timing(progress, { toValue: 0, duration: motion.base, useNativeDriver: true }),
+        Animated.timing(progress, { toValue: 1, duration: motion.base, easing: Easing.linear, useNativeDriver: true }),
+        Animated.timing(progress, { toValue: 0, duration: motion.base, easing: Easing.linear, useNativeDriver: true }),
       ]),
     );
     loop.start();
@@ -26,16 +26,24 @@ export function VoiceWave({ active }: { active: boolean }) {
   return (
     <View style={styles.wave} accessibilityRole="image">
       {[0, 1, 2, 3, 4, 5].map((index) => {
-        const height = reduceMotion
-          ? active ? activeHeight(index) : idleHeight(index)
+        const fullHeight = activeHeight(index);
+        const scaleY = reduceMotion
+          ? active ? 1 : idleHeight(index) / fullHeight
           : progress.interpolate({
               inputRange: [0, 1],
-              outputRange: [idleHeight(index), activeHeight(index)],
+              outputRange: [idleHeight(index) / fullHeight, 1],
             });
         return (
           <Animated.View
             key={index}
-            style={[styles.bar, { height, backgroundColor: alpha(theme.accent, 0.75 - index * 0.08) }]}
+            style={[
+              styles.bar,
+              {
+                height: fullHeight,
+                transform: [{ scaleY }],
+                backgroundColor: alpha(theme.accent, 0.75 - index * 0.08),
+              },
+            ]}
           />
         );
       })}

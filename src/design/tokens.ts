@@ -157,10 +157,15 @@ export const letterSpacing = {
   button: 1.1,
 } as const;
 
-export const motion = {
+const motionDurations = {
   fast: 120,
   base: 240,
   slow: 480,
+} as const;
+
+export const motion = {
+  ...motionDurations,
+  spring: { duration: motionDurations.slow, dampingRatio: 0.8 },
   easing: {
     enter: [0.215, 0.61, 0.355, 1],
     exit: [0.55, 0.055, 0.675, 0.19],

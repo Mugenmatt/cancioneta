@@ -28,6 +28,9 @@ import { TraitorChorusGame } from './TraitorChorusGame';
 import { TwoVoicesGame } from './TwoVoicesGame';
 import { TitleQuestionGame } from './TitleQuestionGame';
 import { BadSongGame } from './BadSongGame';
+import { G45Game } from './G45Game';
+import { G52Game } from './G52Game';
+import { G53Game } from './G53Game';
 import { ShotPlanGame } from './ShotPlanGame';
 import { EmotionArcGame } from './EmotionArcGame';
 import { MorningPagesGame, PromptGame, SpyGame, VoiceGame, WhyGame } from '../phase0';
@@ -36,7 +39,7 @@ export const RUNTIME_GAME_IDS = new Set([
   'f0-1', 'f0-2', 'f0-3', 'f0-4', 'f0-5',
   'g01', 'g03', 'g04', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11', 'g12', 'g13',
   'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20', 'g21', 'g22', 'g23', 'g25',
-  'g26', 'g27', 'g28', 'g29', 'g30', 'g32', 'g33', 'g34', 'g35', 'g36', 'g37', 'g38', 'g39', 'g41', 'g42', 'g43', 'g44', 'g48', 'g49', 'g50', 'g54', 'g55', 'g56', 'g57',
+  'g26', 'g27', 'g28', 'g29', 'g30', 'g32', 'g33', 'g34', 'g35', 'g36', 'g37', 'g38', 'g39', 'g41', 'g42', 'g43', 'g44', 'g45', 'g48', 'g49', 'g50', 'g52', 'g53', 'g54', 'g55', 'g56', 'g57',
 ]);
 
 export function RuntimeGame({ id }: { id: string }): ReactElement | null {
@@ -114,12 +117,18 @@ export function RuntimeGame({ id }: { id: string }): ReactElement | null {
       return <StrangerStoryGame />;
     case 'g44':
       return <BadSongGame />;
+    case 'g45':
+      return <G45Game />;
     case 'g48':
       return <ShotPlanGame />;
     case 'g49':
       return <MutantProverbGame />;
     case 'g50':
       return <EmotionArcGame />;
+    case 'g52':
+      return <G52Game />;
+    case 'g53':
+      return <G53Game />;
     case 'g54':
       return <OnlyQuestionsGame />;
     case 'g55':

@@ -1,0 +1,33 @@
+export const G52_MIN_SECONDS = 30;
+export const G52_MAX_SECONDS = 60;
+
+export const G52_TEXT = {
+  intro: 'Grabá entre 30 y 60 segundos de balbuceo, habla rápida, susurros o mala dicción. Después transcribí sin conexión y rescatá los fragmentos raros que aparezcan.',
+  privacy: 'El micrófono se pide recién cuando tocás grabar. El audio queda en una carpeta temporal y se borra al terminar. La transcripción y los fragmentos viven solo en memoria.',
+  webNotice: 'En la web el micrófono no está disponible. Podés escribir a mano lo que habrías balbuceado y seguir marcando fragmentos sin que se rompa nada.',
+  permissionDenied: 'Necesitás permitir el micrófono para grabar. El audio se queda en una carpeta temporal del teléfono.',
+  recordingError: 'No se pudo iniciar la grabación. Probá otra vez.',
+  transcriptionUnavailable: 'El reconocimiento on-device para español no está disponible acá. No enviamos tu audio a ningún servidor: podés transcribir a mano mientras escuchás la grabación.',
+  transcriptionError: 'No se pudo transcribir el audio. Podés escribir lo que dijiste a mano.',
+  transcribing: 'Transcribiendo en el dispositivo…',
+  record: 'Grabalá torcida',
+  stop: 'Detener grabación',
+  listen: 'Escuchar grabación',
+  transcribe: 'Transcribir sin conexión',
+  recordingSeconds: (seconds: number) => `${seconds} s de grabación`,
+  durationHint: 'La consigna pide entre 30 y 60 segundos.',
+  durationOk: 'Duración dentro de la consigna.',
+  durationOut: 'La consigna pide entre 30 y 60 segundos; podés grabar otra si querés.',
+  transcriptEyebrow: 'Transcripción literal',
+  transcriptNote: 'Acá se muestra lo que entendió el reconocedor, con sus errores. No lo corrigimos automáticamente.',
+  manualLabel: 'Transcripción asistida',
+  fragmentEyebrow: 'Fragmentos para rescatar',
+  markNote: 'Marcá los fragmentos absurdos o sugerentes.',
+  selectedCount: (count: number) => `${count} fragmentos marcados`,
+  emptySelection: 'Marcá al menos un fragmento antes de llevarlos al cuaderno.',
+  mix: 'Mezclar fragmentos',
+  mixedLabel: 'Fragmentos mezclados',
+  send: 'Llevar fragmentos al cuaderno',
+  finish: 'Terminar y borrar audio',
+  editorTitle: 'Transcripción torcida',
+} as const;

@@ -254,6 +254,95 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 - **Estímulo visible durante la escritura:** tres grupos con la emoción asignada a cada bloque.
 - **Identidad:** onda de tres colores; paleta clara con acento violeta.
 
+### G-38 Escena robada
+- **Mecánica:** tarjeta con una descripción breve y original de una situación emocional, un personaje y «lo que no se dice». Se escribe desde el sentimiento de un solo personaje, sin contar la escena desde afuera. Temporizador opcional de 30 minutos, sin notificaciones ni guardado.
+- **Datos:** pool `stolen_scenes` con 30 escenas originales de Cancioneta; cada semilla guarda descripción, personaje y lo no dicho. Sin obras ni diálogos citados.
+- **Sorteo:** `RandomService.draw('stolen_scenes', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel plegable arriba del cuaderno con los tres campos y, si se activó, el tiempo restante.
+- **Identidad:** encuadre de ventana y luz nocturna; paleta oscura con acento dorado.
+
+### G-39 Disección de un verso
+- **Mecánica:** el usuario escribe un verso que le gusta (no se guarda ni se busca en ningún lado) y elige qué lo atrapa: imagen, sonido, giro inesperado, emoción o ritmo. Después escribe un verso propio con el mismo recurso sobre otro tema y va al editor.
+- **Datos:** sin banco nuevo; solo las cinco opciones fijas en `src/content/games/g39.ts`.
+- **Sorteo:** ninguno.
+- **Estímulo visible durante la escritura:** panel plegable con el verso traído y el recurso elegido, más la consigna de escribir sobre otro tema.
+- **Identidad:** lupa y cuadrícula de análisis; paleta clara con acento violeta.
+
+### G-42 Diez primeros versos
+- **Mecánica:** lista numerada del 1 al 10 con contador de aperturas escritas. Criterio: cada apertura debe dejar una pregunta en quien escucha. Tema opcional sorteado del banco existente `themes`. Al terminar se marcan tres favoritas y esas tres van al editor.
+- **Datos:** pool existente `themes` para el tema opcional; sin banco nuevo.
+- **Sorteo:** `RandomService.draw('themes', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel con el tema opcional y el grupo de las tres aperturas favoritas.
+- **Identidad:** escalera de diez peldaños; paleta cálida con acento terracota.
+
+### G-43 Contar a un extraño
+- **Mecánica:** paso 1, contar lo que pasó como si se lo contara a alguien que no lo conoce, sin adornos; disparador de situación opcional. Paso 2, en el editor: la versión sin adornos queda arriba en un panel plegable y la consigna pide convertirla en letra conservando toda la información.
+- **Datos:** pool existente `situations` para el disparador opcional; sin banco nuevo.
+- **Sorteo:** `RandomService.draw('situations', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel plegable con cada línea del relato original y la nota de conservar los datos.
+- **Identidad:** sobre y carta sin sobrescribir; paleta clara con acento verde azulado.
+
+### G-49 Refrán mutante
+- **Mecánica:** sale una frase corta fija que queda destacada durante todo el ejercicio. Se escriben tres o cuatro estrofas que terminen con esa frase, con un sentido distinto en cada una. El editor recuerda la frase y avisa cuando aparece en la letra.
+- **Datos:** pool `mutant_proverbs` con 40 frases breves originales de Cancioneta; no son refranes de obras protegidas.
+- **Sorteo:** `RandomService.draw('mutant_proverbs', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** frase fija destacada en el Juego y en el panel del cuaderno, con aviso de aparición.
+- **Identidad:** frase subrayada y bandas repetidas; paleta cálida con acento ocre.
+
+### G-54 Solo preguntas
+- **Mecánica:** tema aleatorio del banco existente y entre 8 y 16 versos, todos preguntas. El panel del cuaderno señala con suavidad qué versos no tienen signo de interrogación y muestra el tema.
+- **Datos:** pool existente `themes`; sin banco nuevo.
+- **Sorteo:** `RandomService.draw('themes', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** tema, lista de versos señalados por número y aviso de aparición de signos de interrogación.
+- **Identidad:** signos de interrogación suspendidos; paleta oscura con acento celeste.
+
+### G-55 Empezar por el final
+- **Mecánica:** tema aleatorio del banco existente. Primero se escribe el último verso, que queda fijo abajo; después se agregan versos arriba, de atrás hacia adelante. Botón «Ver en orden normal» para comprobar el resultado. La cantidad de versos es libre.
+- **Datos:** pool existente `themes`; sin banco nuevo.
+- **Sorteo:** `RandomService.draw('themes', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel plegable con el tema, el último verso y los anteriores ya invertidos al orden normal de la canción.
+- **Identidad:** escalera inversa; paleta oscura con acento lila.
+
+### G-56 Estribillo traidor
+- **Mecánica:** paso 1, escribir una estrofa; paso 2, escribir un estribillo que la contradiga o desmienta. Ambos textos se muestran lado a lado. Consigna de contradicción aleatoria: ironía, negación, cambio de punto de vista o mentira piadosa.
+- **Datos:** pool `contradiction_modes` con 4 consignas originales de Cancioneta.
+- **Sorteo:** `RandomService.draw('contradiction_modes', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel plegable con la consigna, la estrofa y el estribillo juntos.
+- **Identidad:** dos columnas enfrentadas; paleta clara con acento granate.
+
+### G-57 Dos voces
+- **Mecánica:** se sortean dos personajes y sus versos se alternan A/B desde el principio, sin narrador. La pantalla colorea cada bloque según la voz y pide un mínimo de ocho versos. El cuaderno recibe el diálogo en orden con un panel que separa lo que dice cada uno.
+- **Datos:** pool `voice_pairs` con 40 parejas originales de personajes arquetípicos; sin obras citadas.
+- **Sorteo:** `RandomService.draw('voice_pairs', 1)`, sin repetición hasta agotar el ciclo.
+- **Estímulo visible durante la escritura:** panel plegable con los grupos «Voz A» y «Voz B» y la nota de leer sin narrador.
+- **Identidad:** dos colores de voz sobre línea de agua; paleta oscura con acento verde agua.
+
+## Juegos con audio
+
+### G-45 Dos registros
+- **Mecánica:** dos grabaciones temporales. Registro 1 con voz grave y conversacional, 4 a 6 líneas sobre algo que el usuario hizo o pensó esta semana. Registro 2 con voz más aguda, notas largas y suaves, 4 a 6 líneas sobre una emoción que sintió. Se reproducen los dos seguidos y se ofrece un descanso opcional de 30 minutos que se puede saltear. Al volver se escuchan de nuevo, se responde «¿qué conecta las dos?» y se elige entre llevar el registro 1 como verso y el 2 como estribillo, sumar un pre-estribillo y elegir una línea del estribillo como tema central. Todo eso va al cuaderno como panel de escritura.
+- **Datos:** sin pool nuevo. La transcripción offline y la carpeta temporal son las mismas de Voz desatada, ahora en `src/services/audio/recording.ts` y los hooks compartidos de `src/games/runtime/`.
+- **Sorteo:** ninguno.
+- **Estímulo visible durante la escritura:** panel plegable con «Verso — registro 1», «Estribillo — registro 2», la conexión, el pre-estribillo opcional y el tema central elegido.
+- **Identidad:** dos ondas superpuestas; paleta oscura con acento ámbar.
+- **Web/PWA:** sin micrófono; se muestra un aviso claro y se pueden escribir los dos registros a mano.
+
+### G-52 Transcripción torcida
+- **Mecánica:** grabación de 30 a 60 segundos de balbuceo, habla rápida, susurros o mala dicción. La transcripción offline se muestra literal, con sus errores, sin corrección automática. El usuario marca fragmentos absurdos o sugerentes y los lleva al cuaderno; el botón «Mezclar fragmentos» los reordena con `RandomService`.
+- **Datos:** sin pool nuevo. Misma grabadora temporal y misma transcripción on-device que Voz desatada, centralizadas en `src/services/audio/recording.ts`.
+- **Sorteo:** `RandomService.shuffle()` sobre los fragmentos ya marcados; nunca `Math.random()` directo.
+- **Estímulo visible durante la escritura:** panel plegable con la transcripción literal y los fragmentos marcados, en el orden elegido.
+- **Identidad:** bandas torcidas; paleta oscura con acento verde ácido.
+- **Web/PWA:** sin micrófono; aviso claro y transcripción manual disponible para seguir marcando fragmentos.
+
+### G-53 Paisaje sonoro
+- **Mecánica:** grabación ambiente de 20 segundos (cocina, calle, lluvia, etc.), escucha sin transcripción y tres preguntas guía: qué suena lejos, qué suena cerca y qué falta. Las tres respuestas van al cuaderno como borrador y panel plegable. Grabar es opcional: se puede escribir de todos modos.
+- **Datos:** sin pool nuevo. Misma grabadora temporal que Voz desatada, centralizada en `src/services/audio/recording.ts`. No usa transcripción.
+- **Sorteo:** ninguno.
+- **Estímulo visible durante la escritura:** panel plegable con las tres preguntas y sus respuestas.
+- **Identidad:** círculos concéntricos; paleta oscura con acento verde agua.
+- **Web/PWA:** sin micrófono; aviso claro y preguntas disponibles para escribir a mano sin romper la pantalla.
+
 ---
 
 ## Índice de datos por Juego
@@ -288,12 +377,24 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 | G-35 | `rhyme_schemes` |
 | G-36 | `form_styles`, `form_meters`, `form_structures` |
 | G-37 | `fable_protagonists`, `fable_conflicts` |
+| G-38 | `stolen_scenes` |
+| G-39 | Entrada del usuario (sin pool) |
 | G-41 | `question_titles` |
+| G-42 | `themes` |
+| G-43 | `situations` |
 | G-44 | `bad_song_prompts` |
+| G-45 | Dos grabaciones temporales; sin pool |
 | G-48 | seis planos fijos (sin pool) |
+| G-49 | `mutant_proverbs` |
 | G-50 | `emotion_arc` |
+| G-52 | Grabación temporal y transcripción; sin pool |
+| G-53 | Grabación temporal sin transcripción; sin pool |
+| G-54 | `themes` |
+| G-55 | `themes` |
+| G-56 | `contradiction_modes` |
+| G-57 | `voice_pairs` |
 
 ## Verificación de integridad del catálogo
-- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 = **41 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado.
+- 23 originales + 9 nuevos + 3 de prueba (G-33, G-41, G-44) + G-34, G-35, G-36, G-37, G-48, G-50 + G-38, G-39, G-42, G-43, G-49, G-54, G-55, G-56, G-57 + G-45 + G-52 + G-53 = **53 numerados**; 5 ejercicios de Fase 0 aparte. G-31 queda reservado (52 habilitados).
 - Test de registro: ids `g01…g44` (sin `g31`) únicos, cada uno con intro completa (título, objetivo, pasos, ejemplos, «Comenzar»).
 - Cualquier cambio de la esencia de un Juego original requiere aprobación explícita del usuario.

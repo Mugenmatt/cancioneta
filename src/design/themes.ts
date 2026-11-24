@@ -222,6 +222,10 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#EFEDE7', bgAlt: '#DEDAD0', surface: '#FBFAF6', ink: '#242019', inkSoft: '#565046',
     accent: '#8E3B2F', accentInk: '#FFF4EE', motif: 'paper', entrance: 'flip', displayFont: 'sansBold', label: 'Canción mala',
   },
+  'g45': {
+    bg: '#12161F', bgAlt: '#1E2532', surface: '#19202B', ink: '#F1F3F7', inkSoft: '#B8C2D0',
+    accent: '#F0B86A', accentInk: '#2A1B06', motif: 'wave', entrance: 'drop', displayFont: 'display', label: 'Dos registros',
+  },
   'g48': {
     bg: '#161B1E', bgAlt: '#242C30', surface: '#1D2529', ink: '#F0F4F3', inkSoft: '#B0BDBE',
     accent: '#67C4B4', accentInk: '#062621', motif: 'window', entrance: 'slide', displayFont: 'sansSemiBold', label: 'Plano a plano',
@@ -233,6 +237,14 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
   'g50': {
     bg: '#F2E9F1', bgAlt: '#E2D3E2', surface: '#FCF8FC', ink: '#2B2230', inkSoft: '#695C70',
     accent: '#6A3E82', accentInk: '#FFF5FF', motif: 'wave', entrance: 'rise', displayFont: 'displayItalic', label: 'Arco emocional',
+  },
+  'g52': {
+    bg: '#17121C', bgAlt: '#261B2F', surface: '#201827', ink: '#F6F0F8', inkSoft: '#C6B7CF',
+    accent: '#D3E85A', accentInk: '#1C2405', motif: 'stripes', entrance: 'flip', displayFont: 'sansBold', label: 'Transcripción torcida',
+  },
+  'g53': {
+    bg: '#0E1B1B', bgAlt: '#172A29', surface: '#132322', ink: '#EEF6F3', inkSoft: '#B3C8C2',
+    accent: '#72D6B6', accentInk: '#06231B', motif: 'rings', entrance: 'rise', displayFont: 'displayItalic', label: 'Paisaje sonoro',
   },
   'g54': {
     bg: '#101C28', bgAlt: '#1D3042', surface: '#172A3A', ink: '#E9F2F8', inkSoft: '#A9BECD',

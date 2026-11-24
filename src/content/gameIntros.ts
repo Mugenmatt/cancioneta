@@ -454,4 +454,31 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
     ],
     examples: ['Verso: nostalgia · Pre-estribillo: inquietud · Estribillo: esperanza.', 'Cambiar solo el estribillo por «alivio» deja los otros dos igual.'],
   },
+  'g45': {
+    steps: [
+      'Grabá el registro 1 con voz grave: 4 a 6 líneas sobre algo que hiciste o pensaste esta semana.',
+      'Grabá el registro 2 con voz aguda y notas suaves: 4 a 6 líneas sobre una emoción que sentiste.',
+      'Escuchá los dos seguidos. El descanso de 30 minutos es opcional y se puede saltear.',
+      'Al volver, respondé «¿qué conecta las dos?» y elegí una línea del estribillo como tema central.',
+    ],
+    examples: ['Registro 1: «Esta semana arreglé la canilla y nadie lo notó».', 'Registro 2: «La calma me vino después, sin avisar».'],
+  },
+  'g52': {
+    steps: [
+      'Grabá entre 30 y 60 segundos de balbuceo, habla rápida, susurros o mala dicción.',
+      'Transcribí sin conexión y mirá la transcripción literal, con sus errores.',
+      'Marcá los fragmentos absurdos o sugerentes que quieras rescatar.',
+      'Si querés, mezclalos con el sistema de azar y llevá el resultado al cuaderno.',
+    ],
+    examples: ['Transcripción literal: «y no se ya la coso del mármol».', 'Fragmento marcado: «la coso del mármol».'],
+  },
+  'g53': {
+    steps: [
+      'Grabá 20 segundos de ambiente: cocina, calle, lluvia o lo que tengas cerca.',
+      'Escuchá el paisaje; acá no hay transcripción.',
+      'Respondé tres preguntas: qué suena lejos, qué suena cerca y qué falta.',
+      'Llevá las tres respuestas al cuaderno para escribir desde la escucha.',
+    ],
+    examples: ['Lejos: un colectivo. Cerca: el mate contra la mesa. Falta: la voz de alguien.', 'Escribí: «El colectivo pasa lejos; el mate suena cerca; nadie dice nada».'],
+  },
 };

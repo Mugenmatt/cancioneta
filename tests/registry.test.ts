@@ -8,7 +8,7 @@ describe('catálogo de juegos', () => {
       'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10',
       'g11', 'g12', 'g13', 'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20',
       'g21', 'g22', 'g23', 'g24', 'g25', 'g26', 'g27', 'g28', 'g29', 'g30', 'g32',
-      'g33', 'g34', 'g35', 'g36', 'g37', 'g38', 'g39', 'g41', 'g42', 'g43', 'g44', 'g48', 'g49', 'g50', 'g54', 'g55', 'g56', 'g57',
+      'g33', 'g34', 'g35', 'g36', 'g37', 'g38', 'g39', 'g41', 'g42', 'g43', 'g44', 'g45', 'g48', 'g49', 'g50', 'g52', 'g53', 'g54', 'g55', 'g56', 'g57',
     ]);
     expect(games).not.toContainEqual(expect.objectContaining({ id: 'g31' }));
     expect(new Set(gameIds()).size).toBe(GAME_REGISTRY.length);
@@ -26,7 +26,7 @@ describe('catálogo de juegos', () => {
   });
 
   it('deriva los contadores del registro', () => {
-    expect(gameCounts()).toEqual({ games: 49, fase0: 5, total: 54 });
+    expect(gameCounts()).toEqual({ games: 52, fase0: 5, total: 57 });
   });
 });
 

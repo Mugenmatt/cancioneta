@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
+import Animated from 'react-native-reanimated';
 import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
 import { BackButton } from '@/design/components/Primitives';
 import { useGameTheme } from '@/design/ThemeProvider';
+import { useEntranceStyle } from '@/design/useEntranceStyle';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { GAME_FLOW_TEXT } from '@/content/gameFlow';
 import { GAME_INTROS } from '@/content/gameIntros';
@@ -25,6 +27,7 @@ export default function GameScreen() {
   const router = useRouter();
   const game = gameById(id ?? '');
   const theme = useGameTheme(game?.themeId ?? 'g01');
+  const entranceStyle = useEntranceStyle(theme.entrance);
   const [startedId, setStartedId] = useState<string | null>(null);
   const started = startedId === id;
 
@@ -68,7 +71,7 @@ export default function GameScreen() {
       </View>
 
       {!started ? (
-        <View style={[styles.intro, { borderColor: alpha(theme.ink, 0.16) }]}>
+        <Animated.View style={[styles.intro, { borderColor: alpha(theme.ink, 0.16) }, entranceStyle]}>
           <AppText variant="label" color={theme.accentText}>{GAME_FLOW_TEXT.objective}</AppText>
           <AppText variant="caption" color={theme.ink} style={{ marginTop: 4 }}>{game.summary}</AppText>
           <AppText variant="label" color={theme.accentText} style={{ marginTop: spacing.md }}>{GAME_FLOW_TEXT.stepsTitle}</AppText>
@@ -86,7 +89,7 @@ export default function GameScreen() {
             accentInk={theme.accentInk}
             style={{ marginTop: spacing.lg }}
           />
-        </View>
+        </Animated.View>
       ) : (
         <View style={[styles.runtime, { borderColor: alpha(theme.ink, 0.16), backgroundColor: alpha(theme.surface, 0.8) }]}>
           {game.id === 'g24' ? <DiceGame /> : null}

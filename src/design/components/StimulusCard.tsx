@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import Animated from 'react-native-reanimated';
 import type { GameTheme } from '../themes';
 import { alpha, fonts, radii, spacing } from '../tokens';
+import { useEntranceStyle } from '../useEntranceStyle';
 import { AppText } from './Text';
 
 interface StimulusCardProps {
@@ -15,10 +17,12 @@ interface StimulusCardProps {
 }
 
 export function StimulusCard({ theme, children, eyebrow, caption, style, large = false, footer }: StimulusCardProps) {
+  const entranceStyle = useEntranceStyle(theme.entrance);
   return (
-    <View
+    <Animated.View
       style={[
         styles.card,
+        entranceStyle,
         {
           backgroundColor: theme.surface,
           borderColor: alpha(theme.accent, 0.28),
@@ -39,7 +43,7 @@ export function StimulusCard({ theme, children, eyebrow, caption, style, large =
         </AppText>
       ) : null}
       {footer}
-    </View>
+    </Animated.View>
   );
 }
 

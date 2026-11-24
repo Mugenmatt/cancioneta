@@ -12,6 +12,7 @@ export const RIMAS_TEXT = {
     assonant: 'Asonante',
   },
   results: (count: number) => `${count} ${count === 1 ? 'palabra' : 'palabras'}`,
+  emptyTitle: 'No encontramos rimas',
   empty: 'No encontramos rimas para esa palabra. Probá con otra.',
   idle: 'Acá van a aparecer las rimas.',
   onlineNote: 'Buscamos también en Datamuse: tu palabra viaja solo cuando tocás Buscar.',

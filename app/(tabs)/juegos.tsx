@@ -5,9 +5,12 @@ import { Feather } from '@expo/vector-icons';
 import { useCoreTheme } from '@/design/ThemeProvider';
 import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
+import { Button } from '@/design/components/Button';
+import { EmptyState } from '@/design/components/Feedback';
 import { SectionLabel } from '@/design/components/Primitives';
 import { alpha, fonts, radii, spacing } from '@/design/tokens';
 import { gameThemes } from '@/design/themes';
+import { GAME_FLOW_TEXT } from '@/content/gameFlow';
 import { GAME_REGISTRY, PHASE_LABEL, type GameMeta, type GamePhase } from '@/games/registry';
 
 const PHASES: GamePhase[] = ['fase0', 'original', 'nuevo'];
@@ -72,12 +75,11 @@ export default function GamesScreen() {
       })}
 
       {games.length === 0 ? (
-        <View style={styles.empty}>
-          <Feather name="feather" size={24} color={colors.textMuted} />
-          <AppText variant="body" color={colors.textSecondary} style={{ marginTop: spacing.sm }}>
-            No hay juegos con esa búsqueda.
-          </AppText>
-        </View>
+        <EmptyState
+          title={GAME_FLOW_TEXT.emptySearchTitle}
+          body={GAME_FLOW_TEXT.emptySearchBody}
+          action={<Button label={GAME_FLOW_TEXT.clearSearch} small onPress={() => setQuery('')} />}
+        />
       ) : null}
     </Screen>
   );
@@ -122,5 +124,4 @@ const styles = StyleSheet.create({
   group: { marginTop: spacing.lg },
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: radii.card, padding: spacing.sm, marginBottom: spacing.xs, minHeight: 78 },
   number: { width: 42, height: 42, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
-  empty: { alignItems: 'center', paddingVertical: spacing.xxl },
 });

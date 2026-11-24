@@ -1,23 +1,32 @@
+import type { ReactNode } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated from 'react-native-reanimated';
 import { alpha } from '../tokens';
 import type { GameTheme } from '../themes';
+import { useEntranceStyle } from '../useEntranceStyle';
 
 export function Motif({ theme }: { theme: GameTheme }) {
   const { width, height } = useWindowDimensions();
   const accent = theme.accent;
   const line = alpha(theme.ink, 0.08);
+  const entranceStyle = useEntranceStyle(theme.entrance);
+  const withEntrance = (content: ReactNode) => (
+    <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, entranceStyle]}>
+      {content}
+    </Animated.View>
+  );
 
   switch (theme.motif) {
     case 'halo':
-      return (
+      return withEntrance(
         <>
           <View style={[styles.circle, { width: 360, height: 360, top: -140, right: -120, backgroundColor: alpha(accent, 0.16) }]} />
           <View style={[styles.circle, { width: 180, height: 180, bottom: 60, left: -90, borderColor: alpha(accent, 0.35) }]} />
         </>
       );
     case 'grid':
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 9 }, (_, i) => (
             <View key={`h${i}`} style={{ position: 'absolute', left: 0, right: 0, top: (height / 10) * (i + 1), height: 1, backgroundColor: line }} />
@@ -28,7 +37,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </View>
       );
     case 'stripes':
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 7 }, (_, i) => (
             <View
@@ -43,7 +52,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </View>
       );
     case 'wave':
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 4 }, (_, i) => (
             <View
@@ -58,7 +67,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </View>
       );
     case 'orbit':
-      return (
+      return withEntrance(
         <>
           <View style={[styles.ring, { width: 320, height: 320, top: -110, right: -110, borderColor: alpha(accent, 0.25) }]} />
           <View style={[styles.ring, { width: 210, height: 210, top: -55, right: -55, borderColor: alpha(accent, 0.16) }]} />
@@ -66,13 +75,13 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </>
       );
     case 'rings':
-      return (
+      return withEntrance(
         <View style={[styles.ring, { width: 260, height: 260, alignSelf: 'center', top: height * 0.08, borderColor: alpha(accent, 0.22), borderWidth: 10 }]}>
           <View style={[styles.ring, { width: 120, height: 120, borderColor: alpha(accent, 0.4), borderWidth: 6 }]} />
         </View>
       );
     case 'beam':
-      return (
+      return withEntrance(
         <LinearGradient
           pointerEvents="none"
           colors={[alpha(accent, 0.28), 'transparent']}
@@ -82,14 +91,14 @@ export function Motif({ theme }: { theme: GameTheme }) {
         />
       );
     case 'blur':
-      return (
+      return withEntrance(
         <>
           <View style={[styles.circle, { width: 260, height: 260, top: -100, left: -80, backgroundColor: alpha(accent, 0.2) }]} />
           <View style={[styles.circle, { width: 180, height: 180, bottom: 40, right: -70, backgroundColor: alpha(accent, 0.12) }]} />
         </>
       );
     case 'stairs':
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 6 }, (_, i) => (
             <View
@@ -103,7 +112,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </View>
       );
     case 'paper':
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 14 }, (_, i) => (
             <View key={i} style={{ position: 'absolute', left: 24, right: 24, top: 80 + i * 42, height: 1, backgroundColor: alpha(theme.ink, 0.055) }} />
@@ -112,7 +121,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
         </View>
       );
     case 'window':
-      return (
+      return withEntrance(
         <View style={[styles.frame, { borderColor: alpha(accent, 0.2), top: height * 0.09, left: width * 0.1, width: width * 0.8, height: height * 0.42 }]}>
           <View style={{ flex: 1, borderRightWidth: 1, borderColor: alpha(accent, 0.16) }} />
           <View style={{ flex: 1 }} />
@@ -120,7 +129,7 @@ export function Motif({ theme }: { theme: GameTheme }) {
       );
     case 'grain':
     default:
-      return (
+      return withEntrance(
         <View style={StyleSheet.absoluteFill} pointerEvents="none">
           {Array.from({ length: 26 }, (_, i) => (
             <View

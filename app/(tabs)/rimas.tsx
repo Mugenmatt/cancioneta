@@ -6,6 +6,7 @@ import { useCoreTheme } from '@/design/ThemeProvider';
 import { Screen } from '@/design/components/Screen';
 import { AppText } from '@/design/components/Text';
 import { Button } from '@/design/components/Button';
+import { EmptyState } from '@/design/components/Feedback';
 import { Pill, SectionLabel } from '@/design/components/Primitives';
 import { fonts, minTouch, radii, spacing } from '@/design/tokens';
 import { RIMAS_TEXT } from '@/content/rimas';
@@ -100,7 +101,20 @@ export default function RimasScreen() {
           </SectionLabel>
 
           {words.length === 0 ? (
-            <AppText variant="caption" color={colors.textMuted}>{RIMAS_TEXT.empty}</AppText>
+            <EmptyState
+              title={RIMAS_TEXT.emptyTitle}
+              body={RIMAS_TEXT.empty}
+              action={
+                <Button
+                  label={RIMAS_TEXT.clear}
+                  small
+                  onPress={() => {
+                    setQuery('');
+                    setResults(null);
+                  }}
+                />
+              }
+            />
           ) : (
             <View style={styles.list}>
               {words.map((word) => (

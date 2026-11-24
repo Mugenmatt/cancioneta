@@ -3,6 +3,20 @@
 ## Qué es este proyecto
 App mobile (Android primero, iOS-ready) para componer canciones con 32 Juegos creativos, acordes con piano y estructuras poéticas. La documentación completa está en la raíz del repositorio (`docs/` está vacío). NO inventes decisiones: si algo no está en la documentación, preguntá.
 
+## Reglas del proyecto
+- No modificar, renombrar ni refactorizar ningún Juego existente (G-01 a G-32) ni la Fase 0, Fase 1 ni Fase 3.
+- Todos los Juegos nuevos usan el editor central único. No crear editores nuevos.
+- No guardar letras de forma permanente. Si se cierra la app, se pierde la canción. Sin borrador de recuperación.
+- Todo funciona offline. Sin IA generativa. Sin servicios externos pagos. Sin cuentas ni registro.
+- El audio vive solo en carpeta temporal.
+- Usar el sistema existente de aleatoriedad sin repetición. No crear uno nuevo.
+- No mostrar ni guardar letras de canciones protegidas. Los ejemplos y bancos de datos deben ser originales.
+- Español argentino, voseo.
+- Compatibilidad web/PWA: si un Juego usa una API nativa (micrófono, etc.), debe degradar con un mensaje claro en web, sin romper.
+- No agregar dependencias nuevas sin avisarme antes y esperar mi aprobación.
+- Trabajar de a un Juego por vez. Después de cada Juego, correr typecheck/lint/build o los tests existentes y reportar qué archivos se tocaron.
+- Ante la duda, preguntar en vez de inventar.
+
 ## Reglas absolutas
 1. No cambies la esencia de ningún Juego (G-01 a G-32). Reglas literales en `GAME_CATALOG.md`.
 2. No agregues IA generativa, cuentas de usuario, analíticas ni anuncios.

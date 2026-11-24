@@ -39,6 +39,10 @@ export type PoolId =
   | 'fable_protagonists'
   | 'fable_conflicts'
   | 'emotion_arc'
+  | 'stolen_scenes'
+  | 'mutant_proverbs'
+  | 'contradiction_modes'
+  | 'voice_pairs'
   | 'games';
 
 export interface PoolItem {

@@ -198,9 +198,25 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#EDF0E4', bgAlt: '#DBE1CD', surface: '#FAFCF4', ink: '#25301F', inkSoft: '#5E6A52',
     accent: '#557A34', accentInk: '#F7FFF0', motif: 'paper', entrance: 'slide', displayFont: 'display', label: 'Fábula',
   },
+  'g38': {
+    bg: '#14161B', bgAlt: '#20242D', surface: '#1A1E25', ink: '#F2F0EA', inkSoft: '#B8BCC4',
+    accent: '#E5B567', accentInk: '#2A1E08', motif: 'window', entrance: 'fade', displayFont: 'displayItalic', label: 'Escena robada',
+  },
+  'g39': {
+    bg: '#ECE9F3', bgAlt: '#DBD6E8', surface: '#F9F7FD', ink: '#242131', inkSoft: '#625C72',
+    accent: '#5B4A8C', accentInk: '#FFF8FF', motif: 'grid', entrance: 'flip', displayFont: 'serifSemiBold', label: 'Disección de un verso',
+  },
+  'g42': {
+    bg: '#F3E9DF', bgAlt: '#E4D4C6', surface: '#FBF6F1', ink: '#2C241D', inkSoft: '#6D6156',
+    accent: '#B5532C', accentInk: '#FFF6F1', motif: 'stairs', entrance: 'rise', displayFont: 'display', label: 'Diez primeros versos',
+  },
   'g41': {
     bg: '#E8EEF2', bgAlt: '#D5E1E8', surface: '#F7FAFC', ink: '#1F2B33', inkSoft: '#5E6E78',
     accent: '#1D6B87', accentInk: '#F2FBFF', motif: 'window', entrance: 'rise', displayFont: 'displayItalic', label: 'Título interrogante',
+  },
+  'g43': {
+    bg: '#E9EDEF', bgAlt: '#D7DFE2', surface: '#F8FAFB', ink: '#202A2D', inkSoft: '#5C6B70',
+    accent: '#2E6E73', accentInk: '#F2FFFF', motif: 'paper', entrance: 'slide', displayFont: 'serifSemiBold', label: 'Contar a un extraño',
   },
   'g44': {
     bg: '#EFEDE7', bgAlt: '#DEDAD0', surface: '#FBFAF6', ink: '#242019', inkSoft: '#565046',
@@ -210,9 +226,29 @@ const raw: Record<string, Omit<GameTheme, 'id' | 'name' | 'accentText'>> = {
     bg: '#161B1E', bgAlt: '#242C30', surface: '#1D2529', ink: '#F0F4F3', inkSoft: '#B0BDBE',
     accent: '#67C4B4', accentInk: '#062621', motif: 'window', entrance: 'slide', displayFont: 'sansSemiBold', label: 'Plano a plano',
   },
+  'g49': {
+    bg: '#F4ECDD', bgAlt: '#E5D8C2', surface: '#FBF7EF', ink: '#2C251B', inkSoft: '#6C6050',
+    accent: '#8A5A1F', accentInk: '#FFF8EC', motif: 'stripes', entrance: 'drop', displayFont: 'display', label: 'Refrán mutante',
+  },
   'g50': {
     bg: '#F2E9F1', bgAlt: '#E2D3E2', surface: '#FCF8FC', ink: '#2B2230', inkSoft: '#695C70',
     accent: '#6A3E82', accentInk: '#FFF5FF', motif: 'wave', entrance: 'rise', displayFont: 'displayItalic', label: 'Arco emocional',
+  },
+  'g54': {
+    bg: '#101C28', bgAlt: '#1D3042', surface: '#172A3A', ink: '#E9F2F8', inkSoft: '#A9BECD',
+    accent: '#79C4D8', accentInk: '#062430', motif: 'window', entrance: 'fade', displayFont: 'displayItalic', label: 'Solo preguntas',
+  },
+  'g55': {
+    bg: '#1B1724', bgAlt: '#2C2539', surface: '#241F30', ink: '#F3EEF8', inkSoft: '#BDB2CC',
+    accent: '#D4A7E8', accentInk: '#2A1233', motif: 'stairs', entrance: 'rise', displayFont: 'displayItalic', label: 'Empezar por el final',
+  },
+  'g56': {
+    bg: '#F5ECEC', bgAlt: '#E4D2D2', surface: '#FCF7F7', ink: '#2B2020', inkSoft: '#675757',
+    accent: '#9E3546', accentInk: '#FFF5F6', motif: 'stripes', entrance: 'flip', displayFont: 'display', label: 'Estribillo traidor',
+  },
+  'g57': {
+    bg: '#101F1C', bgAlt: '#1C322D', surface: '#162822', ink: '#EDF5F2', inkSoft: '#B0C5BE',
+    accent: '#6FD8C0', accentInk: '#06231C', motif: 'wave', entrance: 'slide', displayFont: 'displayItalic', label: 'Dos voces',
   },
 };
 

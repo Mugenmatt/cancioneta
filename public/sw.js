@@ -1,11 +1,11 @@
-const CACHE_NAME = 'cancioneta-shell-v11';
+const CACHE_NAME = 'cancioneta-shell-v20';
 const ROUTES = ['juegos', 'acordes', 'ajustes', 'escribir', 'material', 'onboarding'];
 const GAME_IDS = [
   'f0-1', 'f0-2', 'f0-3', 'f0-4', 'f0-5',
   'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10',
   'g11', 'g12', 'g13', 'g14', 'g15', 'g16', 'g17', 'g18', 'g19', 'g20',
   'g21', 'g22', 'g23', 'g24', 'g25', 'g26', 'g27', 'g28', 'g29', 'g30',
-  'g32', 'g33', 'g34', 'g35', 'g36', 'g37', 'g41', 'g44', 'g48', 'g50',
+  'g32', 'g33', 'g34', 'g35', 'g36', 'g37', 'g38', 'g39', 'g41', 'g42', 'g43', 'g44', 'g48', 'g49', 'g50', 'g54', 'g55', 'g56', 'g57',
 ];
 const STATIC_FILES = [
   '/fonts/Fraunces_400Regular.ttf',

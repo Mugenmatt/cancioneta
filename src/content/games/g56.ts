@@ -1,0 +1,17 @@
+export const G56_TEXT = {
+  intro: 'Escribí una estrofa y después un estribillo que la desmienta. Los dos textos quedan lado a lado para que se vea la pelea.',
+  modeEyebrow: 'Consigna de contradicción',
+  anotherMode: 'Otra consigna',
+  loading: 'Buscando consigna…',
+  stanzaEyebrow: 'Estrofa',
+  stanzaPlaceholder: 'La estrofa…',
+  chorusEyebrow: 'Estribillo traidor',
+  chorusPlaceholder: 'El estribillo que la contradice…',
+  editorTitle: (mode: string) => `Estribillo traidor: ${mode}`,
+  modeGroup: 'Consigna',
+  stanzaGroup: 'Estrofa',
+  chorusGroup: 'Estribillo',
+  editorNote: 'La estrofa y el estribillo conviven en el cuaderno: la una sostiene lo que el otro desmiente.',
+  send: 'Llevar al cuaderno',
+  privacy: 'La estrofa, el estribillo y la consigna viven solo en memoria. Si cerrás la app, se pierden.',
+} as const;

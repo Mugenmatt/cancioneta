@@ -54,10 +54,19 @@ export const GAME_REGISTRY: GameMeta[] = [
   { id: 'g35', number: 35, name: 'Molde de rima', phase: 'nuevo', summary: 'Ocho esquemas con ejemplos originales de cuatro versos.', tags: ['rima', 'estructura'], status: 'ready', themeId: 'g35' },
   { id: 'g36', number: 36, name: 'Ruleta de forma', phase: 'nuevo', summary: 'Estilo, compás y estructura en ruedas bloqueables.', tags: ['forma', 'azar'], status: 'ready', themeId: 'g36' },
   { id: 'g37', number: 37, name: 'Fábula', phase: 'nuevo', summary: 'Protagonista, conflicto y moraleja de dos versos.', tags: ['fábula', 'moraleja'], status: 'ready', themeId: 'g37' },
+  { id: 'g38', number: 38, name: 'Escena robada', phase: 'nuevo', summary: 'Una escena, un personaje y lo que no se dice.', tags: ['escena', 'emoción'], status: 'ready', themeId: 'g38' },
+  { id: 'g39', number: 39, name: 'Disección de un verso', phase: 'nuevo', summary: 'Encontrá el recurso de un verso y usalo en otro tema.', tags: ['verso', 'análisis'], status: 'ready', themeId: 'g39' },
   { id: 'g41', number: 41, name: 'Título interrogante', phase: 'nuevo', summary: 'Preguntas que nacen de un título y vuelven respondidas en la canción.', tags: ['preguntas', 'título'], status: 'ready', themeId: 'g41' },
+  { id: 'g42', number: 42, name: 'Diez primeros versos', phase: 'nuevo', summary: 'Diez aperturas que dejen una pregunta; elegí tres.', tags: ['aperturas', 'favoritos'], status: 'ready', themeId: 'g42' },
+  { id: 'g43', number: 43, name: 'Contar a un extraño', phase: 'nuevo', summary: 'Contar sin adornos y convertirlo en letra sin perder datos.', tags: ['relato', 'transformación'], status: 'ready', themeId: 'g43' },
   { id: 'g44', number: 44, name: 'Canción mala', phase: 'nuevo', summary: 'Diez minutos para escribirla mal a propósito, tirarla y escribir la buena.', tags: ['consigna', 'temporizador'], status: 'ready', themeId: 'g44' },
   { id: 'g48', number: 48, name: 'Plano a plano', phase: 'nuevo', summary: 'Un plano cinematográfico por verso, en orden o al azar.', tags: ['planos', 'estructura'], status: 'ready', themeId: 'g48' },
+  { id: 'g49', number: 49, name: 'Refrán mutante', phase: 'nuevo', summary: 'Tres o cuatro estrofas que cierran con la misma frase.', tags: ['repetición', 'estrofas'], status: 'ready', themeId: 'g49' },
   { id: 'g50', number: 50, name: 'Arco emocional', phase: 'nuevo', summary: 'Tres emociones distintas para verso, pre-estribillo y estribillo.', tags: ['emociones', 'estructura'], status: 'ready', themeId: 'g50' },
+  { id: 'g54', number: 54, name: 'Solo preguntas', phase: 'nuevo', summary: 'Entre ocho y dieciséis versos, todos preguntas.', tags: ['preguntas', 'restricción'], status: 'ready', themeId: 'g54' },
+  { id: 'g55', number: 55, name: 'Empezar por el final', phase: 'nuevo', summary: 'Escribí el último verso y después los anteriores hacia atrás.', tags: ['final', 'reverso'], status: 'ready', themeId: 'g55' },
+  { id: 'g56', number: 56, name: 'Estribillo traidor', phase: 'nuevo', summary: 'Un estribillo que desmiente la estrofa, lado a lado.', tags: ['contradicción', 'estribillo'], status: 'ready', themeId: 'g56' },
+  { id: 'g57', number: 57, name: 'Dos voces', phase: 'nuevo', summary: 'Dos personajes alternan versos, sin narrador.', tags: ['diálogo', 'voces'], status: 'ready', themeId: 'g57' },
 ];
 
 export interface GameCounts {

@@ -1,0 +1,18 @@
+export const G43_TEXT = {
+  intro: 'Primero contá lo que pasó como si hablaras con alguien que no lo conoce: sin adornos, sin metáforas, sin omitir datos.',
+  triggerTitle: 'Disparador de situación (opcional)',
+  withoutTrigger: 'Sin disparador',
+  withTrigger: 'Situación al azar',
+  triggerEyebrow: 'Situación',
+  anotherTrigger: 'Otra situación',
+  loading: 'Buscando situación…',
+  plainEyebrow: 'Paso 1: contarlo sin adornos',
+  plainPlaceholder: 'Pasó que…',
+  stepTwoTitle: 'Paso 2: convertirlo en letra',
+  stepTwoBody: 'Tu versión sin adornos queda arriba del cuaderno, en un panel que podés plegar. Convertila en letra conservando toda la información: no agregues ni quites datos.',
+  editorTitle: 'Contar a un extraño',
+  plainGroup: 'Versión sin adornos',
+  editorNote: 'Arriba está la versión que contaste. Pasala a letra sin perder ningún dato; el panel se puede plegar mientras escribís.',
+  send: 'Llevar al cuaderno',
+  privacy: 'La situación y lo que escribas viven solo en memoria. Si cerrás la app, se pierden.',
+} as const;

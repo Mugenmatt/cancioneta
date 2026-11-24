@@ -337,6 +337,33 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
     ],
     examples: ['Protagonista: «Un reloj que siempre se adelanta».', 'Moraleja: «Llegar antes no es estar / donde uno quería estar».'],
   },
+  'g38': {
+    steps: [
+      'Mirá la escena, el personaje y lo que no se dice; podés pedir otra escena.',
+      'Si querés, activá el temporizador opcional de 30 minutos: no guarda nada ni avisa al terminar.',
+      'Escribí solo desde el sentimiento de ese personaje, sin contar la escena desde afuera.',
+      'Llevá la escena al cuaderno: queda arriba como panel plegable mientras escribís.',
+    ],
+    examples: ['Escena: «Alguien deja el teléfono boca abajo antes de que vibre».', 'Escrito desde el personaje: «No quiero saber quién llama, quiero que llamen».'],
+  },
+  'g39': {
+    steps: [
+      'Escribí un verso que te gusta: no se guarda ni se busca en ningún lado.',
+      'Elegí qué te atrapa: imagen, sonido, giro inesperado, emoción o ritmo.',
+      'Escribí un verso propio con ese mismo recurso pero sobre otro tema.',
+      'Llevá la consigna al cuaderno; el verso que trajiste queda en el panel como referencia.',
+    ],
+    examples: ['Verso traído: «El café se enfría en el marco de la ventana».', 'Recurso imagen → «La luna se olvida en el bolsillo del abrigo».'],
+  },
+  'g42': {
+    steps: [
+      'Si querés, activá un tema al azar del banco existente; podés cambiarlo las veces que quieras.',
+      'Escribí diez aperturas numeradas: cada una debe dejar una pregunta en quien escucha.',
+      'Cuando complete las diez, marcá las tres favoritas.',
+      'Llevá esas tres al cuaderno: el panel recuerda el tema opcional y la consigna.',
+    ],
+    examples: ['Apertura: «El teléfono vibró antes de que nadie dijera hola».', 'Otra: «Dejé la ventana abierta para ver si volvía el frío».'],
+  },
   'g41': {
     steps: [
       'Leé el título breve que aparece y dejá que te despierte preguntas.',
@@ -345,6 +372,15 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
       'La meta es un verso y un estribillo que respondan esas preguntas.',
     ],
     examples: ['Título: "La casa que se quedó despierta" → "¿Quién se quedó esperando?"', 'Estribillo: "La casa sigue despierta, pero ya nadie vuelve".'],
+  },
+  'g43': {
+    steps: [
+      'Si querés, activá un disparador de situación del banco existente.',
+      'Paso 1: contá lo que pasó como si hablaras con alguien que no lo conoce, sin adornos.',
+      'Paso 2: pasá al cuaderno; tu versión queda arriba en un panel plegable.',
+      'Escribí la letra conservando toda la información del relato original.',
+    ],
+    examples: ['Sin adornos: «Me quedé sin colectivo y caminé hasta casa bajo la lluvia».', 'En letra: «Caminé con el agua por los tobillos / y el colectivo se me fue sin mí».'],
   },
   'g44': {
     steps: [
@@ -363,6 +399,51 @@ export const GAME_INTROS: Record<string, GameIntroContent> = {
       'Cada verso queda etiquetado con su plano en el panel del cuaderno.',
     ],
     examples: ['4 versos en orden: panorámica, plano general, plano medio, primer plano.', '6 versos al azar con escena inicial: «una estación vacía».'],
+  },
+  'g49': {
+    steps: [
+      'Mirá la frase fija: permanece visible en el Juego y arriba del cuaderno.',
+      'Elegí escribir tres o cuatro estrofas.',
+      'Cada estrofa debe terminar con esa frase, pero con un sentido distinto.',
+      'Llevá las estrofas al cuaderno; el panel recuerda la frase y avisa cuando aparece.',
+    ],
+    examples: ['Frase: «Nadie guarda esa llave».', 'Estrofa 1: «Cerré la puerta igual. Nadie guarda esa llave». / Estrofa 2: «La encontré en otro abrigo. Nadie guarda esa llave».'],
+  },
+  'g54': {
+    steps: [
+      'Mirá el tema sorteado; podés cambiarlo por otro.',
+      'Escribí entre ocho y dieciséis versos, todos con signo de interrogación.',
+      'Si algún verso se te escapa como afirmación, el panel del cuaderno lo señala con suavidad.',
+      'Llevá las preguntas al cuaderno y escribí la canción sin responderlas del todo.',
+    ],
+    examples: ['Tema: «la espera» → «¿Quién dejó la luz encendida?»', 'Otra: «¿Cuánto tiempo se tarda en volver?»'],
+  },
+  'g55': {
+    steps: [
+      'Mirá el tema sorteado; podés cambiarlo por otro.',
+      'Escribí primero el último verso: queda fijo abajo mientras trabajás.',
+      'Después agregá versos arriba, de atrás hacia adelante.',
+      'Tocá «Ver en orden normal» para comprobar cómo queda la canción y llevá las dos versiones al cuaderno.',
+    ],
+    examples: ['Último verso: «Y ahí entendí que no hacía falta volver».', 'Verso anterior: «Dejé la luz prendida por si acaso».'],
+  },
+  'g56': {
+    steps: [
+      'Escribí una estrofa en el panel de la izquierda.',
+      'Mirá la consigna de contradicción que salió: podés pedir otra.',
+      'Escribí el estribillo en el panel de la derecha: debe desmentir a la estrofa.',
+      'Llevá los dos textos al cuaderno: quedan juntos en un panel plegable.',
+    ],
+    examples: ['Consigna ironía: «Todo está bien», dice el estribillo después de una estrofa de pérdida.', 'Consigna negación: «No llovió, no esperé, no volviste».'],
+  },
+  'g57': {
+    steps: [
+      'Mirá la pareja de personajes que salió; podés pedir otra.',
+      'Escribí el primer verso de A y después el de B, alternando sin narrador.',
+      'Los bloques van cambiando de color según la voz: los mínimos son ocho versos.',
+      'Llevá el diálogo al cuaderno: el panel separa lo que dice cada uno.',
+    ],
+    examples: ['A: «Dejé la ventana abierta».', 'B: «Yo la cerré antes de que vinieras».'],
   },
   'g50': {
     steps: [

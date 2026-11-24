@@ -13,6 +13,10 @@ import { rhymeSchemeIds } from '@/data/rhymeSchemes';
 import { formStyles, formMeters, formStructures } from '@/data/formWheels';
 import { fableProtagonists, fableConflicts } from '@/data/fable';
 import { arcEmotions } from '@/data/emotions';
+import { stolenScenes } from '@/data/stolenScenes';
+import { mutantProverbs } from '@/data/proverbs';
+import { contradictionModes } from '@/data/contradictions';
+import { voicePairs } from '@/data/voicePairs';
 import { titles, characters, songs, poemsSongsRef, quotes, scriptPhrases, images, type RawCultural } from '@/data/cultural';
 import {
   culturalSource, realImages, realPrompts, realSongs, realTitles,
@@ -183,6 +187,16 @@ function buildPools(): { pools: Record<PoolId, PoolItem[]>; report: DataReport; 
   pools.fable_protagonists = fableProtagonists.map((text) => makeItem('fable_protagonists', text));
   pools.fable_conflicts = fableConflicts.map((text) => makeItem('fable_conflicts', text));
   pools.emotion_arc = arcEmotions.map((text) => makeItem('emotion_arc', text));
+  pools.stolen_scenes = stolenScenes.map((seed) => makeItem('stolen_scenes', seed.description, {
+    extra: { character: seed.character, unsaid: seed.unsaid },
+  }));
+  pools.mutant_proverbs = mutantProverbs.map((text) => makeItem('mutant_proverbs', text));
+  pools.contradiction_modes = contradictionModes.map((seed) => makeItem('contradiction_modes', seed.label, {
+    extra: { instruction: seed.instruction },
+  }));
+  pools.voice_pairs = voicePairs.map((seed) => makeItem('voice_pairs', `${seed.a} / ${seed.b}`, {
+    extra: { a: seed.a, b: seed.b },
+  }));
   pools.games = [];
 
   const byPool: Record<string, number> = {};

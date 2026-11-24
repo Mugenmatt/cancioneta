@@ -1,14 +1,18 @@
 import { useEffect, useMemo } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
-import { useGameTheme } from '@/design/ThemeProvider';
+import { useCoreTheme, useGameTheme } from '@/design/ThemeProvider';
 import { alpha, minTouch, motion, spacing } from '@/design/tokens';
+
+const idleHeight = (index: number) => spacing.xs + (index % 3) * spacing.xxs;
+const activeHeight = (index: number) => minTouch + ((index + 1) % 3) * spacing.sm;
 
 export function VoiceWave({ active }: { active: boolean }) {
   const theme = useGameTheme('f0-1');
+  const { reduceMotion } = useCoreTheme();
   const progress = useMemo(() => new Animated.Value(0), []);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active || reduceMotion) return;
     const loop = Animated.loop(
       Animated.sequence([
         Animated.timing(progress, { toValue: 1, duration: motion.base, useNativeDriver: true }),
@@ -17,15 +21,17 @@ export function VoiceWave({ active }: { active: boolean }) {
     );
     loop.start();
     return () => loop.stop();
-  }, [active, progress]);
+  }, [active, reduceMotion, progress]);
 
   return (
     <View style={styles.wave} accessibilityRole="image">
       {[0, 1, 2, 3, 4, 5].map((index) => {
-        const height = progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [spacing.xs + (index % 3) * spacing.xxs, minTouch + ((index + 1) % 3) * spacing.sm],
-        });
+        const height = reduceMotion
+          ? active ? activeHeight(index) : idleHeight(index)
+          : progress.interpolate({
+              inputRange: [0, 1],
+              outputRange: [idleHeight(index), activeHeight(index)],
+            });
         return (
           <Animated.View
             key={index}

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useCoreTheme } from '../ThemeProvider';
-import { alpha, fonts, radii, spacing } from '../tokens';
+import { alpha, fonts, motion, radii, spacing } from '../tokens';
 import { AppText } from './Text';
 
 export function ProgressBar({ value, total, accent, label }: { value: number; total: number; accent?: string; label?: string }) {
@@ -23,19 +23,19 @@ export function ProgressBar({ value, total, accent, label }: { value: number; to
 }
 
 export function TimerBadge({ seconds, running, accent, accentText }: { seconds: number; running: boolean; accent?: string; accentText?: string }) {
-  const { colors } = useCoreTheme();
+  const { colors, reduceMotion } = useCoreTheme();
   const [pulse] = useState(() => new Animated.Value(1));
   useEffect(() => {
-    if (!running) return;
+    if (!running || reduceMotion) return;
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(pulse, { toValue: 0.72, duration: 700, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0.72, duration: motion.slow, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 1, duration: motion.slow, useNativeDriver: true }),
       ]),
     );
     loop.start();
     return () => loop.stop();
-  }, [running, pulse]);
+  }, [running, reduceMotion, pulse]);
   const mins = Math.floor(Math.max(0, seconds) / 60);
   const secs = Math.max(0, seconds) % 60;
   return (
@@ -45,7 +45,7 @@ export function TimerBadge({ seconds, running, accent, accentText }: { seconds: 
       style={[
         styles.timer,
         { borderColor: alpha(accent ?? colors.accentCore, 0.4), backgroundColor: alpha(accent ?? colors.accentCore, 0.12) },
-        { opacity: running ? pulse : 1 },
+        { opacity: running && !reduceMotion ? pulse : 1 },
       ]}
     >
       <Feather name="clock" size={14} color={accentText ?? accent ?? colors.accentCore} />

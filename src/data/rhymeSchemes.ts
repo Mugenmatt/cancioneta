@@ -7,4 +7,8 @@ export const rhymeSchemeIds = [
   'aacbbc',
   'internal',
   'no_rhyme_refrain',
+  'abcb',
+  'assonance',
+  'aabba',
+  'free_verse',
 ] as const;

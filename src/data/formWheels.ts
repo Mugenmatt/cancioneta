@@ -25,7 +25,7 @@ export const formStyles = [
   'Canción de fogata',
 ] as const;
 
-export const formMeters = ['4/4', '3/4', '6/8', '12/8'] as const;
+export const formMeters = ['4/4', '3/4', '6/8', '12/8', '2/4', '5/4', '9/8'] as const;
 
 export const formStructures = [
   'Solo estrofas tipo balada',
@@ -33,4 +33,7 @@ export const formStructures = [
   'Con puente instrumental',
   'Estribillo primero',
   'Sin estribillo',
+  'Con introducción y coda',
+  'Verso, estribillo y puente',
+  'Estribillo con final hablado',
 ] as const;

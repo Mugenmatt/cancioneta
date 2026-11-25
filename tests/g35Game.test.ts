@@ -3,17 +3,18 @@ import { G35_SCHEMES, G35_TEXT } from '@/content/games/g35';
 import { makeRhymeStimulus, schemeById } from '@/games/runtime/g35Logic';
 
 describe('G-35 Molde de rima', () => {
-  it('tiene ocho esquemas en el banco y en las tarjetas', () => {
+  it('tiene doce esquemas en el banco y en las tarjetas', () => {
     const pool = dataService.getPool('rhyme_schemes');
-    expect(pool).toHaveLength(8);
+    expect(pool).toHaveLength(12);
     expect(pool.every((item) => item.license === 'original')).toBe(true);
-    expect(new Set(pool.map((item) => item.fingerprint)).size).toBe(8);
+    expect(new Set(pool.map((item) => item.fingerprint)).size).toBe(12);
     expect([...pool.map((item) => item.text)].sort()).toEqual([...G35_SCHEMES.map((scheme) => scheme.id)].sort());
   });
 
   it('cada tarjeta trae letras y un ejemplo original de cuatro versos', () => {
     expect(G35_SCHEMES.map((scheme) => scheme.pattern)).toEqual([
       'ABAB', 'AABB', 'ABBA', 'XAXA', 'AAAA', 'AACBBC', 'A A / B B', 'XXXR',
+      'ABCB', 'ABAB (asonante)', 'AABBA', 'XXXX',
     ]);
     for (const scheme of G35_SCHEMES) {
       expect(scheme.lines).toHaveLength(4);

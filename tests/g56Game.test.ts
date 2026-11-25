@@ -7,10 +7,12 @@ import {
 } from '@/games/runtime/g56Logic';
 
 describe('G-56 Estribillo traidor', () => {
-  it('tiene cuatro consignas originales de contradicción', () => {
+  it('tiene doce consignas originales de contradicción', () => {
     const items = dataService.getPool('contradiction_modes');
     expect(items.map((item) => item.text)).toEqual([
       'Ironía', 'Negación', 'Cambio de punto de vista', 'Mentira piadosa',
+      'Exageración', 'Inversión de roles', 'Contradicción temporal', 'Desmentido con datos',
+      'Eufemismo', 'Voz del objeto', 'Duda tardía', 'Versión oficial',
     ]);
     expect(items.every((item) => item.license === 'original')).toBe(true);
     expect(items.every((item) => modeFromItem(item).instruction.length > 20)).toBe(true);

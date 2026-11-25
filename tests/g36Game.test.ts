@@ -14,10 +14,11 @@ describe('G-36 Ruleta de forma', () => {
     const meters = dataService.getPool('form_meters');
     const structures = dataService.getPool('form_structures');
     expect(styles).toHaveLength(24);
-    expect(meters.map((item) => item.text)).toEqual(['4/4', '3/4', '6/8', '12/8']);
+    expect(meters.map((item) => item.text)).toEqual(['4/4', '3/4', '6/8', '12/8', '2/4', '5/4', '9/8']);
     expect(structures.map((item) => item.text)).toEqual([
       'Solo estrofas tipo balada', 'Verso y estribillo', 'Con puente instrumental',
-      'Estribillo primero', 'Sin estribillo',
+      'Estribillo primero', 'Sin estribillo', 'Con introducción y coda',
+      'Verso, estribillo y puente', 'Estribillo con final hablado',
     ]);
     for (const items of [styles, meters, structures]) {
       expect(items.every((item) => item.license === 'original')).toBe(true);

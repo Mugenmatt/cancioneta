@@ -18,6 +18,14 @@ describe('DataService', () => {
     expect(new Set(fingerprints).size).toBe(fingerprints.length);
   });
 
+  it('conserva las 12 semillas de cut-up sin colisionar con prompts', () => {
+    const cutups = dataService.getPool('cutup_texts');
+    expect(cutups).toHaveLength(12);
+    expect(new Set(cutups.map((item) => item.fingerprint)).size).toBe(12);
+    const promptTexts = new Set(dataService.getPool('prompts').map((item) => item.text));
+    expect(cutups.some((item) => promptTexts.has(item.text))).toBe(false);
+  });
+
   it('conserva licencias y metadatos', () => {
     const songs = dataService.getPool('songs');
     expect(songs.length).toBeGreaterThan(0);

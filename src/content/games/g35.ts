@@ -103,6 +103,54 @@ export const G35_SCHEMES: readonly RhymeScheme[] = [
       'siempre vuelvo por la misma calle.',
     ],
   },
+  {
+    id: 'abcb',
+    pattern: 'ABCB',
+    name: 'Rima en los pares',
+    hint: 'Los versos segundo y cuarto riman entre sí; el primero y el tercero quedan libres.',
+    lines: [
+      'El colectivo pasó sin frenar en la esquina,',
+      'dejó un papel con tu letra en el umbral;',
+      'mi hermana dice que no valía la pena,',
+      'yo lo guardé como quien guarda un final.',
+    ],
+  },
+  {
+    id: 'assonance',
+    pattern: 'ABAB (asonante)',
+    name: 'Rima asonante',
+    hint: 'Riman las vocales, no las consonantes: casa con sala, piedra con fiera.',
+    lines: [
+      'Volví corriendo hasta la casa,',
+      'el camino cortaba la piedra,',
+      'dejé las llaves tiradas en la sala,',
+      'y tu risa salió como una fiera.',
+    ],
+  },
+  {
+    id: 'aabba',
+    pattern: 'AABBA',
+    name: 'Cinco posiciones',
+    hint: 'Esquema A A B B A; el ejemplo muestra los cuatro primeros versos (A A B B).',
+    lines: [
+      'Hay una silla en la esquina de la plaza,',
+      'que nadie mueve y nadie la reemplaza;',
+      'por la noche espera que pase el coche,',
+      'y el barrio le devuelve su reproche.',
+    ],
+  },
+  {
+    id: 'free_verse',
+    pattern: 'XXXX',
+    name: 'Verso libre',
+    hint: 'Sin rima fija: los cuatro versos pueden terminar en palabras que no se parezcan.',
+    lines: [
+      'Anoté la hora en el borde del diario,',
+      'dejé la taza sin lavar sobre el mesón,',
+      'afuera alguien discutía con el portero,',
+      'y el timbre sigue sonando en mi memoria.',
+    ],
+  },
 ];
 
 export const G35_TEXT = {

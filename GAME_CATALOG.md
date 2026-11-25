@@ -220,15 +220,15 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 - **Identidad:** ventanas y tres dados; paleta cálida con acento marrón.
 
 ### G-35 Molde de rima
-- **Mecánica:** ocho tarjetas con esquemas (ABAB, AABB, ABBA, XAXA, AAA con última palabra repetida, AACBBC, rimas internas a mitad de verso y sin rima con último verso fijo). Cada tarjeta muestra el esquema con letras y un ejemplo original de cuatro versos. El usuario elige o sortea; el esquema queda fijo arriba del cuaderno. No se detectan rimas automáticamente.
-- **Datos:** pool `rhyme_schemes` con 8 semillas originales; ejemplos de cuatro versos escritos para esta app.
+- **Mecánica:** doce tarjetas con esquemas (ABAB, AABB, ABBA, XAXA, AAA con última palabra repetida, AACBBC, rimas internas a mitad de verso, sin rima con último verso fijo, ABCB, asonante, AABBA y verso libre). Cada tarjeta muestra el esquema con letras y un ejemplo original de cuatro versos. El usuario elige o sortea; el esquema queda fijo arriba del cuaderno. No se detectan rimas automáticamente.
+- **Datos:** pool `rhyme_schemes` con 12 semillas originales; ejemplos de cuatro versos escritos para esta app.
 - **Sorteo:** `RandomService.draw('rhyme_schemes', 1)`, excluyendo el esquema actual, sin repetición hasta agotar el ciclo.
 - **Estímulo visible durante la escritura:** esquema elegido arriba del cuaderno, con su explicación y el ejemplo original.
 - **Identidad:** cuadrícula de moldes; paleta fría con acento azul.
 
 ### G-36 Ruleta de forma
-- **Mecánica:** tres ruedas independientes (estilo o género, compás y estructura) que se pueden bloquear y volver a tirar de a una o todas juntas. Compases: 4/4, 3/4, 6/8 y 12/8. Estructuras: solo estrofas tipo balada, verso-estribillo, con puente instrumental, estribillo primero y sin estribillo. Es solo una consigna, sin audio.
-- **Datos:** pools `form_styles` (24), `form_meters` (4) y `form_structures` (5), semillas originales.
+- **Mecánica:** tres ruedas independientes (estilo o género, compás y estructura) que se pueden bloquear y volver a tirar de a una o todas juntas. Compases: 4/4, 3/4, 6/8, 12/8, 2/4, 5/4 y 9/8. Estructuras: solo estrofas tipo balada, verso-estribillo, con puente instrumental, estribillo primero, sin estribillo, con introducción y coda, verso-estribillo-puente y estribillo con final hablado. Es solo una consigna, sin audio.
+- **Datos:** pools `form_styles` (24), `form_meters` (7) y `form_structures` (8), semillas originales.
 - **Sorteo:** `RandomService.draw(pool, 1)` por rueda; las ruedas bloqueadas conservan su valor.
 - **Estímulo visible durante la escritura:** panel con las tres ruedas elegidas y la aclaración de que no hay audio.
 - **Identidad:** tres ruedas con candado; paleta oscura con acento dorado.
@@ -304,8 +304,8 @@ Se registran con los códigos acordados. No modifican la esencia ni la implement
 - **Identidad:** escalera inversa; paleta oscura con acento lila.
 
 ### G-56 Estribillo traidor
-- **Mecánica:** paso 1, escribir una estrofa; paso 2, escribir un estribillo que la contradiga o desmienta. Ambos textos se muestran lado a lado. Consigna de contradicción aleatoria: ironía, negación, cambio de punto de vista o mentira piadosa.
-- **Datos:** pool `contradiction_modes` con 4 consignas originales de Cancioneta.
+- **Mecánica:** paso 1, escribir una estrofa; paso 2, escribir un estribillo que la contradiga o desmienta. Ambos textos se muestran lado a lado. Consigna de contradicción aleatoria entre doce modos originales (ironía, negación, cambio de punto de vista, mentira piadosa y ocho más).
+- **Datos:** pool `contradiction_modes` con 12 consignas originales de Cancioneta.
 - **Sorteo:** `RandomService.draw('contradiction_modes', 1)`, sin repetición hasta agotar el ciclo.
 - **Estímulo visible durante la escritura:** panel plegable con la consigna, la estrofa y el estribillo juntos.
 - **Identidad:** dos columnas enfrentadas; paleta clara con acento granate.
